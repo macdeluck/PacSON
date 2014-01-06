@@ -116,6 +116,21 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 		sensor = sns;
 	}
 	@Override
+	protected void onManagedUpdate(float pSecondsElapsed){
+	 if(resourcesManager.gamePaused) 
+	 {
+		 if(resourcesManager.isAudioOn)
+			 resourcesManager.music.pause();
+		 super.onManagedUpdate(0);
+	 }
+	 else  
+	 {
+		 if(resourcesManager.isAudioOn)
+			 resourcesManager.music.resume();
+		 super.onManagedUpdate(pSecondsElapsed);
+	 }
+	}
+	@Override
 	public void createScene()
 	{
 		createEngineOptions();

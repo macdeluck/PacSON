@@ -68,13 +68,17 @@ public class ResourcesManager
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	public static boolean isAudioOn = true;
 	public static boolean FPS_COUNTER_ENABLE = true;
+	public static boolean gamePaused = false;
 	
 	/**
 	 * Texture Region for the game graphics
 	 */
 	private BitmapTextureAtlas mSoundButtonBitmapTextureAtlas;
+	private BitmapTextureAtlas mPauseButtonBitmapTextureAtlas;
 	public TiledTextureRegion soundButtonTextureRegion;
+	public TiledTextureRegion PauseButtonTextureRegion;
 	public ToggleButtonSprite soundToggleButtonSprite;
+	public ToggleButtonSprite pauseToggleButtonSprite;
 	public TiledTextureRegion tickAndCrossButtonTextureRegion;
 	public ToggleButtonSprite tickAndCrossToggleButtonSprite;
 	
@@ -161,9 +165,15 @@ public class ResourcesManager
 				.createFromAsset(gameTextureAtlas, activity, Ellipse.ELLIPSE_FILE_NAME, Ellipse.ELLIPSE_SPRITE_X, Ellipse.ELLIPSE_SPRITE_Y);
 		settings_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(settingsTextureAtlas, activity, "settings.png", 0, 0);
-
+		
+		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
+				200, 200, TextureOptions.BILINEAR);
+		this.PauseButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mPauseButtonBitmapTextureAtlas, activity.getAssets(), 
+						"playPause.png", 0, 0, 2, 1);	
 		activity.getTextureManager().loadTexture(gameTextureAtlas);
 		activity.getTextureManager().loadTexture(settingsTextureAtlas);
+		this.mPauseButtonBitmapTextureAtlas.load();
 	}
 	
 	private void loadGameFonts()
@@ -186,7 +196,9 @@ public class ResourcesManager
 	public void unloadGameTextures()
 	{
 		gameTextureAtlas.unload();
+		settingsTextureAtlas.unload();
 		reg = null;
+		settings_region = null;
 	}
 	
 	public void loadSplashScreen()
