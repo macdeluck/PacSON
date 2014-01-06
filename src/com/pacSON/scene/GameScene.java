@@ -37,8 +37,8 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	private int CAMERA_HEIGHT;
 	private static final int BLOCK_WIDTH = 60;
 	private static final int BLOCK_HEIGHT = 60;
-	private static final int AREA_WIDTH = 960;
-	private static final int AREA_HEIGHT = 1560;
+	private static final int AREA_WIDTH = 1560;
+	private static final int AREA_HEIGHT = 960;
 	private int BLOCK_X_COUNT;
 	private int BLOCK_Y_COUNT;
 	private static final int STARS_COUNT = 5;
