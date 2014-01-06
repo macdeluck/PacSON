@@ -23,6 +23,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
+import com.pacSON.tools.ToggleButtonSprite;
+import com.pacSON.tools.ToggleButtonSpriteInterface;
+import com.pacSON.tools.ToggleButtonSprite.ToggleState;
 
 public class PacHud extends HUD
 {
@@ -59,6 +62,7 @@ public class PacHud extends HUD
 		gravityValue = new Text(2, 2, loadFont(activity),"0.0", HUD_GRAV_VAL_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
 		
 		this.attachChild(addOptionsButton());
+		addPauseToogleButton();
 		if(resourcesManager.FPS_COUNTER_ENABLE){
 		this.attachChild(addFpsCounter(activity));
 		}
@@ -66,9 +70,39 @@ public class PacHud extends HUD
 		this.attachChild(gravityArrow);
 		this.attachChild(gravityValue);
 	}
+	private void addPauseToogleButton()
+	{
+		resourcesManager.pauseToggleButtonSprite = new ToggleButtonSprite(5, 5, resourcesManager.PauseButtonTextureRegion, resourcesManager.vbom);//vbo
+		if (resourcesManager.gamePaused == false){
+			resourcesManager.pauseToggleButtonSprite.setState(ToggleState.ON);
+		}
+		else{
+			resourcesManager.pauseToggleButtonSprite.setState(ToggleState.OFF);
+		}
+		attachChild(resourcesManager.pauseToggleButtonSprite);
+		
+		/**
+		 * Set the Toggle Click Listener for the button
+		 */
+		resourcesManager.pauseToggleButtonSprite.setOnToggleClickListener(new ToggleButtonSpriteInterface() {
+			
+			@Override
+			public void onOnClick(ToggleButtonSprite pButtonSprite,
+					float pTouchAreaLocalX, float pTouchAreaLocalY) {
+				resourcesManager.gamePaused = true;
+			}
+			
+			@Override
+			public void onOffClick(ToggleButtonSprite pButtonSprite,
+					float pTouchAreaLocalX, float pTouchAreaLocalY) {
+				resourcesManager.gamePaused = false;
+			}
+		});
+		registerTouchArea(resourcesManager.pauseToggleButtonSprite);
+	}
 	private ButtonSprite addOptionsButton()
 	{
-		ButtonSprite button = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_region.getWidth(), 0, resourcesManager.settings_region, resourcesManager.vbom) {
+		ButtonSprite button = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_region.getWidth(), 5, resourcesManager.settings_region, resourcesManager.vbom) {
 		       @Override
 		       public boolean onAreaTouched(TouchEvent pTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		           if(pTouchEvent.isActionDown()) {
@@ -84,7 +118,7 @@ public class PacHud extends HUD
 	private Text addFpsCounter(GameActivity activity){
 		final FPSCounter fpsCounter = new FPSCounter();
 		activity.getEngine().registerUpdateHandler(fpsCounter);
-		final Text fpsText = new Text(5, 5, loadFont(activity), "FPS:",
+		final Text fpsText = new Text(resourcesManager.camera.getWidth() - resourcesManager.settings_region.getWidth() - 100, 5, loadFont(activity), "FPS:",
 				"FPS:".length() + 4, activity.getEngine().getVertexBufferObjectManager());
 
 		final String form = "%.0f";

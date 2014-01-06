@@ -78,13 +78,21 @@ public class ResourcesManager
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	public static boolean isAudioOn = true;
 	public static boolean FPS_COUNTER_ENABLE = true;
+<<<<<<< HEAD
 
+=======
+	public static boolean gamePaused = false;
+	
+>>>>>>> a5952031f9aa19e46ba538bcc8c2f9155d39583d
 	/**
 	 * Texture Region for the game graphics
 	 */
 	private BitmapTextureAtlas mSoundButtonBitmapTextureAtlas;
+	private BitmapTextureAtlas mPauseButtonBitmapTextureAtlas;
 	public TiledTextureRegion soundButtonTextureRegion;
+	public TiledTextureRegion PauseButtonTextureRegion;
 	public ToggleButtonSprite soundToggleButtonSprite;
+	public ToggleButtonSprite pauseToggleButtonSprite;
 	public TiledTextureRegion tickAndCrossButtonTextureRegion;
 	public ToggleButtonSprite tickAndCrossToggleButtonSprite;
 
@@ -208,11 +216,23 @@ public class ResourcesManager
 				backgroundTextureAtlas, activity, LabyrinthBackground.FILE_NAME, 0, 0);
 
 		settings_region = BitmapTextureAtlasTextureRegionFactory
+<<<<<<< HEAD
 				.createFromAsset(settingsTextureAtlas, activity,
 						"settings.png", 0, 0);
 
 		activity.getTextureManager().loadTexture(playerTextureAtlas);
+=======
+				.createFromAsset(settingsTextureAtlas, activity, "settings.png", 0, 0);
+		
+		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
+				200, 200, TextureOptions.BILINEAR);
+		this.PauseButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mPauseButtonBitmapTextureAtlas, activity.getAssets(), 
+						"playPause.png", 0, 0, 2, 1);	
+		activity.getTextureManager().loadTexture(gameTextureAtlas);
+>>>>>>> a5952031f9aa19e46ba538bcc8c2f9155d39583d
 		activity.getTextureManager().loadTexture(settingsTextureAtlas);
+		this.mPauseButtonBitmapTextureAtlas.load();
 	}
 
 	private void loadGameFonts()
@@ -234,8 +254,15 @@ public class ResourcesManager
 
 	public void unloadGameTextures()
 	{
+<<<<<<< HEAD
 		playerTextureAtlas.unload();
 		player_reg = null;
+=======
+		gameTextureAtlas.unload();
+		settingsTextureAtlas.unload();
+		reg = null;
+		settings_region = null;
+>>>>>>> a5952031f9aa19e46ba538bcc8c2f9155d39583d
 	}
 
 	public void loadSplashScreen()
