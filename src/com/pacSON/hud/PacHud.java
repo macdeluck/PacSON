@@ -102,7 +102,7 @@ public class PacHud extends HUD
 	}
 	private ButtonSprite addOptionsButton()
 	{
-		ButtonSprite button = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_region.getWidth(), 5, resourcesManager.settings_region, resourcesManager.vbom) {
+		ButtonSprite button = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth(), 5, resourcesManager.settings_reg, resourcesManager.vbom) {
 		       @Override
 		       public boolean onAreaTouched(TouchEvent pTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		           if(pTouchEvent.isActionDown()) {
@@ -118,7 +118,7 @@ public class PacHud extends HUD
 	private Text addFpsCounter(GameActivity activity){
 		final FPSCounter fpsCounter = new FPSCounter();
 		activity.getEngine().registerUpdateHandler(fpsCounter);
-		final Text fpsText = new Text(resourcesManager.camera.getWidth() - resourcesManager.settings_region.getWidth() - 100, 5, loadFont(activity), "FPS:",
+		final Text fpsText = new Text(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth() - 100, 5, loadFont(activity), "FPS:",
 				"FPS:".length() + 4, activity.getEngine().getVertexBufferObjectManager());
 
 		final String form = "%.0f";

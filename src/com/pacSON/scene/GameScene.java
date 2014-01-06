@@ -2,9 +2,7 @@ package com.pacSON.scene;
 
 import java.util.List;
 
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -17,8 +15,10 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.base.BaseScene;
 import com.pacSON.entity.Bot;
+import com.pacSON.entity.LabyrinthBackground;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.Star;
+import com.pacSON.entity.Wall;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
 import com.pacSON.manager.SceneManager;
@@ -112,10 +112,10 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 		final VertexBufferObjectManager vertexBufferObjectManager = resourcesManager.activity
 				.getVertexBufferObjectManager();
 
-		/*LabyrinthBackground lbg = new LabyrinthBackground(resourcesManager,AREA_WIDTH,AREA_HEIGHT);
+		LabyrinthBackground lbg = new LabyrinthBackground(resourcesManager,AREA_WIDTH,AREA_HEIGHT);
 		lbg.load(resourcesManager.activity);
-		attachChild(lbg.getSprite());*/
-		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
+		attachChild(lbg.getSprite());
+		//setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		
 		player.createPhysicBody(mPhysicsWorld);
 		mPhysicsWorld.registerPhysicsConnector(player.createPhysicsConnector());
@@ -141,7 +141,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 		PhysicsFactory.createBoxBody(this.mPhysicsWorld, right,
 				BodyType.StaticBody, wallFixtureDef);
 		
-		/*List<int[]> tab = lb.Return_Blocks();
+		List<int[]> tab = lb.Return_Blocks();
 		final Wall[] walls = new Wall[tab.size()];
 		for (int i = 0; i < tab.size(); i++)
 		{
@@ -170,20 +170,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 			bots[i].load(resourcesManager.activity);
 			bots[i].createPhysicBody(mPhysicsWorld);
 			attachChild(bots[i].getSprite());
-		}*/
-		List<int[]> tab = lb.Return_Blocks();
-
-        final Rectangle[] walls = new Rectangle[tab.size()];
-        for (int i = 0; i < tab.size(); i++)
-        {
-                walls[i] = new Rectangle(tab.get(i)[1] * BLOCK_WIDTH, tab.get(i)[0]
-                                * BLOCK_HEIGHT, BLOCK_WIDTH, BLOCK_HEIGHT,
-                                vertexBufferObjectManager);
-                PhysicsFactory.createBoxBody(this.mPhysicsWorld, walls[i],
-                                BodyType.StaticBody, wallFixtureDef);
-                walls[i].setCullingEnabled(true);
-                attachChild(walls[i]);
-        }
+		}
 		
 		attachChild(player.getSprite());
 		attachChild(right);

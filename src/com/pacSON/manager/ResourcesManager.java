@@ -63,7 +63,7 @@ public class ResourcesManager
 	public ITextureRegion bot_reg;
 	public ITextureRegion star_reg;
 	public ITextureRegion background_reg;
-	public ITextureRegion settings_region;
+	public ITextureRegion settings_reg;
 
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BitmapTextureAtlas playerTextureAtlas;
@@ -78,12 +78,7 @@ public class ResourcesManager
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	public static boolean isAudioOn = true;
 	public static boolean FPS_COUNTER_ENABLE = true;
-<<<<<<< HEAD
-
-=======
 	public static boolean gamePaused = false;
-	
->>>>>>> a5952031f9aa19e46ba538bcc8c2f9155d39583d
 	/**
 	 * Texture Region for the game graphics
 	 */
@@ -214,24 +209,22 @@ public class ResourcesManager
 				botTextureAtlas, activity, Bot.FILE_NAME, 0, 0);
 		background_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				backgroundTextureAtlas, activity, LabyrinthBackground.FILE_NAME, 0, 0);
-
-		settings_region = BitmapTextureAtlasTextureRegionFactory
-<<<<<<< HEAD
+		settings_reg = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(settingsTextureAtlas, activity,
 						"settings.png", 0, 0);
 
 		activity.getTextureManager().loadTexture(playerTextureAtlas);
-=======
-				.createFromAsset(settingsTextureAtlas, activity, "settings.png", 0, 0);
+		activity.getTextureManager().loadTexture(wallTextureAtlas);
+		activity.getTextureManager().loadTexture(starTextureAtlas);
+		activity.getTextureManager().loadTexture(botTextureAtlas);
+		activity.getTextureManager().loadTexture(backgroundTextureAtlas);
+		activity.getTextureManager().loadTexture(settingsTextureAtlas);
 		
 		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
 				200, 200, TextureOptions.BILINEAR);
 		this.PauseButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mPauseButtonBitmapTextureAtlas, activity.getAssets(), 
 						"playPause.png", 0, 0, 2, 1);	
-		activity.getTextureManager().loadTexture(gameTextureAtlas);
->>>>>>> a5952031f9aa19e46ba538bcc8c2f9155d39583d
-		activity.getTextureManager().loadTexture(settingsTextureAtlas);
 		this.mPauseButtonBitmapTextureAtlas.load();
 	}
 
@@ -254,15 +247,18 @@ public class ResourcesManager
 
 	public void unloadGameTextures()
 	{
-<<<<<<< HEAD
 		playerTextureAtlas.unload();
 		player_reg = null;
-=======
-		gameTextureAtlas.unload();
+		wallTextureAtlas.unload();
+		wall_reg = null;
+		starTextureAtlas.unload();
+		star_reg = null;
+		botTextureAtlas.unload();
+		bot_reg = null;
+		backgroundTextureAtlas.unload();
+		background_reg = null;
 		settingsTextureAtlas.unload();
-		reg = null;
-		settings_region = null;
->>>>>>> a5952031f9aa19e46ba538bcc8c2f9155d39583d
+		settings_reg = null;
 	}
 
 	public void loadSplashScreen()
