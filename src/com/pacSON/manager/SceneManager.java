@@ -9,6 +9,7 @@ import com.pacSON.base.BaseScene;
 import com.pacSON.scene.GameScene;
 import com.pacSON.scene.LoadingScene;
 import com.pacSON.scene.MainMenuScene;
+import com.pacSON.scene.OptionsScene;
 import com.pacSON.scene.SplashScene;
 
 public class SceneManager
@@ -21,6 +22,7 @@ public class SceneManager
 	private BaseScene menuScene;
 	private BaseScene gameScene;
 	private BaseScene loadingScene;
+	private BaseScene optionsScene;
 	
 	//---------------------------------------------
 	// VARIABLES
@@ -40,6 +42,7 @@ public class SceneManager
 		SCENE_MENU,
 		SCENE_GAME,
 		SCENE_LOADING,
+		SCENE_OPTIONS,
 	}
 	
 	//---------------------------------------------
@@ -69,6 +72,8 @@ public class SceneManager
 			case SCENE_LOADING:
 				setScene(loadingScene);
 				break;
+			case SCENE_OPTIONS:
+				setScene(optionsScene);
 			default:
 				break;
 		}
@@ -79,10 +84,10 @@ public class SceneManager
 		ResourcesManager.getInstance().loadMenuResources();
 		menuScene = new MainMenuScene();
 		loadingScene = new LoadingScene();
+//		optionsScene = new OptionsScene();
         SceneManager.getInstance().setScene(menuScene);
         disposeSplashScene();
 	}
-	
 	public void createSplashScene(OnCreateSceneCallback pOnCreateSceneCallback)
 	{
 		ResourcesManager.getInstance().loadSplashScreen();
@@ -97,7 +102,21 @@ public class SceneManager
 		splashScene.disposeScene();
 		splashScene = null;
 	}
-	
+	public void loadOptionsScene(final Engine mEngine)
+	{
+		setScene(loadingScene);
+		ResourcesManager.getInstance().unloadMenuTextures();
+		mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
+		{
+            public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+            	mEngine.unregisterUpdateHandler(pTimerHandler);
+            	ResourcesManager.getInstance().loadOptionsResources();
+        		optionsScene = new OptionsScene();
+        		setScene(optionsScene);
+            }
+		}));
+	}
 	public void loadGameScene(final Engine mEngine)
 	{
 		setScene(loadingScene);
@@ -117,8 +136,10 @@ public class SceneManager
 	public void loadMenuScene(final Engine mEngine)
 	{
 		setScene(loadingScene);
-		gameScene.disposeScene();
-		ResourcesManager.getInstance().unloadGameTextures();
+		if (gameScene != null){
+			gameScene.disposeScene();
+			ResourcesManager.getInstance().unloadGameTextures();
+		}
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
 		{
             public void onTimePassed(final TimerHandler pTimerHandler) 

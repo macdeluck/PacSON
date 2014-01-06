@@ -73,7 +73,6 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	private Ellipse player;
 	private PacHud hud;
 	
-	
 	public void createEngineOptions()
 	{
 		Display display = resourcesManager.activity.getWindowManager().getDefaultDisplay();
@@ -125,9 +124,11 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	}
 	private void setUpAudio()
 	{
+		if (resourcesManager.isAudioOn == true){
 		resourcesManager.music.setVolume(0.5f);
 		resourcesManager.music.setLooping(true);
 		resourcesManager.music.play();
+		}
 	}
 	protected void onCreateScene()
 	{	
@@ -233,7 +234,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 		player = new Ellipse(resourcesManager);
 
 		player.load(resourcesManager.activity);
-		hud = new PacHud();
+		hud = new PacHud(resourcesManager);
 		hud.load(resourcesManager.activity);
 	}
 }

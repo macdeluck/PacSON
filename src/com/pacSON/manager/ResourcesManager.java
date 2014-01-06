@@ -17,8 +17,7 @@ import org.andengine.opengl.texture.atlas.bitmap.source.IBitmapTextureAtlasSourc
 import org.andengine.opengl.texture.atlas.buildable.builder.BlackPawnTextureAtlasBuilder;
 import org.andengine.opengl.texture.atlas.buildable.builder.ITextureAtlasBuilder.TextureAtlasBuilderException;
 import org.andengine.opengl.texture.region.ITextureRegion;
-import org.andengine.opengl.texture.region.ITiledTextureRegion;
-import org.andengine.opengl.texture.region.TextureRegion;
+import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
@@ -26,6 +25,7 @@ import android.graphics.Color;
 
 import com.pacSON.GameActivity;
 import com.pacSON.entity.Ellipse;
+import com.pacSON.tools.ToggleButtonSprite;
 
 public class ResourcesManager
 {
@@ -55,15 +55,28 @@ public class ResourcesManager
 	
 	// Game Texture Regions
 	public ITextureRegion reg;
+	public ITextureRegion settings_region;
 	
 	
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BitmapTextureAtlas gameTextureAtlas;
+	private BitmapTextureAtlas settingsTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 	
-//	// Level Complete Window
-//	public ITextureRegion complete_window_region;
-//	public ITiledTextureRegion complete_stars_region;
+	
+	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
+	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
+	public static boolean isAudioOn = true;
+	public static boolean FPS_COUNTER_ENABLE = true;
+	
+	/**
+	 * Texture Region for the game graphics
+	 */
+	private BitmapTextureAtlas mSoundButtonBitmapTextureAtlas;
+	public TiledTextureRegion soundButtonTextureRegion;
+	public ToggleButtonSprite soundToggleButtonSprite;
+	public TiledTextureRegion tickAndCrossButtonTextureRegion;
+	public ToggleButtonSprite tickAndCrossToggleButtonSprite;
 	
 	//---------------------------------------------
 	// CLASS LOGIC
@@ -82,7 +95,26 @@ public class ResourcesManager
 		loadGameFonts();
 		loadGameAudio();
 	}
+	public void loadOptionsResources()
+	{
+		loadOptionsGraphics();
+	}
+	private void loadOptionsGraphics()
+	{
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/options/");
+		this.mSoundButtonBitmapTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
+				200, 200, TextureOptions.BILINEAR);
 	
+		this.soundButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mSoundButtonBitmapTextureAtlas, activity.getAssets(), 
+						TOGGLE_BUTTON_AUDOIO, 0, 0, 2, 1);	
+		
+		this.tickAndCrossButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
+				.createTiledFromAsset(mSoundButtonBitmapTextureAtlas, activity.getAssets(), 
+						TOGGLE_TICK_AND_CROSS, 0, 100, 2, 1);	
+		
+		this.mSoundButtonBitmapTextureAtlas.load();
+	}
 	private void loadMenuGraphics()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/menu/");
@@ -123,11 +155,15 @@ public class ResourcesManager
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		gameTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
 				Ellipse.ELLIPSE_SPRITE_WIDTH, Ellipse.ELLIPSE_SPRITE_HEIGHT, TextureOptions.DEFAULT);
-
+		settingsTextureAtlas =  new BitmapTextureAtlas(activity.getTextureManager(),
+				117, 121, TextureOptions.DEFAULT);
 		reg = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(gameTextureAtlas, activity, Ellipse.ELLIPSE_FILE_NAME, Ellipse.ELLIPSE_SPRITE_X, Ellipse.ELLIPSE_SPRITE_Y);
+		settings_region = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(settingsTextureAtlas, activity, "settings.png", 0, 0);
 
 		activity.getTextureManager().loadTexture(gameTextureAtlas);
+		activity.getTextureManager().loadTexture(settingsTextureAtlas);
 	}
 	
 	private void loadGameFonts()

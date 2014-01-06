@@ -5,21 +5,24 @@ import org.andengine.engine.camera.hud.HUD;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.sprite.ButtonSprite;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.entity.util.FPSCounter;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.TextureOptions;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.texture.region.TextureRegion;
-import org.andengine.ui.activity.SimpleBaseGameActivity;
 
 import android.graphics.Typeface;
 
 import com.badlogic.gdx.math.Vector2;
 import com.pacSON.GameActivity;
+import com.pacSON.manager.ResourcesManager;
+import com.pacSON.manager.SceneManager;
 
 public class PacHud extends HUD
 {
@@ -41,9 +44,12 @@ public class PacHud extends HUD
 	private final int HUD_GRAV_VAL_MARGINY = 63;
 	private final int HUD_GRAV_VAL_MAXCHARS = 5;
 	
-	private boolean FPS_COUNTER_ENABLE = true;
 	private RotationModifier arrowRotationModifier;
-	
+	private ResourcesManager resourcesManager;
+	public PacHud(ResourcesManager resourcesManager){
+		this.resourcesManager = resourcesManager;
+	}
+	public PacHud(){}
 	public void load(GameActivity activity)
 	{
 		hudBase = new Sprite(2, 2, loadTextureRegion(activity, HUD_BASE_NAME, HUD_BASE_WIDTH, HUD_BASE_HEIGHT),
@@ -51,13 +57,29 @@ public class PacHud extends HUD
 		gravityArrow = new Sprite(2, 2, loadTextureRegion(activity, HUD_GRAV_ARROW_NAME, HUD_GRAV_ARROW_WIDTH, HUD_GRAV_ARROW_HEIGHT),
 				activity.getEngine().getVertexBufferObjectManager());
 		gravityValue = new Text(2, 2, loadFont(activity),"0.0", HUD_GRAV_VAL_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
-				
-		if(FPS_COUNTER_ENABLE){
+		
+		this.attachChild(addOptionsButton());
+		if(resourcesManager.FPS_COUNTER_ENABLE){
 		this.attachChild(addFpsCounter(activity));
 		}
 		this.attachChild(hudBase);
 		this.attachChild(gravityArrow);
 		this.attachChild(gravityValue);
+	}
+	private ButtonSprite addOptionsButton()
+	{
+		ButtonSprite button = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_region.getWidth(), 0, resourcesManager.settings_region, resourcesManager.vbom) {
+		       @Override
+		       public boolean onAreaTouched(TouchEvent pTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+		           if(pTouchEvent.isActionDown()) {
+		        	   SceneManager.getInstance().getCurrentScene().disposeScene();//this is to change experience
+		               SceneManager.getInstance().loadOptionsScene(resourcesManager.engine);
+		           }
+		           return super.onAreaTouched(pTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
+		       }
+		};
+		registerTouchArea(button);
+		return button;
 	}
 	private Text addFpsCounter(GameActivity activity){
 		final FPSCounter fpsCounter = new FPSCounter();

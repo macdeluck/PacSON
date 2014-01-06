@@ -61,10 +61,12 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 				SceneManager.getInstance().loadGameScene(engine);
 				return true;
 			case MENU_OPTIONS:
+				SceneManager.getInstance().loadOptionsScene(engine);
 				return true;
 			case ABOUT_OPTIONS:
 				return true;
 			case EXIT_OPTIONS:
+				resourcesManager.activity.finish();
 				System.exit(0);
 				return true;
 			default:
