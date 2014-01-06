@@ -1,17 +1,30 @@
 package com.pacSON.entity;
 
+import java.util.HashSet;
+
+import org.andengine.engine.handler.IUpdateHandler;
+import org.andengine.entity.IEntity;
+import org.andengine.entity.modifier.DelayModifier;
+import org.andengine.entity.modifier.RotationModifier;
+import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
+import org.andengine.util.algorithm.collision.RectangularShapeCollisionChecker;
+import org.andengine.util.modifier.IModifier;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.GameActivity;
+import com.pacSON.common.Vector2RotationCalculator;
+import com.pacSON.common.Vector2RotationResult;
+import com.pacSON.entity.modifiers.ModifiersFactory;
 import com.pacSON.manager.ResourcesManager;
 
 public class Player
@@ -19,7 +32,8 @@ public class Player
 	private Sprite mSprite;
 	private Body mBody;
 	private PhysicsConnector mConn;
-	private ResourcesManager resourceManager; 
+	private ResourcesManager resourceManager;
+	private PlayerStats mStats; 
 	
 	public static final int IMAGE_WIDTH = 50;
 	public static final int IMAGE_HEIGHT = 50;
@@ -32,12 +46,46 @@ public class Player
 	public static final float FIXTURE_ELASTICITY = 0.0f;
 	public static final float FIXTURE_FRICTION = 0.0f;
 	public static final String FILE_NAME = "circle.png";
+	public static final float ROTATION_DURATION = 0.2f;
+	
+	private float mImmortalityDuration = 3f;
+	private int mImmortalityBlinks = 3;
 
 	public Player(ResourcesManager resourcesManager)
 	{
+		this();
 		this.resourceManager = resourcesManager;
 	}
-	public Player(){}
+	public Player()
+	{
+		mStats = new PlayerStats();
+	}
+	
+	public float getImmortalityDuration()
+	{
+		return mImmortalityDuration;
+	}
+
+	public void setImmortalityDuration(float mImmortalityDuration)
+	{
+		this.mImmortalityDuration = mImmortalityDuration;
+	}
+
+	public int getImmortalityBlinks()
+	{
+		return mImmortalityBlinks;
+	}
+
+	public void setImmortalityBlinks(int mImmortalityBlinks)
+	{
+		this.mImmortalityBlinks = mImmortalityBlinks;
+	}
+	
+	public PlayerStats getStats()
+	{
+		return mStats;
+	}
+	
 	public Sprite getSprite()
 	{
 		return mSprite;
@@ -90,7 +138,41 @@ public class Player
 
 	public PhysicsConnector createPhysicsConnector()
 	{
-		mConn = new PhysicsConnector(mSprite, mBody, true, false);
+		mConn = new PhysicsConnector(mSprite, mBody, true, true)
+		{
+			private RotationModifier mod = null;
+			@Override
+			public void onUpdate(float pSecondsElapsed)
+			{
+				final IShape shape = this.mShape;
+				final Body body = this.mBody;
+	
+				if(this.mUpdatePosition) 
+				{
+					final Vector2 position = body.getPosition();
+					final float pixelToMeterRatio = this.mPixelToMeterRatio;
+					shape.setPosition(position.x * pixelToMeterRatio - this.mShapeHalfBaseWidth, position.y * pixelToMeterRatio - this.mShapeHalfBaseHeight);
+				}
+	
+				if(this.mUpdateRotation) 
+				{
+					Vector2 vec = mBody.getLinearVelocity();
+					float l = vec.len();
+					if (l!=0f)
+					{
+						Vector2RotationResult rot = Vector2RotationCalculator.getAngles(vec, mShape.getRotation());
+						
+						if (mod==null)
+						{
+							mod = new RotationModifier(ROTATION_DURATION, rot.fromAngle, rot.toAngle);
+							mod.setAutoUnregisterWhenFinished(false);
+							mShape.registerEntityModifier(mod);
+						}
+						else mod.reset(ROTATION_DURATION, rot.fromAngle, rot.toAngle);
+					}
+				}
+			}
+		};
 		return mConn;
 	}
 	
@@ -113,5 +195,131 @@ public class Player
 	    		(pY+ heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT);
 	    mBody.setTransform(v2, angle);
 	    Vector2Pool.recycle(v2);
+	}
+	
+	public class PlayerStats
+	{
+		private HashSet<IPlayerStatsChangedListener> lcListeners;
+		
+		private int defaultLives = 3;
+		
+		private int lives;
+
+		protected boolean immortality;
+		
+		public PlayerStats()
+		{
+			super();
+			reset();
+		}
+
+		public PlayerStats(int defaultLives)
+		{
+			super();
+			this.defaultLives = defaultLives;
+			reset();
+		}
+
+		public int getDefaultLives()
+		{
+			return defaultLives;
+		}
+
+		public void setDefaultLives(int defaultLives)
+		{
+			this.defaultLives = defaultLives;
+		}
+		
+		public int getLives()
+		{
+			return lives;
+		}
+
+		public void setLives(int lives)
+		{
+			this.lives = lives;
+			changed();
+		}
+
+		public boolean registerLivesChangedListener(IPlayerStatsChangedListener listener)
+		{
+			return lcListeners.add(listener);
+		}
+		
+		public boolean unregisterLivesChangedListener(IPlayerStatsChangedListener listener)
+		{
+			return lcListeners.remove(listener);
+		}
+		
+		public void reset()
+		{
+			lives = defaultLives;
+			immortality = false;
+			lcListeners = new HashSet<IPlayerStatsChangedListener>();
+			reseted();
+		}
+		
+		private void reseted()
+		{
+			for(IPlayerStatsChangedListener l : lcListeners)
+				l.statsReseted(this);
+		}
+		
+		private void changed()
+		{
+			for(IPlayerStatsChangedListener l : lcListeners)
+				l.statsChanged(this);
+		}
+		
+		public void setImmortality(float pDuration, int blinks)
+		{
+			immortality = true;
+			Player.this.getSprite().registerEntityModifier(ModifiersFactory.getBlinkModifier(pDuration, blinks));
+			Player.this.getSprite().registerEntityModifier(new DelayModifier(pDuration, new IEntityModifierListener() {
+			    @Override
+			    public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) 
+			    {
+			    }
+
+			    @Override
+			    public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) 
+			    {
+			    	immortality = false;
+			    }
+			}));
+		}
+		
+		public boolean isImmortality()
+		{
+			return immortality;
+		}
+	}
+
+	public class PlayerWithEnemyCollisionHandler implements IUpdateHandler
+	{
+		private Sprite enemy;
+		
+		public PlayerWithEnemyCollisionHandler(Sprite enemy)
+		{
+			super();
+			this.enemy = enemy;
+		}
+
+		@Override
+		public void reset()
+		{
+		}
+		
+		@Override
+		public void onUpdate(float pSecondsElapsed)
+		{
+			if (Player.this.getStats().isImmortality()) return;
+			if (RectangularShapeCollisionChecker.checkCollision(enemy, Player.this.getSprite()))
+			{
+				Player.this.getStats().setImmortality(Player.this.mImmortalityDuration, Player.this.mImmortalityBlinks);
+				Player.this.getStats().setLives(Player.this.getStats().getLives()-1);
+			}
+		}
+		
 	}
 }

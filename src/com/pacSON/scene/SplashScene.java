@@ -4,8 +4,6 @@ import org.andengine.engine.camera.Camera;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.opengl.util.GLState;
 
-import android.view.Display;
-
 import com.pacSON.base.BaseScene;
 import com.pacSON.manager.SceneManager.SceneType;
 

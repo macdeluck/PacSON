@@ -15,12 +15,15 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.base.BaseScene;
 import com.pacSON.entity.Bot;
+import com.pacSON.entity.GhostBot;
 import com.pacSON.entity.LabyrinthBackground;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.Star;
 import com.pacSON.entity.Wall;
+import com.pacSON.entity.modifiers.ModifiersFactory;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
+import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 import com.pacSON.physic.gravity.AccelerometerSensor;
@@ -45,9 +48,11 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	private LabyrinthManager lb;
 	private Player player;
 	private Bot[] bots;
+	private GhostBot ghostBot;
 	private Star[] stars;
 	private PacHud hud;
 	
+	@SuppressWarnings("deprecation")
 	public void createEngineOptions()
 	{
 		Display display = resourcesManager.activity.getWindowManager().getDefaultDisplay();
@@ -77,15 +82,15 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	}
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed){
-	 if(resourcesManager.gamePaused) 
+	 if(ResourcesManager.gamePaused) 
 	 {
-		 if(resourcesManager.isAudioOn)
+		 if(ResourcesManager.isAudioOn)
 			 resourcesManager.music.pause();
 		 super.onManagedUpdate(0);
 	 }
 	 else  
 	 {
-		 if(resourcesManager.isAudioOn)
+		 if(ResourcesManager.isAudioOn)
 			 resourcesManager.music.resume();
 		 super.onManagedUpdate(pSecondsElapsed);
 	 }
@@ -99,7 +104,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	}
 	private void setUpAudio()
 	{
-		if (resourcesManager.isAudioOn == true){
+		if (ResourcesManager.isAudioOn == true){
 		resourcesManager.music.setVolume(0.5f);
 		resourcesManager.music.setLooping(true);
 		resourcesManager.music.play();
@@ -171,12 +176,22 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 			bots[i].createPhysicBody(mPhysicsWorld);
 			attachChild(bots[i].getSprite());
 		}
+		//LIVES HUD SETUP
+		player.getStats().registerLivesChangedListener(hud.getLivesHud().getStatsChangedListener());
+		
+		//CREATE GHOST
+		ghostBot = new GhostBot(resourcesManager);
+		ghostBot.load(resourcesManager.activity);
+		ghostBot.getSprite().registerEntityModifier(
+				ModifiersFactory.getMoveAndGoBackModifier(10f, 0, 800, 100, 100));
 		
 		attachChild(player.getSprite());
 		attachChild(right);
 		attachChild(left);
 		attachChild(roof);
 		attachChild(ground);
+		attachChild(ghostBot.getSprite());
+		registerUpdateHandler(player.new PlayerWithEnemyCollisionHandler(ghostBot.getSprite()));
 
 		sensor.addOnGravityChangedListener(new OnGravityChangedListener()
 		{
@@ -185,7 +200,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 			{
 				Vector2 nv = new Vector2(vector[1], vector[0]);
 				mPhysicsWorld.setGravity(nv);
-				hud.setGravity(nv);
+				hud.getGravityHud().setGravity(nv);
 			}
 		});
 		camera.setChaseEntity(player.getSprite());

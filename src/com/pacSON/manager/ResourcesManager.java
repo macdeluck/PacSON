@@ -25,6 +25,7 @@ import android.graphics.Color;
 
 import com.pacSON.GameActivity;
 import com.pacSON.entity.Bot;
+import com.pacSON.entity.GhostBot;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.LabyrinthBackground;
 import com.pacSON.entity.Star;
@@ -61,6 +62,7 @@ public class ResourcesManager
 	public ITextureRegion player_reg;
 	public ITextureRegion wall_reg;
 	public ITextureRegion bot_reg;
+	public ITextureRegion ghostBotGreen_reg;
 	public ITextureRegion star_reg;
 	public ITextureRegion background_reg;
 	public ITextureRegion settings_reg;
@@ -70,6 +72,7 @@ public class ResourcesManager
 	private BitmapTextureAtlas wallTextureAtlas;
 	private BitmapTextureAtlas starTextureAtlas;
 	private BitmapTextureAtlas botTextureAtlas;
+	private BitmapTextureAtlas ghostBotGreenTextureAtlas;
 	private BitmapTextureAtlas backgroundTextureAtlas;
 	private BitmapTextureAtlas settingsTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
@@ -194,6 +197,9 @@ public class ResourcesManager
 		botTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), Bot.IMAGE_WIDTH,
 				Bot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
+		ghostBotGreenTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), GhostBot.IMAGE_WIDTH,
+				GhostBot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
 		backgroundTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), LabyrinthBackground.IMAGE_WIDTH,
 				LabyrinthBackground.IMAGE_HEIGHT, TextureOptions.REPEATING_NEAREST);
@@ -207,6 +213,8 @@ public class ResourcesManager
 				starTextureAtlas, activity, Star.FILE_NAME, 0, 0);
 		bot_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				botTextureAtlas, activity, Bot.FILE_NAME, 0, 0);
+		ghostBotGreen_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				ghostBotGreenTextureAtlas, activity, GhostBot.GREEN_FILE_NAME, 0, 0);
 		background_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				backgroundTextureAtlas, activity, LabyrinthBackground.FILE_NAME, 0, 0);
 		settings_reg = BitmapTextureAtlasTextureRegionFactory

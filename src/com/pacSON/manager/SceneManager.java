@@ -108,7 +108,8 @@ public class SceneManager
 		ResourcesManager.getInstance().unloadMenuTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
 		{
-            public void onTimePassed(final TimerHandler pTimerHandler) 
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler) 
             {
             	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadOptionsResources();
@@ -123,7 +124,8 @@ public class SceneManager
 		ResourcesManager.getInstance().unloadMenuTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
 		{
-            public void onTimePassed(final TimerHandler pTimerHandler) 
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler) 
             {
             	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadGameResources();
@@ -142,7 +144,8 @@ public class SceneManager
 		}
 		mEngine.registerUpdateHandler(new TimerHandler(0.1f, new ITimerCallback() 
 		{
-            public void onTimePassed(final TimerHandler pTimerHandler) 
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler) 
             {
             	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadMenuTextures();

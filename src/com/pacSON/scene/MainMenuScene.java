@@ -53,6 +53,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		// TODO Auto-generated method stub
 	}
 	
+	@Override
 	public boolean onMenuItemClicked(MenuScene pMenuScene, IMenuItem pMenuItem, float pMenuItemLocalX, float pMenuItemLocalY)
 	{
 		switch(pMenuItem.getID())

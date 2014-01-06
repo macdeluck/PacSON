@@ -4,6 +4,7 @@ import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 
 import com.pacSON.base.BaseScene;
+import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -27,7 +28,7 @@ public class OptionsScene extends BaseScene{
 	{
 		attachChild(new Text(pX - 100, pY + 25, resourcesManager.font, "Audio", vbom));
 		resourcesManager.soundToggleButtonSprite = new ToggleButtonSprite(pX + 200, pY, resourcesManager.soundButtonTextureRegion, resourcesManager.vbom);//vbo
-		if (resourcesManager.isAudioOn == true){
+		if (ResourcesManager.isAudioOn == true){
 			resourcesManager.soundToggleButtonSprite.setState(ToggleState.ON);
 		}
 		else{
@@ -43,10 +44,10 @@ public class OptionsScene extends BaseScene{
 			@Override
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				resourcesManager.isAudioOn = false;
+				ResourcesManager.isAudioOn = false;
 				if (resourcesManager.music != null)
 				{
-					if (resourcesManager.isAudioOn == true)
+					if (ResourcesManager.isAudioOn == true)
 						resourcesManager.music.play();
 					else
 						resourcesManager.music.stop();
@@ -56,10 +57,10 @@ public class OptionsScene extends BaseScene{
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				resourcesManager.isAudioOn = true;
+				ResourcesManager.isAudioOn = true;
 				if (resourcesManager.music != null)
 				{
-					if (resourcesManager.isAudioOn == true)
+					if (ResourcesManager.isAudioOn == true)
 						resourcesManager.music.play();
 					else
 						resourcesManager.music.stop();
@@ -72,7 +73,7 @@ public class OptionsScene extends BaseScene{
 	{
 		attachChild(new Text(pX - 150, pY + 25, resourcesManager.font, "Fps counter", vbom));
 		resourcesManager.tickAndCrossToggleButtonSprite = new ToggleButtonSprite(pX + 200, pY, resourcesManager.tickAndCrossButtonTextureRegion, resourcesManager.vbom);//vbo
-		if (resourcesManager.FPS_COUNTER_ENABLE == true){
+		if (ResourcesManager.FPS_COUNTER_ENABLE == true){
 			resourcesManager.tickAndCrossToggleButtonSprite.setState(ToggleState.ON);
 		}
 		else{
@@ -88,13 +89,13 @@ public class OptionsScene extends BaseScene{
 			@Override
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				resourcesManager.FPS_COUNTER_ENABLE = false;
+				ResourcesManager.FPS_COUNTER_ENABLE = false;
 			}
 			
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				resourcesManager.FPS_COUNTER_ENABLE = true;
+				ResourcesManager.FPS_COUNTER_ENABLE = true;
 			}
 		});
 		registerTouchArea(resourcesManager.tickAndCrossToggleButtonSprite);
