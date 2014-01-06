@@ -225,6 +225,7 @@ public class ResourcesManager
 		activity.getTextureManager().loadTexture(wallTextureAtlas);
 		activity.getTextureManager().loadTexture(starTextureAtlas);
 		activity.getTextureManager().loadTexture(botTextureAtlas);
+		activity.getTextureManager().loadTexture(ghostBotGreenTextureAtlas);
 		activity.getTextureManager().loadTexture(backgroundTextureAtlas);
 		activity.getTextureManager().loadTexture(settingsTextureAtlas);
 		
