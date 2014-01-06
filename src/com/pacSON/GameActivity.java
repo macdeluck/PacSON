@@ -17,7 +17,7 @@ import org.andengine.ui.activity.BaseGameActivity;
 import android.view.Display;
 import android.view.KeyEvent;
 
-import com.pacSON.entity.Ellipse;
+import com.pacSON.entity.Player;
 import com.pacSON.hud.PacHud;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;

@@ -10,6 +10,9 @@ public class LabyrinthMap
 	private int height;
 	private int[][] map;
 	private Random rnd;
+	private int[] player_position;
+	private List<int[]> stars_positions;
+	private List<int[]> bots_positions;
 
 	public LabyrinthMap(int _width, int _height)
 	{
@@ -17,11 +20,27 @@ public class LabyrinthMap
 		height = _height;
 		map = new int[height][width];
 		rnd = new Random(System.currentTimeMillis());
+		stars_positions = new ArrayList<int[]>(0);
+		bots_positions = new ArrayList<int[]>(0);
 	}
-
+	
 	public boolean Is_Empty(int x, int y)
 	{
 		if (x >= 0 && x < height && y >= 0 && y < width && map[x][y] == 0)
+			return true;
+		else
+			return false;
+	}
+	public boolean Is_Star_Or_Player(int x, int y)
+	{
+		if (x >= 0 && x < height && y >= 0 && y < width && (map[x][y] == 2 || map[x][y] == 4))
+			return true;
+		else
+			return false;
+	}
+	public boolean Is_Bot(int x, int y)
+	{
+		if (x >= 0 && x < height && y >= 0 && y < width && map[x][y] == 3)
 			return true;
 		else
 			return false;
@@ -35,11 +54,30 @@ public class LabyrinthMap
 			return false;
 	}
 
-	public boolean Set_Object(int x, int y)
+	public boolean Set_Star(int x, int y)
 	{
 		if (x < 0 || x >= height || y < 0 || y >= width)
 			return false;
 		map[x][y] = 2;
+		stars_positions.add(new int[]{x,y});
+		return true;
+	}
+	
+	public boolean Set_Player(int x, int y)
+	{
+		if (x < 0 || x >= height || y < 0 || y >= width)
+			return false;
+		map[x][y] = 4;
+		player_position = new int[]{x,y};
+		return true;
+	}
+	
+	public boolean Set_Bot(int x, int y)
+	{
+		if (x < 0 || x >= height || y < 0 || y >= width)
+			return false;
+		map[x][y] = 3;
+		bots_positions.add(new int[]{x,y});
 		return true;
 	}
 
@@ -71,14 +109,19 @@ public class LabyrinthMap
 		return res;
 	}
 
-	public List<int[]> Return_Objects()
+	public List<int[]> Return_Stars()
 	{
-		List<int[]> res = new ArrayList<int[]>(0);
-		for (int i = 0; i < height; i++)
-			for (int j = 0; j < width; j++)
-				if (map[i][j] == 2)
-					res.add(new int[]{i,j});
-		return res;
+		return stars_positions;
+	}
+	
+	public List<int[]> Return_Bots()
+	{
+		return bots_positions;
+	}
+	
+	public int[] Return_Player()
+	{
+		return player_position;
 	}
 
 	public List<int[]> Check_And_Repair(int x, int y)
@@ -190,14 +233,5 @@ public class LabyrinthMap
 		if (Is_Empty(x + 1, y))
 			count++;
 		return count;
-	}
-	
-	public int[] Return_First_Empty()
-	{
-		for (int i = 0; i < height; i++)
-			for (int j = 0; j < width; j++)
-			if(map[i][j] == 0)
-				return new int[]{i,j};
-		return new int[]{0,0};
 	}
 }
