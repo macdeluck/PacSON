@@ -34,7 +34,6 @@ public class GhostBot
 	
 	public void load(GameActivity activity)
 	{
-		// TODO inna grafika ducha
 		mSprite = new Sprite(GHOST_SPRITE_X, GHOST_SPRITE_Y, resourcesManager.ghostBotGreen_reg, 
 				resourcesManager.vbom);
 	}

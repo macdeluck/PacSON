@@ -81,13 +81,13 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	
 	private void createBackground()
 	{
-		
+		/*
 		int cameraWidth = (int) resourcesManager.camera.getWidth();
 		int cameraHeight = (int) resourcesManager.camera.getHeight();
 		int splashWidth = (int) resourcesManager.splash_region.getWidth();
 		int splashHeight= (int) resourcesManager.splash_region.getHeight();
 		int offsetX = ( cameraWidth - splashWidth ) / 2;
-		int offsetY = ( cameraHeight - splashHeight ) / 2;
+		int offsetY = ( cameraHeight - splashHeight ) / 2;*/
 		attachChild(new Sprite(0,0, resourcesManager.menu_background_region, vbom)
 		{
     		@Override
@@ -104,7 +104,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		menuChildScene = new MenuScene(camera);
 		menuChildScene.setPosition(0, 0);
 		int cameraWidth = (int) resourcesManager.camera.getWidth();
-		int cameraHeight = (int) resourcesManager.camera.getHeight();
+		// int cameraHeight = (int) resourcesManager.camera.getHeight();
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.2f, 1);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.2f, 1);
 		final IMenuItem aboutMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_OPTIONS, resourcesManager.about_region, vbom), 1.2f, 1);

@@ -20,6 +20,9 @@ import com.pacSON.entity.LabyrinthBackground;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.Star;
 import com.pacSON.entity.Wall;
+import com.pacSON.entity.collisions.PlayerCollisionHandler;
+import com.pacSON.entity.collisions.effects.PlayerWithEnemyCollisionEffect;
+import com.pacSON.entity.collisions.effects.PlayerWithStarCollisionEffect;
 import com.pacSON.entity.modifiers.ModifiersFactory;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
@@ -41,6 +44,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 	private static final int AREA_HEIGHT = 960;
 	private int BLOCK_X_COUNT;
 	private int BLOCK_Y_COUNT;
+	private float GRAVITY_FACTOR = 1.5f;
 	private static final int STARS_COUNT = 5;
 	private final int BOTS_COUNT = 5;
 	private final int UPDATE_RATE = 60;
@@ -165,6 +169,8 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 					* BLOCK_HEIGHT);
 			stars[i].load(resourcesManager.activity);
 			attachChild(stars[i].getSprite());
+			registerUpdateHandler(new PlayerCollisionHandler(player, stars[i].getSprite(), 
+					new PlayerWithStarCollisionEffect()));
 		}
 		tab = lb.Return_Bots();
 		bots = new Bot[tab.size()];
@@ -191,7 +197,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 		attachChild(roof);
 		attachChild(ground);
 		attachChild(ghostBot.getSprite());
-		registerUpdateHandler(player.new PlayerWithEnemyCollisionHandler(ghostBot.getSprite()));
+		registerUpdateHandler(new PlayerCollisionHandler(player, ghostBot.getSprite(), new PlayerWithEnemyCollisionEffect()));
 
 		sensor.addOnGravityChangedListener(new OnGravityChangedListener()
 		{
@@ -199,7 +205,7 @@ public class GameScene extends BaseScene //implements IOnSceneTouchListener
 			public void onGravityChanged(float[] vector, float[] delta)
 			{
 				Vector2 nv = new Vector2(vector[1], vector[0]);
-				mPhysicsWorld.setGravity(nv);
+				mPhysicsWorld.setGravity(nv.mul(GRAVITY_FACTOR));
 				hud.getGravityHud().setGravity(nv);
 			}
 		});

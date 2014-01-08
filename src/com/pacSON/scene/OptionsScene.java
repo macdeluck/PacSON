@@ -17,9 +17,9 @@ public class OptionsScene extends BaseScene{
 	{
 		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		int cameraWidth = (int) resourcesManager.camera.getWidth();
-		int cameraHeight = (int) resourcesManager.camera.getHeight();
+		// int cameraHeight = (int) resourcesManager.camera.getHeight();
 		int offsetX = ( cameraWidth - 150) / 2;
-		int offsetY = (int) (( cameraHeight - resourcesManager.font.getLineHeight()) / 2);
+		// int offsetY = (int) (( cameraHeight - resourcesManager.font.getLineHeight()) / 2);
 		attachChild(new Text(resourcesManager.camera.getXMin() + offsetX, 50, resourcesManager.font, "Options", vbom));
 		createAudioToogleButton((int)resourcesManager.camera.getXMin()+ offsetX, 150);
 		createFPSToogleButton((int)resourcesManager.camera.getXMin()+ offsetX, 300);

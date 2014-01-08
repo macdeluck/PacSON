@@ -2,11 +2,10 @@ package com.pacSON.entity;
 
 import java.util.HashSet;
 
-import org.andengine.engine.handler.IUpdateHandler;
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -14,7 +13,6 @@ import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.andengine.extension.physics.box2d.util.constants.PhysicsConstants;
-import org.andengine.util.algorithm.collision.RectangularShapeCollisionChecker;
 import org.andengine.util.modifier.IModifier;
 
 import com.badlogic.gdx.math.Vector2;
@@ -204,6 +202,18 @@ public class Player
 		private int defaultLives = 3;
 		
 		private int lives;
+		
+		private int stars;
+
+		public int getStars()
+		{
+			return stars;
+		}
+
+		public void setStars(int stars)
+		{
+			this.stars = stars;
+		}
 
 		protected boolean immortality;
 		
@@ -289,37 +299,9 @@ public class Player
 			}));
 		}
 		
-		public boolean isImmortality()
+		public boolean isImmortal()
 		{
 			return immortality;
 		}
-	}
-
-	public class PlayerWithEnemyCollisionHandler implements IUpdateHandler
-	{
-		private Sprite enemy;
-		
-		public PlayerWithEnemyCollisionHandler(Sprite enemy)
-		{
-			super();
-			this.enemy = enemy;
-		}
-
-		@Override
-		public void reset()
-		{
-		}
-		
-		@Override
-		public void onUpdate(float pSecondsElapsed)
-		{
-			if (Player.this.getStats().isImmortality()) return;
-			if (RectangularShapeCollisionChecker.checkCollision(enemy, Player.this.getSprite()))
-			{
-				Player.this.getStats().setImmortality(Player.this.mImmortalityDuration, Player.this.mImmortalityBlinks);
-				Player.this.getStats().setLives(Player.this.getStats().getLives()-1);
-			}
-		}
-		
 	}
 }
