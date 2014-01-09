@@ -190,7 +190,7 @@ public class ResourcesManager
 				Player.IMAGE_HEIGHT, TextureOptions.DEFAULT);
 		wallTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), Wall.IMAGE_WIDTH,
-				Wall.IMAGE_HEIGHT, TextureOptions.DEFAULT);
+				Wall.IMAGE_HEIGHT, TextureOptions.REPEATING_BILINEAR);
 		starTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), Star.IMAGE_WIDTH,
 				Star.IMAGE_HEIGHT, TextureOptions.DEFAULT);
