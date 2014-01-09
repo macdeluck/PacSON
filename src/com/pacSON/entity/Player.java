@@ -25,7 +25,7 @@ import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.entity.modifiers.ModifiersFactory;
 import com.pacSON.manager.ResourcesManager;
 
-public class Player
+public class Player implements com.pacSON.entity.IEntity
 {
 	private Sprite mSprite;
 	private Body mBody;
@@ -33,10 +33,10 @@ public class Player
 	private ResourcesManager resourceManager;
 	private PlayerStats mStats; 
 	
-	public static final int IMAGE_WIDTH = 50;
-	public static final int IMAGE_HEIGHT = 50;
-	public static final int SPRITE_WIDTH = 50;
-	public static final int SPRITE_HEIGHT = 50;
+	public static final int IMAGE_WIDTH = 48;
+	public static final int IMAGE_HEIGHT = 48;
+	public static final int SPRITE_WIDTH = 48;
+	public static final int SPRITE_HEIGHT = 48;
 	public static final int SPRITE_X = 0;
 	public static final int SPRITE_Y = 0;
 	public static final int RADIUS = 24;
@@ -84,11 +84,13 @@ public class Player
 		return mStats;
 	}
 	
+	@Override
 	public Sprite getSprite()
 	{
 		return mSprite;
 	}
 
+	@Override
 	public void setSprite(Sprite mSprite)
 	{
 		this.mSprite = mSprite;
@@ -198,12 +200,15 @@ public class Player
 	public class PlayerStats
 	{
 		private HashSet<IPlayerStatsChangedListener> lcListeners;
+		private HashSet<IPlayerStatsChangedListener> lsListeners;
 		
 		private int defaultLives = 3;
 		
 		private int lives;
 		
 		private int stars;
+		
+		protected boolean immortality;
 
 		public int getStars()
 		{
@@ -213,13 +218,14 @@ public class Player
 		public void setStars(int stars)
 		{
 			this.stars = stars;
+			starsChanged();
 		}
-
-		protected boolean immortality;
 		
 		public PlayerStats()
 		{
 			super();
+			lcListeners = new HashSet<IPlayerStatsChangedListener>();
+			lsListeners = new HashSet<IPlayerStatsChangedListener>();
 			reset();
 		}
 
@@ -248,7 +254,7 @@ public class Player
 		public void setLives(int lives)
 		{
 			this.lives = lives;
-			changed();
+			livesChanged();
 		}
 
 		public boolean registerLivesChangedListener(IPlayerStatsChangedListener listener)
@@ -261,11 +267,20 @@ public class Player
 			return lcListeners.remove(listener);
 		}
 		
+		public boolean registerStarsChangedListener(IPlayerStatsChangedListener listener)
+		{
+			return lsListeners.add(listener);
+		}
+		
+		public boolean unregisterStarsChangedListener(IPlayerStatsChangedListener listener)
+		{
+			return lsListeners.remove(listener);
+		}
+		
 		public void reset()
 		{
 			lives = defaultLives;
 			immortality = false;
-			lcListeners = new HashSet<IPlayerStatsChangedListener>();
 			reseted();
 		}
 		
@@ -273,11 +288,19 @@ public class Player
 		{
 			for(IPlayerStatsChangedListener l : lcListeners)
 				l.statsReseted(this);
+			for(IPlayerStatsChangedListener l : lsListeners)
+				l.statsReseted(this);
 		}
 		
-		private void changed()
+		private void livesChanged()
 		{
 			for(IPlayerStatsChangedListener l : lcListeners)
+				l.statsChanged(this);
+		}
+		
+		private void starsChanged()
+		{
+			for(IPlayerStatsChangedListener l : lsListeners)
 				l.statsChanged(this);
 		}
 		

@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class Wall
+public class Wall implements IEntity
 {
 	private Sprite mSprite;
 	private Body mBody;
@@ -38,11 +38,13 @@ public class Wall
 		SPRITE_HEIGHT = height;
 	}
 	
+	@Override
 	public Sprite getSprite()
 	{
 		return mSprite;
 	}
 
+	@Override
 	public void setSprite(Sprite mSprite)
 	{
 		this.mSprite = mSprite;

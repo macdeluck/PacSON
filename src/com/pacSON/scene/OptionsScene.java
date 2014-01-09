@@ -3,8 +3,10 @@ package com.pacSON.scene;
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.text.Text;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.pacSON.base.BaseScene;
-import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -28,7 +30,7 @@ public class OptionsScene extends BaseScene{
 	{
 		attachChild(new Text(pX - 100, pY + 25, resourcesManager.font, "Audio", vbom));
 		resourcesManager.soundToggleButtonSprite = new ToggleButtonSprite(pX + 200, pY, resourcesManager.soundButtonTextureRegion, resourcesManager.vbom);//vbo
-		if (ResourcesManager.isAudioOn == true){
+		if (resourcesManager.isAudioOn() == true){
 			resourcesManager.soundToggleButtonSprite.setState(ToggleState.ON);
 		}
 		else{
@@ -44,10 +46,15 @@ public class OptionsScene extends BaseScene{
 			@Override
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				ResourcesManager.isAudioOn = false;
+				SharedPreferences pref = resourcesManager.activity.getSharedPreferences(
+						activity.getString(com.pacSON.R.string.preference_key),
+						Context.MODE_PRIVATE);
+				final String key = activity.getString(com.pacSON.R.string.isAudioOn);
+				pref.edit().putBoolean(key, false).commit();
+				//ResourcesManager.isAudioOn = false;
 				if (resourcesManager.music != null)
 				{
-					if (ResourcesManager.isAudioOn == true)
+					if (pref.getBoolean(key, false) == true)
 						resourcesManager.music.play();
 					else
 						resourcesManager.music.stop();
@@ -57,10 +64,15 @@ public class OptionsScene extends BaseScene{
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				ResourcesManager.isAudioOn = true;
+				SharedPreferences pref = resourcesManager.activity.getSharedPreferences(
+						activity.getString(com.pacSON.R.string.preference_key),
+						Context.MODE_PRIVATE);
+				final String key = activity.getString(com.pacSON.R.string.isAudioOn);
+				pref.edit().putBoolean(key, true).commit();
+				// ResourcesManager.isAudioOn = true;
 				if (resourcesManager.music != null)
 				{
-					if (ResourcesManager.isAudioOn == true)
+					if (pref.getBoolean(key, false) == true)
 						resourcesManager.music.play();
 					else
 						resourcesManager.music.stop();
@@ -73,7 +85,7 @@ public class OptionsScene extends BaseScene{
 	{
 		attachChild(new Text(pX - 150, pY + 25, resourcesManager.font, "Fps counter", vbom));
 		resourcesManager.tickAndCrossToggleButtonSprite = new ToggleButtonSprite(pX + 200, pY, resourcesManager.tickAndCrossButtonTextureRegion, resourcesManager.vbom);//vbo
-		if (ResourcesManager.FPS_COUNTER_ENABLE == true){
+		if (resourcesManager.isFpsCounterEnabled() == true){
 			resourcesManager.tickAndCrossToggleButtonSprite.setState(ToggleState.ON);
 		}
 		else{
@@ -88,14 +100,26 @@ public class OptionsScene extends BaseScene{
 			
 			@Override
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
-					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				ResourcesManager.FPS_COUNTER_ENABLE = false;
+					float pTouchAreaLocalX, float pTouchAreaLocalY) 
+			{
+				SharedPreferences pref = resourcesManager.activity.getSharedPreferences(
+					activity.getString(com.pacSON.R.string.preference_key),
+					Context.MODE_PRIVATE);
+				final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
+				pref.edit().putBoolean(key, false).commit();
+				//ResourcesManager.FPS_COUNTER_ENABLE = false;
 			}
 			
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
-					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				ResourcesManager.FPS_COUNTER_ENABLE = true;
+					float pTouchAreaLocalX, float pTouchAreaLocalY) 
+			{
+				SharedPreferences pref = resourcesManager.activity.getSharedPreferences(
+						activity.getString(com.pacSON.R.string.preference_key),
+						Context.MODE_PRIVATE);
+				final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
+				pref.edit().putBoolean(key, true).commit();
+				//ResourcesManager.FPS_COUNTER_ENABLE = true;
 			}
 		});
 		registerTouchArea(resourcesManager.tickAndCrossToggleButtonSprite);

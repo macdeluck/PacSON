@@ -1,13 +1,12 @@
 package com.pacSON.entity.collisions.effects;
 
-import org.andengine.entity.sprite.Sprite;
-
+import com.pacSON.entity.GhostBot;
 import com.pacSON.entity.Player;
 
-public class PlayerWithEnemyCollisionEffect implements IPlayerCollisionEffect
+public class PlayerWithEnemyCollisionEffect implements IPlayerCollisionEffect<GhostBot>
 {
 	@Override
-	public void onCollision(Player player, Sprite enemy)
+	public void onCollision(Player player, GhostBot enemy)
 	{
 		if (!player.getStats().isImmortal())
 		{
@@ -18,7 +17,7 @@ public class PlayerWithEnemyCollisionEffect implements IPlayerCollisionEffect
 	}
 
 	@Override
-	public void onReset(Player s1, Sprite enemy)
+	public void onReset(Player s1, GhostBot enemy)
 	{
 	}
 	

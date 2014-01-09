@@ -14,7 +14,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.base.BaseScene;
-import com.pacSON.entity.Bot;
 import com.pacSON.entity.GhostBot;
 import com.pacSON.entity.LabyrinthBackground;
 import com.pacSON.entity.Player;
@@ -90,12 +89,12 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	{
 		if (ResourcesManager.gamePaused)
 		{
-			if (ResourcesManager.isAudioOn)
+			if (resourcesManager.isAudioOn())
 				resourcesManager.music.pause();
 			super.onManagedUpdate(0);
 		} else
 		{
-			if (ResourcesManager.isAudioOn)
+			if (resourcesManager.isAudioOn())
 				resourcesManager.music.resume();
 			super.onManagedUpdate(pSecondsElapsed);
 		}
@@ -111,7 +110,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 
 	private void setUpAudio()
 	{
-		if (ResourcesManager.isAudioOn == true)
+		if (resourcesManager.isAudioOn() == true)
 		{
 			resourcesManager.music.setVolume(0.5f);
 			resourcesManager.music.setLooping(true);
@@ -175,8 +174,8 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					tab.get(i)[0] * BLOCK_HEIGHT);
 			stars[i].load(resourcesManager.activity);
 			attachChild(stars[i].getSprite());
-			registerUpdateHandler(new PlayerCollisionHandler(player,
-					stars[i].getSprite(), new PlayerWithStarCollisionEffect()));
+			registerUpdateHandler(new PlayerCollisionHandler<Star>(player,
+					stars[i], new PlayerWithStarCollisionEffect()));
 		}
 		tab = lb.Return_Bots();
 		ghostBots = new GhostBot[tab.size()];
@@ -189,16 +188,21 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					ModifiersFactory.getMoveAndGoBackModifier(10f,
 							tab.get(i)[1] * BLOCK_WIDTH - BLOCK_WIDTH * 5 + 9,
 							tab.get(i)[1] * BLOCK_WIDTH + BLOCK_WIDTH * 5 + 9,
-							tab.get(i)[0] * BLOCK_HEIGHT + 5,
-							tab.get(i)[0] * BLOCK_HEIGHT + 5));
-			registerUpdateHandler(new PlayerCollisionHandler(player,
-					ghostBots[i].getSprite(),
+							tab.get(i)[0] * BLOCK_HEIGHT + 7,
+							tab.get(i)[0] * BLOCK_HEIGHT + 7));
+			registerUpdateHandler(new PlayerCollisionHandler<GhostBot>(player,
+					ghostBots[i],
 					new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
 		// LIVES HUD SETUP
 		player.getStats().registerLivesChangedListener(
 				hud.getLivesHud().getStatsChangedListener());
+		
+		// STARS HUD SETUP
+		player.getStats().registerStarsChangedListener(
+				hud.getStarsHud().getStatsChangedListener());
+		
 
 		// CREATE GHOST
 		/*
