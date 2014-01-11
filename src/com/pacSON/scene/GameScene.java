@@ -215,8 +215,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 				GhostBot[] bots = manager.getBots();
 				List<int[]> positions = ai
 						.Return_New_Positions_Greedy(new int[] {
-								player.getBody().getTransform().POS_X / BLOCK_WIDTH,
-								player.getBody().getTransform().POS_Y / BLOCK_HEIGHT, });
+								 });
 				for (int i = 0; i < bots.length; i++)
 				{
 					manager.setNewMoveModifier(bots[i], positions.get(i)[1]
