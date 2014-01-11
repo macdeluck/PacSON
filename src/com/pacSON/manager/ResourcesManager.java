@@ -21,13 +21,15 @@ import org.andengine.opengl.texture.region.TiledTextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 import org.andengine.util.debug.Debug;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 
 import com.pacSON.GameActivity;
 import com.pacSON.entity.Bot;
 import com.pacSON.entity.GhostBot;
-import com.pacSON.entity.Player;
 import com.pacSON.entity.LabyrinthBackground;
+import com.pacSON.entity.Player;
 import com.pacSON.entity.Star;
 import com.pacSON.entity.Wall;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -79,8 +81,6 @@ public class ResourcesManager
 
 	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
-	public static boolean isAudioOn = true;
-	public static boolean FPS_COUNTER_ENABLE = true;
 	public static boolean gamePaused = false;
 	/**
 	 * Texture Region for the game graphics
@@ -323,5 +323,27 @@ public class ResourcesManager
 	public static ResourcesManager getInstance()
 	{
 		return INSTANCE;
+	}
+	
+	public boolean isAudioOn()
+	{
+		SharedPreferences pref = activity.getSharedPreferences(
+				activity.getString(com.pacSON.R.string.preference_key),
+				Context.MODE_PRIVATE);
+		final String key = activity.getString(com.pacSON.R.string.isAudioOn);
+		if (!pref.contains(key))
+			pref.edit().putBoolean(key, false).commit();
+		return pref.getBoolean(key, false);
+	}
+	
+	public boolean isFpsCounterEnabled()
+	{
+		SharedPreferences pref = activity.getSharedPreferences(
+				activity.getString(com.pacSON.R.string.preference_key),
+				Context.MODE_PRIVATE);
+		final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
+		if (!pref.contains(key))
+			pref.edit().putBoolean(key, true).commit();
+		return pref.getBoolean(key, true);
 	}
 }

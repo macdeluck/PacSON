@@ -15,6 +15,9 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f030000;
+        public static final int isAudioOn=0x7f030002;
+        public static final int isFpsCounterEnabled=0x7f030003;
+        public static final int preference_key=0x7f030001;
     }
     public static final class style {
         public static final int AppTheme=0x7f040000;

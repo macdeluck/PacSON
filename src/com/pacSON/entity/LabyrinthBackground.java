@@ -5,7 +5,7 @@ import org.andengine.entity.sprite.Sprite;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class LabyrinthBackground
+public class LabyrinthBackground implements IEntity
 {
 	private Sprite mSprite;
 	private ResourcesManager resourceManager;
@@ -27,11 +27,13 @@ public class LabyrinthBackground
 		SPRITE_HEIGHT = height;
 	}
 	
+	@Override
 	public Sprite getSprite()
 	{
 		return mSprite;
 	}
 
+	@Override
 	public void setSprite(Sprite mSprite)
 	{
 		this.mSprite = mSprite;

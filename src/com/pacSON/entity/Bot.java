@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class Bot
+public class Bot implements IEntity
 {
 	private Sprite mSprite;
 	private Body mBody;
@@ -34,11 +34,13 @@ public class Bot
 		SPRITE_Y = y+5;
 	}
 	
+	@Override
 	public Sprite getSprite()
 	{
 		return mSprite;
 	}
 
+	@Override
 	public void setSprite(Sprite mSprite)
 	{
 		this.mSprite = mSprite;

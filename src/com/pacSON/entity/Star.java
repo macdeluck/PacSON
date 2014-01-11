@@ -5,11 +5,22 @@ import org.andengine.entity.sprite.Sprite;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class Star
+public class Star implements IEntity
 {
 
 	private Sprite mSprite;
 	private ResourcesManager resourceManager;
+	private boolean taken = false;
+
+	public boolean isTaken()
+	{
+		return taken;
+	}
+
+	public void setTaken(boolean taken)
+	{
+		this.taken = taken;
+	}
 
 	public static final int IMAGE_WIDTH = 50;
 	public static final int IMAGE_HEIGHT = 50;
@@ -26,11 +37,13 @@ public class Star
 		SPRITE_Y = y+5;
 	}
 	
+	@Override
 	public Sprite getSprite()
 	{
 		return mSprite;
 	}
 
+	@Override
 	public void setSprite(Sprite mSprite)
 	{
 		this.mSprite = mSprite;

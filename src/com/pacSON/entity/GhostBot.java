@@ -5,7 +5,7 @@ import org.andengine.entity.sprite.Sprite;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class GhostBot
+public class GhostBot implements IEntity
 {
 	private Sprite mSprite;
 	private ResourcesManager resourceManager;
@@ -13,8 +13,8 @@ public class GhostBot
 	public final static String GREEN_FILE_NAME = "ghostgreen.png";
 	public int GHOST_SPRITE_X = 0;
 	public int GHOST_SPRITE_Y = 0;
-	public final static int IMAGE_WIDTH = 42;
-	public final static int IMAGE_HEIGHT = 50;
+	public final static int IMAGE_WIDTH = 38;
+	public final static int IMAGE_HEIGHT = 44;
 	
 	public GhostBot(ResourcesManager resourceManager, int x, int y)
 	{
@@ -24,11 +24,13 @@ public class GhostBot
 		this.resourceManager = resourceManager;
 	}
 	
+	@Override
 	public Sprite getSprite()
 	{
 		return mSprite;
 	}
 
+	@Override
 	public void setSprite(Sprite mSprite)
 	{
 		this.mSprite = mSprite;

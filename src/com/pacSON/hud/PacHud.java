@@ -39,7 +39,16 @@ public class PacHud extends HUD
 	private ResourcesManager resourcesManager;
 	private GravityHud gravityHud;
 	private LivesHud livesHud;
+	private StarHud starsHud;
 	
+	public StarHud getStarsHud()
+	{
+		return starsHud;
+	}
+	public void setStarsHud(StarHud starHud)
+	{
+		this.starsHud = starHud;
+	}
 	public PacHud(ResourcesManager resourcesManager)
 	{
 		this();
@@ -49,6 +58,7 @@ public class PacHud extends HUD
 	{ 
 		gravityHud = new GravityHud();
 		livesHud = new LivesHud(3);
+		starsHud = new StarHud(3);
 	}
 	
 	public LivesHud getLivesHud()
@@ -75,7 +85,7 @@ public class PacHud extends HUD
 	{
 		this.attachChild(addOptionsButton());
 		addPauseToogleButton();
-		if(ResourcesManager.FPS_COUNTER_ENABLE)
+		if(resourcesManager.isFpsCounterEnabled())
 		{
 			this.attachChild(addFpsCounter(activity));
 		}
@@ -84,6 +94,9 @@ public class PacHud extends HUD
 		
 		this.livesHud.add(activity);
 		this.livesHud.attach(this);
+		
+		this.starsHud.add(activity);
+		this.starsHud.attach(this);
 	}
 	private void addPauseToogleButton()
 	{
@@ -153,6 +166,7 @@ public class PacHud extends HUD
 		super.setCamera(camera);
 		this.gravityHud.setCamera(camera);
 		this.livesHud.setCamera(camera);
+		this.starsHud.setCamera(camera);
 	}
 	
 	private Font loadFont(GameActivity activity)
@@ -342,6 +356,67 @@ public class PacHud extends HUD
 			activity.getTextureManager().loadTexture(bta);
 			
 			textureRegion = reg;
+		}
+		
+		public IPlayerStatsChangedListener getStatsChangedListener()
+		{
+			return listener;
+		}
+	}
+
+	public class StarHud
+	{
+		Sprite star;
+		Text text;
+		
+		private IPlayerStatsChangedListener listener = null;
+		
+		public static final String HUD_STAR_NAME = "star.png";
+		public static final int HUD_STAR_WIDTH = 50;
+		public static final int HUD_STAR_HEIGHT= 50;
+		public static final int HUD_STAR_MARGIN = 10;
+
+		public static final int HUD_TEXT_MAXCHARS = 5;
+
+		public StarHud(int stars)
+		{
+			super();
+			listener = new IPlayerStatsChangedListener()
+			{
+				@Override
+				public void statsChanged(PlayerStats stats)
+				{
+					text.setText(Integer.toString(stats.getStars()));
+				}
+
+				@Override
+				public void statsReseted(PlayerStats stats)
+				{
+					text.setText("0");
+				}
+			};
+		}
+
+		public void setCamera(Camera camera)
+		{
+			star.setPosition(HUD_STAR_MARGIN,
+					camera.getHeight() - HUD_STAR_MARGIN - LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
+			text.setPosition(HUD_STAR_MARGIN + HUD_STAR_WIDTH + HUD_STAR_MARGIN,
+					camera.getHeight() - HUD_STAR_MARGIN - LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
+		}
+
+		public void add(GameActivity activity)
+		{
+			star = new Sprite(0,0, resourcesManager.star_reg, 
+					activity.getEngine().getVertexBufferObjectManager());
+			text = new Text(2, 2, resourcesManager.font ,"0", 
+					HUD_TEXT_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
+		}
+
+		public void attach(IEntity parent)
+		{
+			parent.attachChild(star);
+			parent.attachChild(text);
 		}
 		
 		public IPlayerStatsChangedListener getStatsChangedListener()
