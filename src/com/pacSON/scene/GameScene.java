@@ -3,12 +3,12 @@ package com.pacSON.scene;
 import java.util.List;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import android.util.Log;
 import android.view.Display;
 
 import com.badlogic.gdx.math.Vector2;
@@ -215,7 +215,9 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 				GhostBot[] bots = manager.getBots();
 				List<int[]> positions = ai
 						.Return_New_Positions_Greedy(new int[] {
-								 });
+								(int)player.getY()/ BLOCK_HEIGHT,
+								(int)player.getX() / BLOCK_WIDTH, });
+				//Log.d("pacSON", String.format("%f %f", player.getX(), player.getY()));
 				for (int i = 0; i < bots.length; i++)
 				{
 					manager.setNewMoveModifier(bots[i], positions.get(i)[1]

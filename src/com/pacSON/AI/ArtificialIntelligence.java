@@ -36,8 +36,8 @@ public class ArtificialIntelligence
 		{
 			new_x = x = new_bots_positions.get(i)[0];
 			new_y = y = new_bots_positions.get(i)[1];
-			dx = player_position[0] - x;
-			dy = player_position[1] - y;
+			dx = x - player_position[0];
+			dy = y - player_position[1];
 			if (map.Is_Enable_To_Move(x, y - 1))
 				empty_fields[0] = true;
 			else

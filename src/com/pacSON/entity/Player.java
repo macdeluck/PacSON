@@ -19,6 +19,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Transform;
 import com.pacSON.GameActivity;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
@@ -195,6 +196,18 @@ public class Player implements com.pacSON.entity.IEntity
 	    		(pY+ heightD2) / PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT);
 	    mBody.setTransform(v2, angle);
 	    Vector2Pool.recycle(v2);
+	}
+	
+	public float getX()
+	{
+		Transform t = mBody.getTransform();
+		return t.vals[0]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+	}
+	
+	public float getY()
+	{
+		Transform t = mBody.getTransform();
+		return t.vals[1]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 	}
 	
 	public class PlayerStats
