@@ -32,11 +32,11 @@ public class GameActivity extends BaseGameActivity
 	private static final int BACKGROUND_WIDTH = 480;
 	private static final int BACKGROUND_HEIGHT = 800;	
 	//private static final int ITEMS_COUNT = 5;
-	//private final int UPDATE_RATE = 60;
+	private final int FPS = 60;
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
 	{
-		return new LimitedFPSEngine(pEngineOptions, 60);
+		return new LimitedFPSEngine(pEngineOptions, FPS);
 	}
 	
 	@Override

@@ -201,13 +201,13 @@ public class Player implements com.pacSON.entity.IEntity
 	public float getX()
 	{
 		Transform t = mBody.getTransform();
-		return t.vals[0]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+		return t.vals[1]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 	}
 	
 	public float getY()
 	{
 		Transform t = mBody.getTransform();
-		return t.vals[1]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
+		return t.vals[0]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 	}
 	
 	public class PlayerStats
