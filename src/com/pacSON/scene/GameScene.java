@@ -3,6 +3,7 @@ package com.pacSON.scene;
 import java.util.List;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
@@ -23,8 +24,8 @@ import com.pacSON.entity.Wall;
 import com.pacSON.entity.collisions.PlayerCollisionHandler;
 import com.pacSON.entity.collisions.effects.PlayerWithEnemyCollisionEffect;
 import com.pacSON.entity.collisions.effects.PlayerWithStarCollisionEffect;
-import com.pacSON.entity.modifiers.ModifiersFactory;
-import com.pacSON.entity.modifiers.ModifiersFactory.MyMoveModifier;
+import com.pacSON.entity.modifiers.GhostBotMoveManager;
+import com.pacSON.entity.modifiers.MovesReadyListener;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
 import com.pacSON.manager.ResourcesManager;
@@ -197,15 +198,29 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 			 * BLOCK_WIDTH * 5 + 9, tab.get(i)[0] * BLOCK_HEIGHT + 5,
 			 * tab.get(i)[0] BLOCK_HEIGHT + 5));
 			 */
-			ghostBots[i].getSprite().registerEntityModifier(
+			/*ghostBots[i].getSprite().registerEntityModifier(
 					new MyMoveModifier(1f, tab.get(i)[1] * BLOCK_WIDTH + 9,
 							positions.get(i)[1] * BLOCK_WIDTH + 9,
 							tab.get(i)[0] * BLOCK_HEIGHT + 5,
-							positions.get(i)[0] * BLOCK_HEIGHT + 9));
+							positions.get(i)[0] * BLOCK_HEIGHT + 9));*/
 			registerUpdateHandler(new PlayerCollisionHandler<GhostBot>(player,
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
+		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, 1f);
+		manager.setListener(new MovesReadyListener()
+		{
+			@Override
+			public void onReady(GhostBotMoveManager manager)
+			{
+				GhostBot[] bots = manager.getBots();
+				for(int i=0; i<bots.length; i++)
+				{
+					manager.setNewMoveModifier(bots[i], BLOCK_WIDTH, 0f);
+				}
+			}
+		});
+		manager.start();
 		// LIVES HUD SETUP
 		player.getStats().registerLivesChangedListener(
 				hud.getLivesHud().getStatsChangedListener());
