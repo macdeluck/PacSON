@@ -183,8 +183,6 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					stars[i], new PlayerWithStarCollisionEffect()));
 		}
 		tab = lb.Return_Bots();
-		List<int[]> positions = ai.Return_New_Positions_Greedy(new int[] {
-				p[0], p[1] });
 		ghostBots = new GhostBot[tab.size()];
 		for (int i = 0; i < tab.size(); i++)
 		{
@@ -198,11 +196,12 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 			 * BLOCK_WIDTH * 5 + 9, tab.get(i)[0] * BLOCK_HEIGHT + 5,
 			 * tab.get(i)[0] BLOCK_HEIGHT + 5));
 			 */
-			/*ghostBots[i].getSprite().registerEntityModifier(
-					new MyMoveModifier(1f, tab.get(i)[1] * BLOCK_WIDTH + 9,
-							positions.get(i)[1] * BLOCK_WIDTH + 9,
-							tab.get(i)[0] * BLOCK_HEIGHT + 5,
-							positions.get(i)[0] * BLOCK_HEIGHT + 9));*/
+			/*
+			 * ghostBots[i].getSprite().registerEntityModifier( new
+			 * MyMoveModifier(1f, tab.get(i)[1] * BLOCK_WIDTH + 9,
+			 * positions.get(i)[1] * BLOCK_WIDTH + 9, tab.get(i)[0] *
+			 * BLOCK_HEIGHT + 5, positions.get(i)[0] * BLOCK_HEIGHT + 9));
+			 */
 			registerUpdateHandler(new PlayerCollisionHandler<GhostBot>(player,
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
@@ -214,9 +213,14 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 			public void onReady(GhostBotMoveManager manager)
 			{
 				GhostBot[] bots = manager.getBots();
-				for(int i=0; i<bots.length; i++)
+				List<int[]> positions = ai
+						.Return_New_Positions_Greedy(new int[] {
+								player.getBody().getTransform().POS_X / BLOCK_WIDTH,
+								player.getBody().getTransform().POS_Y / BLOCK_HEIGHT, });
+				for (int i = 0; i < bots.length; i++)
 				{
-					manager.setNewMoveModifier(bots[i], BLOCK_WIDTH, 0f);
+					manager.setNewMoveModifier(bots[i], positions.get(i)[1]
+							* BLOCK_WIDTH, positions.get(i)[0] * BLOCK_HEIGHT);
 				}
 			}
 		});
@@ -224,11 +228,10 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		// LIVES HUD SETUP
 		player.getStats().registerLivesChangedListener(
 				hud.getLivesHud().getStatsChangedListener());
-		
+
 		// STARS HUD SETUP
 		player.getStats().registerStarsChangedListener(
 				hud.getStarsHud().getStatsChangedListener());
-		
 
 		// CREATE GHOST
 		/*

@@ -54,6 +54,14 @@ public class LabyrinthMap
 			return false;
 	}
 
+	public boolean Is_Enable_To_Move(int x, int y)
+	{
+		if (x >= 0 && x < height && y >= 0 && y < width && (map[x][y] == 0 || map[x][y] == 2) )
+			return true;
+		else
+			return false;
+	}
+	
 	public boolean Set_Star(int x, int y)
 	{
 		if (x < 0 || x >= height || y < 0 || y >= width)

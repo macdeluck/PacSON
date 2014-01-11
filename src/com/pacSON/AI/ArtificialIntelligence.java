@@ -10,6 +10,7 @@ public class ArtificialIntelligence
 	private List<int[]> bots_positions;
 	private List<int[]> new_bots_positions;
 	private int[] player_position;
+	private List<int[]> res;
 
 	public ArtificialIntelligence(LabyrinthMap _map)
 	{
@@ -17,10 +18,12 @@ public class ArtificialIntelligence
 		List<int[]> tmp = map.Return_Bots();
 		bots_positions = new ArrayList<int[]>(tmp.size());
 		new_bots_positions = new ArrayList<int[]>(tmp.size());
+		res = new ArrayList<int[]>(bots_positions.size());
 		for (int i = 0; i < tmp.size(); ++i)
 		{
-			bots_positions.add(new int[]{tmp.get(i)[0],tmp.get(i)[1]});
-			new_bots_positions.add(new int[]{tmp.get(i)[0],tmp.get(i)[1]});
+			bots_positions.add(new int[] { tmp.get(i)[0], tmp.get(i)[1] });
+			new_bots_positions.add(new int[] { tmp.get(i)[0], tmp.get(i)[1] });
+			res.add(new int[] { 0, 0 });
 		}
 	}
 
@@ -35,19 +38,19 @@ public class ArtificialIntelligence
 			new_y = y = new_bots_positions.get(i)[1];
 			dx = player_position[0] - x;
 			dy = player_position[1] - y;
-			if (map.Is_Empty_Generally(x, y - 1))
+			if (map.Is_Enable_To_Move(x, y - 1))
 				empty_fields[0] = true;
 			else
 				empty_fields[0] = false;
-			if (map.Is_Empty_Generally(x - 1, y))
+			if (map.Is_Enable_To_Move(x - 1, y))
 				empty_fields[1] = true;
 			else
 				empty_fields[1] = false;
-			if (map.Is_Empty_Generally(x, y + 1))
+			if (map.Is_Enable_To_Move(x, y + 1))
 				empty_fields[2] = true;
 			else
 				empty_fields[2] = false;
-			if (map.Is_Empty_Generally(x + 1, y))
+			if (map.Is_Enable_To_Move(x + 1, y))
 				empty_fields[3] = true;
 			else
 				empty_fields[3] = false;
@@ -100,7 +103,9 @@ public class ArtificialIntelligence
 			}
 			bots_positions.get(i)[0] = x;
 			bots_positions.get(i)[1] = y;
+			res.get(i)[0] = new_x - x;
+			res.get(i)[1] = new_y - y;
 		}
-		return new_bots_positions;
+		return res;
 	}
 }
