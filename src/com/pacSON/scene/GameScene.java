@@ -13,6 +13,7 @@ import android.view.Display;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.pacSON.AI.ArtificialIntelligence;
 import com.pacSON.base.BaseScene;
 import com.pacSON.entity.Bot;
 import com.pacSON.entity.GhostBot;
@@ -24,6 +25,7 @@ import com.pacSON.entity.collisions.PlayerCollisionHandler;
 import com.pacSON.entity.collisions.effects.PlayerWithEnemyCollisionEffect;
 import com.pacSON.entity.collisions.effects.PlayerWithStarCollisionEffect;
 import com.pacSON.entity.modifiers.ModifiersFactory;
+import com.pacSON.entity.modifiers.ModifiersFactory.MyMoveModifier;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
 import com.pacSON.manager.ResourcesManager;
@@ -50,6 +52,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	private final int UPDATE_RATE = 60;
 	private GravitySensor sensor;
 	private LabyrinthManager lb;
+	private ArtificialIntelligence ai;
 	private Player player;
 	// private Bot[] bots;
 	private GhostBot[] ghostBots;
@@ -85,6 +88,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		sns.setNoise(0.1f);
 		sensor = sns;
 	}
+
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed)
 	{
@@ -179,18 +183,26 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					stars[i].getSprite(), new PlayerWithStarCollisionEffect()));
 		}
 		tab = lb.Return_Bots();
+		List<int[]> positions = ai.Return_New_Positions_Greedy(new int[] {
+				p[0], p[1] });
 		ghostBots = new GhostBot[tab.size()];
 		for (int i = 0; i < tab.size(); i++)
 		{
 			ghostBots[i] = new GhostBot(resourcesManager, tab.get(i)[1]
 					* BLOCK_WIDTH, tab.get(i)[0] * BLOCK_HEIGHT);
 			ghostBots[i].load(resourcesManager.activity);
+			/*
+			 * ghostBots[i].getSprite().registerEntityModifier(
+			 * ModifiersFactory.getMoveAndGoBackModifier(10f, tab.get(i)[1] *
+			 * BLOCK_WIDTH - BLOCK_WIDTH * 5 + 9, tab.get(i)[1] * BLOCK_WIDTH +
+			 * BLOCK_WIDTH * 5 + 9, tab.get(i)[0] * BLOCK_HEIGHT + 5,
+			 * tab.get(i)[0] BLOCK_HEIGHT + 5));
+			 */
 			ghostBots[i].getSprite().registerEntityModifier(
-					ModifiersFactory.getMoveAndGoBackModifier(10f,
-							tab.get(i)[1] * BLOCK_WIDTH - BLOCK_WIDTH * 5 + 9,
-							tab.get(i)[1] * BLOCK_WIDTH + BLOCK_WIDTH * 5 + 9,
+					new MyMoveModifier(1f, tab.get(i)[1] * BLOCK_WIDTH + 9,
+							positions.get(i)[1] * BLOCK_WIDTH + 9,
 							tab.get(i)[0] * BLOCK_HEIGHT + 5,
-							tab.get(i)[0] * BLOCK_HEIGHT + 5));
+							positions.get(i)[0] * BLOCK_HEIGHT + 9));
 			registerUpdateHandler(new PlayerCollisionHandler(player,
 					ghostBots[i].getSprite(),
 					new PlayerWithEnemyCollisionEffect()));
@@ -213,7 +225,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		attachChild(left);
 		attachChild(roof);
 		attachChild(ground);
-		
+
 		// attachChild(ghostBot.getSprite());
 		// registerUpdateHandler(new PlayerCollisionHandler(player,
 		// ghostBot.getSprite(), new PlayerWithEnemyCollisionEffect()));
@@ -244,7 +256,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	{
 		return SceneType.SCENE_GAME;
 	}
-	
+
 	@Override
 	public void disposeScene()
 	{
@@ -264,7 +276,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		lb = new LabyrinthManager();
 		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, STARS_COUNT,
 				BOTS_COUNT, false, true);
-
+		ai = new ArtificialIntelligence(lb.Return_Map());
 		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
 		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,

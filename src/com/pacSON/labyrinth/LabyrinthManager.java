@@ -192,6 +192,11 @@ public class LabyrinthManager
 	{
 		return map.Return_Bots();
 	}
+	
+	public LabyrinthMap Return_Map()
+	{
+		return map;
+	}
 
 	public List<int[]> Return_Stars()
 	{

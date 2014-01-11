@@ -12,7 +12,7 @@ public class LabyrinthMap
 	private Random rnd;
 	private int[] player_position;
 	private List<int[]> stars_positions;
-	private List<int[]> bots_positions;
+	private List<int[]> bots_initial_positions;
 
 	public LabyrinthMap(int _width, int _height)
 	{
@@ -21,7 +21,7 @@ public class LabyrinthMap
 		map = new int[height][width];
 		rnd = new Random(System.currentTimeMillis());
 		stars_positions = new ArrayList<int[]>(0);
-		bots_positions = new ArrayList<int[]>(0);
+		bots_initial_positions = new ArrayList<int[]>(0);
 	}
 	
 	public boolean Is_Empty(int x, int y)
@@ -62,6 +62,13 @@ public class LabyrinthMap
 		stars_positions.add(new int[]{x,y});
 		return true;
 	}
+	public boolean Set_Empty(int x, int y)
+	{
+		if (x < 0 || x >= height || y < 0 || y >= width)
+			return false;
+		map[x][y] = 0;
+		return true;
+	}
 	
 	public boolean Set_Player(int x, int y)
 	{
@@ -77,7 +84,14 @@ public class LabyrinthMap
 		if (x < 0 || x >= height || y < 0 || y >= width)
 			return false;
 		map[x][y] = 3;
-		bots_positions.add(new int[]{x,y});
+		bots_initial_positions.add(new int[]{x,y});
+		return true;
+	}
+	public boolean Set_Bot_Position(int x, int y)
+	{
+		if (x < 0 || x >= height || y < 0 || y >= width)
+			return false;
+		map[x][y] = 3;
 		return true;
 	}
 
@@ -116,7 +130,7 @@ public class LabyrinthMap
 	
 	public List<int[]> Return_Bots()
 	{
-		return bots_positions;
+		return bots_initial_positions;
 	}
 	
 	public int[] Return_Player()

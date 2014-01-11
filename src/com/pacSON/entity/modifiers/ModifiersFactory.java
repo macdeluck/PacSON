@@ -57,6 +57,7 @@ public class ModifiersFactory
 		@Override
 		protected void onModifierFinished(IEntity pItem)
 		{
+			
 			pItem.registerEntityModifier(new MyMoveModifier(getDuration(), 
 					getToValueA(), getFromValueA(), getToValueB(), getFromValueB()));
 		}
