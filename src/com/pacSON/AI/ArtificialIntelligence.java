@@ -95,16 +95,22 @@ public class ArtificialIntelligence
 				else if (empty_fields[3])
 					new_x = x + 1;
 			}
-			map.Set_Empty(bots_positions.get(i)[0], bots_positions.get(i)[1]);
+			if(map.Is_Bot(bots_positions.get(i)[0], bots_positions.get(i)[1]))
+					map.Set_Empty(bots_positions.get(i)[0], bots_positions.get(i)[1]);
 			if (map.Set_Bot_Position(new_x, new_y))
 			{
 				new_bots_positions.get(i)[0] = new_x;
 				new_bots_positions.get(i)[1] = new_y;
+				res.get(i)[0] = new_x - x;
+				res.get(i)[1] = new_y - y;
+			}
+			else
+			{
+				res.get(i)[0] = 0;
+				res.get(i)[1] = 0;
 			}
 			bots_positions.get(i)[0] = x;
 			bots_positions.get(i)[1] = y;
-			res.get(i)[0] = new_x - x;
-			res.get(i)[1] = new_y - y;
 		}
 		return res;
 	}

@@ -23,7 +23,7 @@ public class LabyrinthMap
 		stars_positions = new ArrayList<int[]>(0);
 		bots_initial_positions = new ArrayList<int[]>(0);
 	}
-	
+
 	public boolean Is_Empty(int x, int y)
 	{
 		if (x >= 0 && x < height && y >= 0 && y < width && map[x][y] == 0)
@@ -31,13 +31,16 @@ public class LabyrinthMap
 		else
 			return false;
 	}
+
 	public boolean Is_Star_Or_Player(int x, int y)
 	{
-		if (x >= 0 && x < height && y >= 0 && y < width && (map[x][y] == 2 || map[x][y] == 4))
+		if (x >= 0 && x < height && y >= 0 && y < width
+				&& (map[x][y] == 2 || map[x][y] == 4))
 			return true;
 		else
 			return false;
 	}
+
 	public boolean Is_Bot(int x, int y)
 	{
 		if (x >= 0 && x < height && y >= 0 && y < width && map[x][y] == 3)
@@ -56,20 +59,22 @@ public class LabyrinthMap
 
 	public boolean Is_Enable_To_Move(int x, int y)
 	{
-		if (x >= 0 && x < height && y >= 0 && y < width && (map[x][y] == 0 || map[x][y] == 2) )
+		if (x >= 0 && x < height && y >= 0 && y < width
+				&& (map[x][y] == 0 || map[x][y] == 2 || map[x][y] == 4))
 			return true;
 		else
 			return false;
 	}
-	
+
 	public boolean Set_Star(int x, int y)
 	{
 		if (x < 0 || x >= height || y < 0 || y >= width)
 			return false;
 		map[x][y] = 2;
-		stars_positions.add(new int[]{x,y});
+		stars_positions.add(new int[] { x, y });
 		return true;
 	}
+
 	public boolean Set_Empty(int x, int y)
 	{
 		if (x < 0 || x >= height || y < 0 || y >= width)
@@ -77,27 +82,28 @@ public class LabyrinthMap
 		map[x][y] = 0;
 		return true;
 	}
-	
+
 	public boolean Set_Player(int x, int y)
 	{
 		if (x < 0 || x >= height || y < 0 || y >= width)
 			return false;
 		map[x][y] = 4;
-		player_position = new int[]{x,y};
+		player_position = new int[] { x, y };
 		return true;
 	}
-	
+
 	public boolean Set_Bot(int x, int y)
 	{
 		if (x < 0 || x >= height || y < 0 || y >= width)
 			return false;
 		map[x][y] = 3;
-		bots_initial_positions.add(new int[]{x,y});
+		bots_initial_positions.add(new int[] { x, y });
 		return true;
 	}
+
 	public boolean Set_Bot_Position(int x, int y)
 	{
-		if (x < 0 || x >= height || y < 0 || y >= width)
+		if (x < 0 || x >= height || y < 0 || y >= width || map[x][y] == 1)
 			return false;
 		map[x][y] = 3;
 		return true;
@@ -127,7 +133,7 @@ public class LabyrinthMap
 		for (int i = 0; i < height; i++)
 			for (int j = 0; j < width; j++)
 				if (map[i][j] == 1)
-					res.add(new int[]{i,j});
+					res.add(new int[] { i, j });
 		return res;
 	}
 
@@ -135,12 +141,12 @@ public class LabyrinthMap
 	{
 		return stars_positions;
 	}
-	
+
 	public List<int[]> Return_Bots()
 	{
 		return bots_initial_positions;
 	}
-	
+
 	public int[] Return_Player()
 	{
 		return player_position;
