@@ -6,8 +6,8 @@ import java.util.Random;
 
 public class LabyrinthMap
 {
-	private int width;
-	private int height;
+	public int width;
+	public int height;
 	private int[][] map;
 	private Random rnd;
 	private int[] player_position;

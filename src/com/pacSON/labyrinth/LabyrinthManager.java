@@ -71,7 +71,7 @@ public class LabyrinthManager
 		{
 			int p_x = height / 3 + 1 + rnd.nextInt(height / 3 - 2);
 			int p_y = width / 3 + 1 + rnd.nextInt(width / 3 - 2);
-			if (map.Is_Empty(p_x, p_y) )
+			if (map.Is_Empty(p_x, p_y))
 			{
 				map.Set_Player(p_x, p_y);
 				return;
@@ -91,8 +91,8 @@ public class LabyrinthManager
 			{
 				int p_x = fact_x[i] * height / 2 + rnd.nextInt(height / 2);
 				int p_y = fact_y[i] * width / 2 + rnd.nextInt(width / 2);
-				if (p_x > height / 3 && p_x < height * 2 / 3 && p_y > width / 3
-						&& p_y < width * 2 / 3)
+				if (p_x > height / 3 - 2 && p_x < height * 2 / 3 + 2
+						&& p_y > width / 3 - 2 && p_y < width * 2 / 3 + 2)
 					continue;
 				if (map.Is_Empty(p_x, p_y) && !map.Is_Bot(p_x - 1, p_y)
 						&& !map.Is_Bot(p_x + 1, p_y)
@@ -158,7 +158,8 @@ public class LabyrinthManager
 			{
 				int p_x = fact_x[i] * height / 2 + rnd.nextInt(height / 2);
 				int p_y = fact_y[i] * width / 2 + rnd.nextInt(width / 2);
-				if (map.Is_Empty(p_x, p_y) && !map.Is_Star_Or_Player(p_x - 1, p_y)
+				if (map.Is_Empty(p_x, p_y)
+						&& !map.Is_Star_Or_Player(p_x - 1, p_y)
 						&& !map.Is_Star_Or_Player(p_x + 1, p_y)
 						&& !map.Is_Star_Or_Player(p_x, p_y - 1)
 						&& !map.Is_Star_Or_Player(p_x, p_y + 1))
@@ -174,7 +175,8 @@ public class LabyrinthManager
 			int p_x = rnd.nextInt(height);
 			int p_y = rnd.nextInt(width);
 			if (map.Is_Empty(p_x, p_y) && !map.Is_Star_Or_Player(p_x - 1, p_y)
-					&& !map.Is_Star_Or_Player(p_x + 1, p_y) && !map.Is_Star_Or_Player(p_x, p_y - 1)
+					&& !map.Is_Star_Or_Player(p_x + 1, p_y)
+					&& !map.Is_Star_Or_Player(p_x, p_y - 1)
 					&& !map.Is_Star_Or_Player(p_x, p_y + 1))
 			{
 				map.Set_Star(p_x, p_y);
@@ -192,7 +194,7 @@ public class LabyrinthManager
 	{
 		return map.Return_Bots();
 	}
-	
+
 	public LabyrinthMap Return_Map()
 	{
 		return map;

@@ -33,10 +33,10 @@ public class ArtificialIntelligence
 		}
 	}
 
-	public List<int[]> Return_New_Positions_Greedy(int[] player_position)
+	public List<int[]> Return_New_Positions(int[] player_position)
 	{
-		int x, y, dx, dy, new_x, new_y, old_x, old_y;
-		boolean[] empty_fields = new boolean[4];
+		int x, y, dx, dy, new_x, new_y, old_x, old_y, actual_intelligence;
+		boolean[] empty_fields;
 		for (int i = 0; i < new_bots_positions.size(); ++i)
 		{
 			old_x = bots_positions.get(i)[0];
@@ -45,26 +45,12 @@ public class ArtificialIntelligence
 			new_y = y = new_bots_positions.get(i)[1];
 			dx = x - player_position[0];
 			dy = y - player_position[1];
-			if (map.Is_Enable_To_Move(x, y - 1))
-				empty_fields[0] = true;
-			else
-				empty_fields[0] = false;
-			if (map.Is_Enable_To_Move(x - 1, y))
-				empty_fields[1] = true;
-			else
-				empty_fields[1] = false;
-			if (map.Is_Enable_To_Move(x, y + 1))
-				empty_fields[2] = true;
-			else
-				empty_fields[2] = false;
-			if (map.Is_Enable_To_Move(x + 1, y))
-				empty_fields[3] = true;
-			else
-				empty_fields[3] = false;
+			actual_intelligence = Scale_Intelligence(dx, dy);
+			empty_fields = Find_Empty_Ways(x, y);
 
 			if (dx < 0 && dy < 0)
 			{
-				if (rnd.nextInt(max_inteligence) <= intelligence)
+				if (rnd.nextInt(max_inteligence) <= actual_intelligence)
 				{
 					if (empty_fields[2] && empty_fields[3])
 						if (rnd.nextInt(2) == 0)
@@ -79,8 +65,7 @@ public class ArtificialIntelligence
 						new_y = y - 1;
 					else if (empty_fields[1])
 						new_x = x - 1;
-				}
-				else
+				} else
 				{
 					if (empty_fields[0])
 						new_y = y - 1;
@@ -91,26 +76,25 @@ public class ArtificialIntelligence
 					else if (empty_fields[3])
 						new_x = x + 1;
 				}
-					
+
 			} else if (dx < 0 && dy >= 0)
 			{
-				if (rnd.nextInt(max_inteligence) <= intelligence)
+				if (rnd.nextInt(max_inteligence) <= actual_intelligence)
 				{
-				if (empty_fields[0] && empty_fields[3])
-					if (rnd.nextInt(2) == 0)
+					if (empty_fields[0] && empty_fields[3])
+						if (rnd.nextInt(2) == 0)
+							new_y = y - 1;
+						else
+							new_x = x + 1;
+					else if (empty_fields[0])
 						new_y = y - 1;
-					else
+					else if (empty_fields[3])
 						new_x = x + 1;
-				else if (empty_fields[0])
-					new_y = y - 1;
-				else if (empty_fields[3])
-					new_x = x + 1;
-				else if (empty_fields[2])
-					new_y = y + 1;
-				else if (empty_fields[1])
-					new_x = x - 1;
-				}
-				else
+					else if (empty_fields[2])
+						new_y = y + 1;
+					else if (empty_fields[1])
+						new_x = x - 1;
+				} else
 				{
 					if (empty_fields[2])
 						new_y = y + 1;
@@ -123,23 +107,22 @@ public class ArtificialIntelligence
 				}
 			} else if (dx >= 0 && dy < 0)
 			{
-				if (rnd.nextInt(max_inteligence) <= intelligence)
+				if (rnd.nextInt(max_inteligence) <= actual_intelligence)
 				{
-				if (empty_fields[2] && empty_fields[1])
-					if (rnd.nextInt(2) == 0)
+					if (empty_fields[2] && empty_fields[1])
+						if (rnd.nextInt(2) == 0)
+							new_y = y + 1;
+						else
+							new_x = x - 1;
+					else if (empty_fields[2])
 						new_y = y + 1;
-					else
+					else if (empty_fields[1])
 						new_x = x - 1;
-				else if (empty_fields[2])
-					new_y = y + 1;
-				else if (empty_fields[1])
-					new_x = x - 1;
-				else if (empty_fields[0])
-					new_y = y - 1;
-				else if (empty_fields[3])
-					new_x = x + 1;
-				}
-				else
+					else if (empty_fields[0])
+						new_y = y - 1;
+					else if (empty_fields[3])
+						new_x = x + 1;
+				} else
 				{
 					if (empty_fields[0])
 						new_y = y - 1;
@@ -152,23 +135,22 @@ public class ArtificialIntelligence
 				}
 			} else
 			{
-				if (rnd.nextInt(max_inteligence) <= intelligence)
+				if (rnd.nextInt(max_inteligence) <= actual_intelligence)
 				{
-				if (empty_fields[0] && empty_fields[1])
-					if (rnd.nextInt(2) == 0)
+					if (empty_fields[0] && empty_fields[1])
+						if (rnd.nextInt(2) == 0)
+							new_y = y - 1;
+						else
+							new_x = x - 1;
+					else if (empty_fields[0])
 						new_y = y - 1;
-					else
+					else if (empty_fields[1])
 						new_x = x - 1;
-				else if (empty_fields[0])
-					new_y = y - 1;
-				else if (empty_fields[1])
-					new_x = x - 1;
-				else if (empty_fields[2])
-					new_y = y + 1;
-				else if (empty_fields[3])
-					new_x = x + 1;
-				}
-				else
+					else if (empty_fields[2])
+						new_y = y + 1;
+					else if (empty_fields[3])
+						new_x = x + 1;
+				} else
 				{
 					if (empty_fields[2])
 						new_y = y + 1;
@@ -198,5 +180,46 @@ public class ArtificialIntelligence
 			bots_positions.get(i)[1] = y;
 		}
 		return res;
+	}
+
+	private boolean[] Find_Empty_Ways(int x, int y)
+	{
+		boolean[] empty_fields = new boolean[4];
+		if (map.Is_Enable_To_Move(x, y - 1))
+			empty_fields[0] = true;
+		else
+			empty_fields[0] = false;
+		if (map.Is_Enable_To_Move(x - 1, y))
+			empty_fields[1] = true;
+		else
+			empty_fields[1] = false;
+		if (map.Is_Enable_To_Move(x, y + 1))
+			empty_fields[2] = true;
+		else
+			empty_fields[2] = false;
+		if (map.Is_Enable_To_Move(x + 1, y))
+			empty_fields[3] = true;
+		else
+			empty_fields[3] = false;
+		return empty_fields;
+	}
+
+	private int Scale_Intelligence(int dx, int dy)
+	{
+		int actual_intelligence;
+		double fact = Math.sqrt(dx * dx + dy * dy);
+		if (fact <= 1)
+			actual_intelligence = intelligence + 30;
+		if (fact <= 3)
+			actual_intelligence = intelligence + 20;
+		else if (fact <= 5)
+			actual_intelligence = intelligence + 10;
+		else if (fact <= 7)
+			actual_intelligence = intelligence;
+		else if (fact <= 9)
+			actual_intelligence = intelligence - 10;
+		else
+			actual_intelligence = intelligence - 20;
+		return actual_intelligence;
 	}
 }

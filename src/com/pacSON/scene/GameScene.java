@@ -46,7 +46,8 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	private int BLOCK_X_COUNT;
 	private int BLOCK_Y_COUNT;
 	private float GRAVITY_FACTOR = 1.5f;
-	private static final int STARS_COUNT = 15;
+	private final int STARS_COUNT = 15;
+	private final float BOTS_SPEED = 0.75f;
 	private final int BOTS_COUNT = 5;
 	private final int UPDATE_RATE = 60;
 	private final int BOTS_INTELLIGENCE = 80;
@@ -80,7 +81,6 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		}
 		BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
-
 		// ///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!here is the question how to
 		// resetup the camera proprietly
 		AccelerometerSensor sns = new AccelerometerSensor(
@@ -206,7 +206,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
-		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, 0.5f);
+		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, BOTS_SPEED);
 		manager.setListener(new MovesReadyListener()
 		{
 			@Override
@@ -214,7 +214,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 			{
 				GhostBot[] bots = manager.getBots();
 				List<int[]> positions = ai
-						.Return_New_Positions_Greedy(new int[] {
+						.Return_New_Positions(new int[] {
 								(int)player.getX()/ BLOCK_WIDTH,
 								(int)player.getY() / BLOCK_HEIGHT, });
 				//Log.d("pacSON", String.format("%f %f", player.getX(), player.getY()));
