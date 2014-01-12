@@ -49,6 +49,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	private static final int STARS_COUNT = 15;
 	private final int BOTS_COUNT = 5;
 	private final int UPDATE_RATE = 60;
+	private final int BOTS_INTELLIGENCE = 80;
 	private GravitySensor sensor;
 	private LabyrinthManager lb;
 	private ArtificialIntelligence ai;
@@ -205,7 +206,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
-		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, 1f);
+		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, 0.5f);
 		manager.setListener(new MovesReadyListener()
 		{
 			@Override
@@ -214,8 +215,8 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 				GhostBot[] bots = manager.getBots();
 				List<int[]> positions = ai
 						.Return_New_Positions_Greedy(new int[] {
-								(int)player.getX()/ BLOCK_HEIGHT,
-								(int)player.getY() / BLOCK_WIDTH, });
+								(int)player.getX()/ BLOCK_WIDTH,
+								(int)player.getY() / BLOCK_HEIGHT, });
 				//Log.d("pacSON", String.format("%f %f", player.getX(), player.getY()));
 				for (int i = 0; i < bots.length; i++)
 				{
@@ -297,7 +298,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		lb = new LabyrinthManager();
 		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, STARS_COUNT,
 				BOTS_COUNT, false, true);
-		ai = new ArtificialIntelligence(lb.Return_Map());
+		ai = new ArtificialIntelligence(lb.Return_Map(),BOTS_INTELLIGENCE);
 		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
 		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,
