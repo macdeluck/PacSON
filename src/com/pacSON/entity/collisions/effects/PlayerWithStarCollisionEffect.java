@@ -1,7 +1,7 @@
 package com.pacSON.entity.collisions.effects;
 
+import com.pacSON.common.PlayerStats;
 import com.pacSON.entity.Player;
-import com.pacSON.entity.Player.PlayerStats;
 import com.pacSON.entity.Star;
 
 public class PlayerWithStarCollisionEffect implements IPlayerCollisionEffect<Star>

@@ -10,7 +10,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class Bot implements IEntity
+public class Bot implements IPacSONEntity
 {
 	private Sprite mSprite;
 	private Body mBody;

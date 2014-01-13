@@ -12,7 +12,7 @@ import com.pacSON.manager.SceneManager.SceneType;
 public class LoadingScene extends BaseScene
 {
 	@Override
-	public void createScene()
+	public void createScene(Object... onCreateParams)
 	{
 		setBackground(new Background(1f, 1f, 1f));
 		int cameraWidth = (int) resourcesManager.camera.getWidth();

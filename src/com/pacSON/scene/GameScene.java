@@ -27,6 +27,7 @@ import com.pacSON.entity.modifiers.GhostBotMoveManager;
 import com.pacSON.entity.modifiers.MovesReadyListener;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
+import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
@@ -45,12 +46,10 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	private static final int AREA_HEIGHT = 960;
 	private int BLOCK_X_COUNT;
 	private int BLOCK_Y_COUNT;
-	private float GRAVITY_FACTOR = 1.5f;
-	private final int STARS_COUNT = 15;
-	private final float BOTS_SPEED = 0.75f;
-	private final int BOTS_COUNT = 5;
+	private static final float GRAVITY_FACTOR = 2f;
+	private static final float GRAVITY_NOISE = 0.5f;
+	private static final int GRAVITY_IMPULSE_SKIP = 1;
 	private final int UPDATE_RATE = 60;
-	private final int BOTS_INTELLIGENCE = 80;
 	private GravitySensor sensor;
 	private LabyrinthManager lb;
 	private ArtificialIntelligence ai;
@@ -59,6 +58,11 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	private GhostBot[] ghostBots;
 	private Star[] stars;
 	private PacHud hud;
+	
+	public GameScene(boolean reset)
+	{
+		super(reset);
+	}
 
 	@SuppressWarnings("deprecation")
 	public void createEngineOptions()
@@ -85,7 +89,8 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		// resetup the camera proprietly
 		AccelerometerSensor sns = new AccelerometerSensor(
 				resourcesManager.activity);
-		sns.setNoise(0.1f);
+		sns.setNoise(GRAVITY_NOISE);
+		sns.setImpulseSkip(GRAVITY_IMPULSE_SKIP);
 		sensor = sns;
 	}
 
@@ -106,8 +111,14 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 	}
 
 	@Override
-	public void createScene()
+	public void createScene(Object... onCreateParams)
 	{
+		boolean reset = true;
+		if (onCreateParams.length>0 && onCreateParams[0] instanceof Boolean)
+			reset = (Boolean)onCreateParams[0];
+		if (reset)
+			GameManager.getInstance().reset();
+		else GameManager.getInstance().levelUp();
 		createEngineOptions();
 		loadResources();
 		onCreateScene();
@@ -206,7 +217,7 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
-		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, BOTS_SPEED);
+		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, GameManager.getInstance().getBotSpeed());
 		manager.setListener(new MovesReadyListener()
 		{
 			@Override
@@ -294,11 +305,10 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 
 	protected void loadResources()
 	{
-
 		lb = new LabyrinthManager();
-		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, STARS_COUNT,
-				BOTS_COUNT, false, true);
-		ai = new ArtificialIntelligence(lb.Return_Map(),BOTS_INTELLIGENCE);
+		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, GameManager.MAX_STARS,
+				GameManager.getInstance().getBotCount(), false, true);
+		ai = new ArtificialIntelligence(lb.Return_Map(),GameManager.getInstance().getBotAI());
 		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
 		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,

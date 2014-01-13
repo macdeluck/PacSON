@@ -8,10 +8,10 @@ public class PlayerWithEnemyCollisionEffect implements IPlayerCollisionEffect<Gh
 	@Override
 	public void onCollision(Player player, GhostBot enemy)
 	{
-		if (!player.getStats().isImmortal())
+		if (!player.isImmortal())
 		{
 			player.getStats().setLives(player.getStats().getLives()-1);
-			player.getStats().setImmortality(player.getImmortalityDuration(), 
+			player.setImmortality(player.getImmortalityDuration(), 
 					player.getImmortalityBlinks());
 		}
 	}

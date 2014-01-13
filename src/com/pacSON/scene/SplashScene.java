@@ -12,7 +12,7 @@ public class SplashScene extends BaseScene
 	private Sprite splash;
 	
 	@Override
-	public void createScene()
+	public void createScene(Object... onCreateParams)
 	{
 		splash = new Sprite(0,0, resourcesManager.splash_region, vbom)
     	{

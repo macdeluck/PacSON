@@ -30,7 +30,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	//---------------------------------------------
 
 	@Override
-	public void createScene()
+	public void createScene(Object... onCreateParams)
 	{
 		createBackground();
 		createMenuChildScene();

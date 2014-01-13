@@ -24,10 +24,11 @@ import android.graphics.Typeface;
 
 import com.badlogic.gdx.math.Vector2;
 import com.pacSON.GameActivity;
+import com.pacSON.common.PlayerStats;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.entity.IPlayerStatsChangedListener;
-import com.pacSON.entity.Player.PlayerStats;
+import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -57,8 +58,8 @@ public class PacHud extends HUD
 	public PacHud()
 	{ 
 		gravityHud = new GravityHud();
-		livesHud = new LivesHud(3);
-		starsHud = new StarHud(3);
+		livesHud = new LivesHud(GameManager.MAX_LIVES);
+		starsHud = new StarHud();
 	}
 	
 	public LivesHud getLivesHud()
@@ -378,7 +379,7 @@ public class PacHud extends HUD
 
 		public static final int HUD_TEXT_MAXCHARS = 5;
 
-		public StarHud(int stars)
+		public StarHud()
 		{
 			super();
 			listener = new IPlayerStatsChangedListener()

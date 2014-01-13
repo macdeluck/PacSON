@@ -26,7 +26,7 @@ public abstract class BaseScene extends Scene
 	// CONSTRUCTOR
 	//---------------------------------------------
 	
-	public BaseScene()
+	public BaseScene(Object... onCreateParams)
 	{
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.engine = resourcesManager.engine;
@@ -40,7 +40,7 @@ public abstract class BaseScene extends Scene
 	// ABSTRACTION
 	//---------------------------------------------
 	
-	public abstract void createScene();
+	public abstract void createScene(Object... onCreateParams);
 	
 	public abstract void onBackKeyPressed();
 	

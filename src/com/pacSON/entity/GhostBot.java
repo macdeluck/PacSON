@@ -5,7 +5,7 @@ import org.andengine.entity.sprite.Sprite;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class GhostBot implements IEntity
+public class GhostBot implements IPacSONEntity
 {
 	private Sprite mSprite;
 	private ResourcesManager resourceManager;

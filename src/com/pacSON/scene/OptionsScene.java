@@ -15,7 +15,7 @@ import com.pacSON.tools.ToggleButtonSpriteInterface;
 
 public class OptionsScene extends BaseScene{
 	@Override
-	public void createScene()
+	public void createScene(Object... onCreateParams)
 	{
 		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		int cameraWidth = (int) resourcesManager.camera.getWidth();
