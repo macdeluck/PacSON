@@ -54,6 +54,6 @@ public class LevelHud
 	{
 		final String txt = String.format("%s %d", HUD_LEVEL_TXT, GameManager.getInstance().getCurrentLevel());
 		text.setText(txt);
-		text.setPosition(text.getX()-text.getWidth()/2, text.getY());
+		text.setPosition(text.getX()-text.getWidth()/2 , text.getY());
 	}
 }

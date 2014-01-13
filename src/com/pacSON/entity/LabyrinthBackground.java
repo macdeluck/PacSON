@@ -10,8 +10,8 @@ public class LabyrinthBackground implements IPacSONEntity
 	private Sprite mSprite;
 	private ResourcesManager resourceManager;
 
-	public static final int IMAGE_WIDTH = 1179;
-	public static final int IMAGE_HEIGHT = 1280;
+	public static final int IMAGE_WIDTH = 320;
+	public static final int IMAGE_HEIGHT = 320;
 	private int SPRITE_WIDTH;
 	private int SPRITE_HEIGHT;
 	public static final int SPRITE_X = 0;
