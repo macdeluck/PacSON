@@ -13,12 +13,17 @@ import com.pacSON.base.BaseScene;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 
-public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
+public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickListener
 {
 	//---------------------------------------------
 	// VARIABLES
 	//---------------------------------------------
 	
+	public MainMenuScene(Void onCreateParam)
+	{
+		super(onCreateParam);
+	}
+
 	private MenuScene menuChildScene;
 	
 	private final int MENU_PLAY = 0;
@@ -30,7 +35,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 	//---------------------------------------------
 
 	@Override
-	public void createScene(Object... onCreateParams)
+	public void createScene(Void onCreateParams)
 	{
 		createBackground();
 		createMenuChildScene();
@@ -59,7 +64,7 @@ public class MainMenuScene extends BaseScene implements IOnMenuItemClickListener
 		switch(pMenuItem.getID())
 		{
 			case MENU_PLAY:
-				SceneManager.getInstance().loadGameScene(engine, true);
+				SceneManager.getInstance().loadGameScene(engine);
 				return true;
 			case MENU_OPTIONS:
 				SceneManager.getInstance().loadOptionsScene(engine);

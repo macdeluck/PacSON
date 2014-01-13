@@ -1,4 +1,4 @@
-package com.pacSON.common;
+package com.pacSON.gameStats;
 
 import java.util.HashSet;
 
@@ -26,7 +26,7 @@ public class PlayerStats
 		starsChanged();
 	}
 	
-	public PlayerStats()
+	protected PlayerStats()
 	{
 		super();
 		lcListeners = new HashSet<IPlayerStatsChangedListener>();
@@ -58,6 +58,10 @@ public class PlayerStats
 
 	public void setLives(int lives)
 	{
+		if (lives<0)
+			lives = 0;
+		else if (lives>defaultLives)
+			lives = defaultLives;
 		this.lives = lives;
 		livesChanged();
 	}

@@ -1,6 +1,6 @@
 package com.pacSON.manager;
 
-import com.pacSON.common.PlayerStats;
+import com.pacSON.gameStats.PlayerStats;
 
 
 public class GameManager

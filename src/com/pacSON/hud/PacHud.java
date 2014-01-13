@@ -21,13 +21,14 @@ import org.andengine.opengl.texture.region.TextureRegion;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.graphics.Typeface;
+import android.util.Log;
 
 import com.badlogic.gdx.math.Vector2;
 import com.pacSON.GameActivity;
-import com.pacSON.common.PlayerStats;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.entity.IPlayerStatsChangedListener;
+import com.pacSON.gameStats.PlayerStats;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
@@ -339,8 +340,12 @@ public class PacHud extends HUD
 			for (int i=0; i<lives.length; i++)
 			{
 				lives[i] = new Sprite(0, 0, textureRegion, buffer);
+				Log.d("LivesHud", String.format("Actual live: %d", i));
 				if (i>=GameManager.getInstance().getPlayerStats().getLives())
+				{
+					Log.d("LivesHud", String.format("Hidden"));
 					lives[i].setAlpha(0f);
+				}
 			}
 		}
 

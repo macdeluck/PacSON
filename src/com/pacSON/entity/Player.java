@@ -2,8 +2,8 @@ package com.pacSON.entity;
 
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
-import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
+import org.andengine.entity.modifier.RotationModifier;
 import org.andengine.entity.shape.IShape;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.extension.physics.box2d.PhysicsConnector;
@@ -19,11 +19,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Transform;
 import com.pacSON.GameActivity;
-import com.pacSON.common.PlayerStats;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.entity.modifiers.ModifiersFactory;
-import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 
 public class Player implements IPacSONEntity
@@ -32,7 +30,6 @@ public class Player implements IPacSONEntity
 	private Body mBody;
 	private PhysicsConnector mConn;
 	private ResourcesManager resourceManager;
-	private PlayerStats mStats; 
 	
 	protected boolean immortality;
 	
@@ -54,12 +51,7 @@ public class Player implements IPacSONEntity
 
 	public Player(ResourcesManager resourcesManager)
 	{
-		this();
 		this.resourceManager = resourcesManager;
-	}
-	public Player()
-	{
-		mStats = GameManager.getInstance().getPlayerStats();
 	}
 	
 	public float getImmortalityDuration()
@@ -80,11 +72,6 @@ public class Player implements IPacSONEntity
 	public void setImmortalityBlinks(int mImmortalityBlinks)
 	{
 		this.mImmortalityBlinks = mImmortalityBlinks;
-	}
-	
-	public PlayerStats getStats()
-	{
-		return mStats;
 	}
 	
 	@Override

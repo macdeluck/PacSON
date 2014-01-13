@@ -9,10 +9,15 @@ import org.andengine.entity.text.Text;
 import com.pacSON.base.BaseScene;
 import com.pacSON.manager.SceneManager.SceneType;
 
-public class LoadingScene extends BaseScene
+public class LoadingScene extends BaseScene<Void>
 {
+	public LoadingScene(Void onCreateParam)
+	{
+		super(onCreateParam);
+	}
+
 	@Override
-	public void createScene(Object... onCreateParams)
+	public void createScene(Void onCreateParam)
 	{
 		setBackground(new Background(1f, 1f, 1f));
 		int cameraWidth = (int) resourcesManager.camera.getWidth();

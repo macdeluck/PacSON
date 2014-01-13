@@ -10,7 +10,7 @@ import android.app.Activity;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager.SceneType;
 
-public abstract class BaseScene extends Scene
+public abstract class BaseScene<Parameter> extends Scene
 {
 	//---------------------------------------------
 	// VARIABLES
@@ -26,21 +26,25 @@ public abstract class BaseScene extends Scene
 	// CONSTRUCTOR
 	//---------------------------------------------
 	
-	public BaseScene(Object... onCreateParams)
+	public BaseScene(Parameter onCreateParam)
 	{
 		this.resourcesManager = ResourcesManager.getInstance();
 		this.engine = resourcesManager.engine;
 		this.activity = resourcesManager.activity;
 		this.vbom = resourcesManager.vbom;
 		this.camera = resourcesManager.camera;
-		createScene(onCreateParams);
+		createScene(onCreateParam);
 	}
 	
 	//---------------------------------------------
 	// ABSTRACTION
 	//---------------------------------------------
 	
-	public abstract void createScene(Object... onCreateParams);
+	public void onSceneSet() {}
+	
+	public void onSceneUnset() {}
+	
+	public abstract void createScene(Parameter onCreateParams);
 	
 	public abstract void onBackKeyPressed();
 	

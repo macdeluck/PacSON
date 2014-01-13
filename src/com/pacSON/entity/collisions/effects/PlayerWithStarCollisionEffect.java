@@ -2,9 +2,9 @@ package com.pacSON.entity.collisions.effects;
 
 import org.andengine.engine.Engine;
 
-import com.pacSON.common.PlayerStats;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.Star;
+import com.pacSON.gameStats.PlayerStats;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
@@ -17,7 +17,7 @@ public class PlayerWithStarCollisionEffect implements IPlayerCollisionEffect<Sta
 	{
 		if (!target.isTaken())
 		{
-			PlayerStats stats = player.getStats();
+			PlayerStats stats = GameManager.getInstance().getPlayerStats();
 			stats.setStars(stats.getStars()+1);
 			GameManager.getInstance().setTakenStars(GameManager.getInstance().getTakenStars()+1);
 			target.getSprite().setAlpha(0f);
@@ -30,7 +30,7 @@ public class PlayerWithStarCollisionEffect implements IPlayerCollisionEffect<Sta
 	@Override
 	public void onReset(Player player, Star target)
 	{
-		player.getStats().setStars(0);
+		GameManager.getInstance().getPlayerStats().setStars(0);
 		target.setTaken(false);
 		target.getSprite().setAlpha(1f);
 	}
@@ -38,6 +38,6 @@ public class PlayerWithStarCollisionEffect implements IPlayerCollisionEffect<Sta
 	public void callNextLevel()
 	{
 		Engine engine = ResourcesManager.getInstance().engine;
-		SceneManager.getInstance().loadGameScene(engine, false);
+		SceneManager.getInstance().loadGameNextLevel(engine);
 	}
 }

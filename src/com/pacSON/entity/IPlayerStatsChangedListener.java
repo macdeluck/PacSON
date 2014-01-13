@@ -1,6 +1,6 @@
 package com.pacSON.entity;
 
-import com.pacSON.common.PlayerStats;
+import com.pacSON.gameStats.PlayerStats;
 
 public interface IPlayerStatsChangedListener
 {
