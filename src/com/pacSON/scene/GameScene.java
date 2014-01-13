@@ -129,14 +129,18 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	@Override
 	public void onSceneSet()
 	{
+		setUpCamera();
 		registerUpdateHandler(mPhysicsWorld);
 		manager.start();
 		sensor.start();
+		ResourcesManager.gamePaused = false;
 	}
 	
 	@Override
 	public void onSceneUnset()
 	{
+		unregisterUpdateHandler(mPhysicsWorld);
+		ResourcesManager.gamePaused = true;
 		disposeScene();
 		sensor.stop();
 	}
@@ -178,9 +182,9 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 				new Vector2(0, 0), false);
 		player = new Player();
 
-		player.load(resourcesManager.activity);
+		player.load();
 		hud = new PacHud();
-		hud.load(resourcesManager.activity);
+		hud.load();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -204,6 +208,10 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		}
 		BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
+		if (player!=null)
+			camera.setChaseEntity(player.getSprite());
+		if (hud!=null)
+			camera.setHUD(hud);
 		// TODO ///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!here is the question how to
 		// resetup the camera proprietly
 	}

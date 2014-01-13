@@ -13,16 +13,31 @@ import com.pacSON.tools.ToggleButtonSprite;
 import com.pacSON.tools.ToggleButtonSprite.ToggleState;
 import com.pacSON.tools.ToggleButtonSpriteInterface;
 
-public class OptionsScene extends BaseScene<Void>
+public class OptionsScene extends BaseScene<BaseScene<?>>
 {
-	public OptionsScene(Void onCreateParam)
+	private BaseScene<?> previousScene;
+	
+	public OptionsScene(BaseScene<?> onCreateParam)
 	{
 		super(onCreateParam);
 	}
 	
-	@Override
-	public void createScene(Void onCreateParam)
+	public BaseScene<?> getPreviousScene()
 	{
+		return previousScene;
+	}
+
+	public void setPreviousScene(BaseScene<?> previousScene)
+	{
+		this.previousScene = previousScene;
+	}
+
+	@Override
+	public void createScene(BaseScene<?> onCreateParam)
+	{
+		if (onCreateParam!=null)
+			previousScene = onCreateParam;
+		else previousScene = SceneManager.getInstance().getMenuScene();
 		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		int cameraWidth = (int) resourcesManager.camera.getWidth();
 		// int cameraHeight = (int) resourcesManager.camera.getHeight();
@@ -133,7 +148,10 @@ public class OptionsScene extends BaseScene<Void>
 	@Override
 	public void onBackKeyPressed()
 	{
-		SceneManager.getInstance().loadMenuScene(engine);
+		if (previousScene.getSceneType()==SceneType.SCENE_MENU)
+			SceneManager.getInstance().loadMenuScene(engine);
+		else if (previousScene.getSceneType()==SceneType.SCENE_GAME)
+			SceneManager.getInstance().loadGameSceneFromOptions(engine);
 		return;
 	}
 

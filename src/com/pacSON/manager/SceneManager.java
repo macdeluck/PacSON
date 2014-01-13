@@ -20,6 +20,66 @@ public class SceneManager
 	
 	private BaseScene<?> splashScene;
 	private BaseScene<?> menuScene;
+	public BaseScene<?> getSplashScene()
+	{
+		return splashScene;
+	}
+
+	public void setSplashScene(BaseScene<?> splashScene)
+	{
+		this.splashScene = splashScene;
+	}
+
+	public BaseScene<?> getMenuScene()
+	{
+		return menuScene;
+	}
+
+	public void setMenuScene(BaseScene<?> menuScene)
+	{
+		this.menuScene = menuScene;
+	}
+
+	public BaseScene<?> getGameScene()
+	{
+		return gameScene;
+	}
+
+	public void setGameScene(BaseScene<?> gameScene)
+	{
+		this.gameScene = gameScene;
+	}
+
+	public BaseScene<?> getLoadingScene()
+	{
+		return loadingScene;
+	}
+
+	public void setLoadingScene(BaseScene<?> loadingScene)
+	{
+		this.loadingScene = loadingScene;
+	}
+
+	public BaseScene<?> getOptionsScene()
+	{
+		return optionsScene;
+	}
+
+	public void setOptionsScene(BaseScene<?> optionsScene)
+	{
+		this.optionsScene = optionsScene;
+	}
+
+	public void setCurrentSceneType(SceneType currentSceneType)
+	{
+		this.currentSceneType = currentSceneType;
+	}
+
+	public void setCurrentScene(BaseScene<?> currentScene)
+	{
+		this.currentScene = currentScene;
+	}
+
 	private BaseScene<?> gameScene;
 	private BaseScene<?> loadingScene;
 	private BaseScene<?> optionsScene;
@@ -106,6 +166,11 @@ public class SceneManager
 	}
 	public void loadOptionsScene(final Engine mEngine)
 	{
+		loadOptionsScene(mEngine, null);
+	}
+	
+	public void loadOptionsScene(final Engine mEngine, final BaseScene<?> param)
+	{
 		setScene(loadingScene);
 		ResourcesManager.getInstance().unloadMenuTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
@@ -115,7 +180,7 @@ public class SceneManager
             {
             	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadOptionsResources();
-        		optionsScene = new OptionsScene(null);
+        		optionsScene = new OptionsScene(param);
         		setScene(optionsScene);
             }
 		}));
@@ -132,6 +197,20 @@ public class SceneManager
             	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadGameResources();
         		gameScene = new GameScene(true);
+        		setScene(gameScene);
+            }
+		}));
+	}
+	public void loadGameSceneFromOptions(final Engine mEngine)
+	{
+		setScene(loadingScene);
+		mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
+		{
+            @Override
+			public void onTimePassed(final TimerHandler pTimerHandler) 
+            {
+            	mEngine.unregisterUpdateHandler(pTimerHandler);
+        		gameScene = getGameScene();
         		setScene(gameScene);
             }
 		}));

@@ -1,4 +1,4 @@
-package com.pacSON.hud;
+package com.pacSON.hud.elements;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -32,8 +32,9 @@ public class LevelHud
 		update();
 	}
 
-	public void add(GameActivity activity)
+	public void add()
 	{
+		GameActivity activity = ResourcesManager.getInstance().activity;
 		text = new Text(2, 2, ResourcesManager.getInstance().levelFont , 
 				Integer.toString(GameManager.getInstance().getPlayerStats().getStars()), 
 				HUD_LEVELHUD_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());

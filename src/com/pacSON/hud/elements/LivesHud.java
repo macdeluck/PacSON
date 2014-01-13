@@ -1,4 +1,4 @@
-package com.pacSON.hud;
+package com.pacSON.hud.elements;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -16,6 +16,7 @@ import com.pacSON.GameActivity;
 import com.pacSON.entity.IPlayerStatsChangedListener;
 import com.pacSON.gameStats.PlayerStats;
 import com.pacSON.manager.GameManager;
+import com.pacSON.manager.ResourcesManager;
 
 public class LivesHud
 {
@@ -66,8 +67,9 @@ public class LivesHud
 					camera.getHeight() - HUD_LIVES_MARGIN - HUD_LIVES_HEIGHT);
 	}
 
-	public void add(GameActivity activity)
+	public void add()
 	{
+		GameActivity activity = ResourcesManager.getInstance().activity;
 		loadTextureRegion(activity, HUD_LIVES_NAME, HUD_LIVES_WIDTH, HUD_LIVES_HEIGHT);
 		buffer = activity.getEngine().getVertexBufferObjectManager();
 		for (int i=0; i<lives.length; i++)

@@ -15,6 +15,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 
 import com.pacSON.GameActivity;
+import com.pacSON.hud.elements.GravityHud;
+import com.pacSON.hud.elements.LevelHud;
+import com.pacSON.hud.elements.LivesHud;
+import com.pacSON.hud.elements.StarHud;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
@@ -74,25 +78,24 @@ public class PacHud extends HUD
 		this.gravityHud = gravityHud;
 	}
 	
-	// TODO remove activity dependence
-	public void load(GameActivity activity)
+	public void load()
 	{
 		this.attachChild(addOptionsButton());
 		addPauseToogleButton();
 		if(ResourcesManager.getInstance().isFpsCounterEnabled())
 		{
-			this.attachChild(addFpsCounter(activity));
+			this.attachChild(addFpsCounter());
 		}
-		this.gravityHud.add(activity);
+		this.gravityHud.add();
 		this.gravityHud.attach(this);
 		
-		this.livesHud.add(activity);
+		this.livesHud.add();
 		this.livesHud.attach(this);
 		
-		this.starsHud.add(activity);
+		this.starsHud.add();
 		this.starsHud.attach(this);
 		
-		this.levelHud.add(activity);
+		this.levelHud.add();
 		this.levelHud.attach(this);
 	}
 	private void addPauseToogleButton()
@@ -133,9 +136,11 @@ public class PacHud extends HUD
 		{
 		       @Override
 		       public boolean onAreaTouched(TouchEvent pTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		           if(pTouchEvent.isActionDown()) {
-		        	   SceneManager.getInstance().getCurrentScene().disposeScene();//this is to change experience
-		               SceneManager.getInstance().loadOptionsScene(ResourcesManager.getInstance().engine);
+		           if(pTouchEvent.isActionDown()) 
+		           {
+		        	   //SceneManager.getInstance().getCurrentScene().disposeScene();//this is to change experience
+		               SceneManager.getInstance().loadOptionsScene(ResourcesManager.getInstance().engine,
+		            		   SceneManager.getInstance().getGameScene());
 		           }
 		           return super.onAreaTouched(pTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 		       }
@@ -143,13 +148,14 @@ public class PacHud extends HUD
 		registerTouchArea(button);
 		return button;
 	}
-	private Text addFpsCounter(GameActivity activity)
+	private Text addFpsCounter()
 	{
 		ResourcesManager resourcesManager = ResourcesManager.getInstance();
 		final FPSCounter fpsCounter = new FPSCounter();
-		activity.getEngine().registerUpdateHandler(fpsCounter);
-		final Text fpsText = new Text(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth() - 100, 5, loadFont(activity), "FPS:",
-				"FPS:".length() + 4, activity.getEngine().getVertexBufferObjectManager());
+		resourcesManager.activity.getEngine().registerUpdateHandler(fpsCounter);
+		final Text fpsText = new Text(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth() - 100, 
+				5, loadFont(resourcesManager.activity), "FPS:",
+				"FPS:".length() + 4, resourcesManager.activity.getEngine().getVertexBufferObjectManager());
 
 		final String form = "%.0f";
 		this.registerUpdateHandler(new TimerHandler(1 / 20.0f, true,

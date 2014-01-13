@@ -18,7 +18,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Transform;
-import com.pacSON.GameActivity;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.entity.modifiers.ModifiersFactory;
@@ -81,13 +80,13 @@ public class Player implements IPacSONEntity
 	}
 	
 
-	public void load(GameActivity activity)
+	public void load()
 	{
 		/*new Sprite((p % part_w) * CAMERA_WIDTH / part_w, p / part_w
 				* CAMERA_HEIGHT / part_h, loadGraphics("circle.png"),
 				getEngine().getVertexBufferObjectManager());*/
 		mSprite = new Sprite(SPRITE_X, SPRITE_Y, ResourcesManager.getInstance().player_reg, 
-				activity.getVertexBufferObjectManager());
+					ResourcesManager.getInstance().activity.getVertexBufferObjectManager());
 	}
 	
 	/*private TextureRegion loadGraphics(GameActivity activity, String name)

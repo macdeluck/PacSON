@@ -1,4 +1,4 @@
-package com.pacSON.hud;
+package com.pacSON.hud.elements;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.pacSON.GameActivity;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
+import com.pacSON.manager.ResourcesManager;
 
 public class GravityHud
 {
@@ -62,8 +63,9 @@ public class GravityHud
 		return gravityValue;
 	}
 	
-	public void add(GameActivity activity)
+	public void add()
 	{
+		GameActivity activity = ResourcesManager.getInstance().activity;
 		hudBase = new Sprite(2, 2, loadTextureRegion(activity, HUD_BASE_NAME, HUD_BASE_WIDTH, HUD_BASE_HEIGHT),
 					activity.getEngine().getVertexBufferObjectManager());
 		gravityArrow = new Sprite(2, 2, loadTextureRegion(activity, HUD_GRAV_ARROW_NAME, HUD_GRAV_ARROW_WIDTH, HUD_GRAV_ARROW_HEIGHT),

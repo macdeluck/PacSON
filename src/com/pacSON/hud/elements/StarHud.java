@@ -1,4 +1,4 @@
-package com.pacSON.hud;
+package com.pacSON.hud.elements;
 
 import org.andengine.engine.camera.Camera;
 import org.andengine.entity.IEntity;
@@ -52,8 +52,9 @@ public class StarHud
 				camera.getHeight() - HUD_STAR_MARGIN - LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
 	}
 
-	public void add(GameActivity activity)
+	public void add()
 	{
+		GameActivity activity = ResourcesManager.getInstance().activity;
 		star = new Sprite(0,0, ResourcesManager.getInstance().star_reg, 
 				activity.getEngine().getVertexBufferObjectManager());
 		text = new Text(2, 2, ResourcesManager.getInstance().font , 
