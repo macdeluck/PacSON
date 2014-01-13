@@ -29,7 +29,6 @@ public class Player implements IPacSONEntity
 	private Sprite mSprite;
 	private Body mBody;
 	private PhysicsConnector mConn;
-	private ResourcesManager resourceManager;
 	
 	protected boolean immortality;
 	
@@ -48,11 +47,6 @@ public class Player implements IPacSONEntity
 	
 	private float mImmortalityDuration = 3f;
 	private int mImmortalityBlinks = 3;
-
-	public Player(ResourcesManager resourcesManager)
-	{
-		this.resourceManager = resourcesManager;
-	}
 	
 	public float getImmortalityDuration()
 	{
@@ -92,7 +86,7 @@ public class Player implements IPacSONEntity
 		/*new Sprite((p % part_w) * CAMERA_WIDTH / part_w, p / part_w
 				* CAMERA_HEIGHT / part_h, loadGraphics("circle.png"),
 				getEngine().getVertexBufferObjectManager());*/
-		mSprite = new Sprite(SPRITE_X, SPRITE_Y, resourceManager.player_reg, 
+		mSprite = new Sprite(SPRITE_X, SPRITE_Y, ResourcesManager.getInstance().player_reg, 
 				activity.getVertexBufferObjectManager());
 	}
 	

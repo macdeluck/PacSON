@@ -48,6 +48,7 @@ public class ResourcesManager
 	public VertexBufferObjectManager vbom;
 	public Music music;
 	public Font font;
+	public Font levelFont;
 
 	// ---------------------------------------------
 	// TEXTURES & TEXTURE REGIONS
@@ -239,7 +240,15 @@ public class ResourcesManager
 
 	private void loadGameFonts()
 	{
+		FontFactory.setAssetBasePath("font/");
+		final ITexture mainFontTexture = new BitmapTextureAtlas(
+				activity.getTextureManager(), 256, 256,
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
+		levelFont = FontFactory.createStrokeFromAsset(activity.getFontManager(),
+				mainFontTexture, activity.getAssets(), "font.ttf", 30, true,
+				Color.WHITE, 2, Color.BLACK);
+		levelFont.load();
 	}
 
 	private void loadGameAudio()

@@ -176,10 +176,10 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 
 		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,
 				new Vector2(0, 0), false);
-		player = new Player(resourcesManager);
+		player = new Player();
 
 		player.load(resourcesManager.activity);
-		hud = new PacHud(resourcesManager);
+		hud = new PacHud();
 		hud.load(resourcesManager.activity);
 	}
 
