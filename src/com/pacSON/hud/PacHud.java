@@ -339,6 +339,8 @@ public class PacHud extends HUD
 			for (int i=0; i<lives.length; i++)
 			{
 				lives[i] = new Sprite(0, 0, textureRegion, buffer);
+				if (i>=GameManager.getInstance().getPlayerStats().getLives())
+					lives[i].setAlpha(0f);
 			}
 		}
 
@@ -410,7 +412,8 @@ public class PacHud extends HUD
 		{
 			star = new Sprite(0,0, resourcesManager.star_reg, 
 					activity.getEngine().getVertexBufferObjectManager());
-			text = new Text(2, 2, resourcesManager.font ,"0", 
+			text = new Text(2, 2, resourcesManager.font , 
+					Integer.toString(GameManager.getInstance().getPlayerStats().getStars()), 
 					HUD_TEXT_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
 		}
 

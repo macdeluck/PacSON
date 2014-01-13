@@ -10,18 +10,9 @@ public class GameManager
 	private float botSpeed;
 	private int botCount;
 	private int currentLevel;
+	private int takenStars;
 	private PlayerStats playerStats;
-
-	public PlayerStats getPlayerStats()
-	{
-		return playerStats;
-	}
-
-	public void setPlayerStats(PlayerStats playerStats)
-	{
-		this.playerStats = playerStats;
-	}
-
+	
 	public final static int BOT_AI_STEP = 2;
 	public final static float BOT_SPEED_STEP = -0.025f;
 	
@@ -29,11 +20,33 @@ public class GameManager
 	public final static int MAX_STARS = 15;
 	public final static int DEF_BOT_AI = 80;
 	public final static float DEF_BOT_SPEED = 0.75f;
-	public final static int DEF_BOT_COUNT = 4;			
+	public final static int DEF_BOT_COUNT = 4;		
+	
+	public PlayerStats getPlayerStats()
+	{
+		return playerStats;
+	}
+
+	public int getTakenStars()
+	{
+		return takenStars;
+	}
+
+	public void setTakenStars(int takenStars)
+	{
+		this.takenStars = takenStars;
+	}
+
+	public void setPlayerStats(PlayerStats playerStats)
+	{
+		this.playerStats = playerStats;
+	}
 	
 	private GameManager()
 	{
 		super();
+		if (instance!=null)
+			throw new RuntimeException();
 		playerStats = new PlayerStats(MAX_LIVES);
 		reset();
 	}
@@ -51,6 +64,7 @@ public class GameManager
 		botSpeed = DEF_BOT_SPEED;
 		botCount = DEF_BOT_COUNT;
 		currentLevel = 1;
+		takenStars = 0;
 		playerStats.setStars(0);
 		playerStats.setDefaultLives(MAX_LIVES);
 		playerStats.setLives(MAX_LIVES);
@@ -78,8 +92,9 @@ public class GameManager
 
 	public void levelUp()
 	{
-		botAI += DEF_BOT_AI;
-		botSpeed += DEF_BOT_SPEED;
+		takenStars = 0;
+		botAI += BOT_AI_STEP;
+		botSpeed += BOT_SPEED_STEP;
 		currentLevel++;
 		if (playerStats.getLives()<MAX_LIVES)
 			playerStats.setLives(playerStats.getLives()+1);

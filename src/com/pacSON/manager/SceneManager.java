@@ -118,8 +118,11 @@ public class SceneManager
             }
 		}));
 	}
-	public void loadGameScene(final Engine mEngine)
+	public void loadGameScene(final Engine mEngine, final boolean reset)
 	{
+		if (gameScene != null){
+			gameScene.disposeScene();
+		}
 		setScene(loadingScene);
 		ResourcesManager.getInstance().unloadMenuTextures();
 		mEngine.registerUpdateHandler(new TimerHandler(0.5f, new ITimerCallback() 
@@ -129,7 +132,7 @@ public class SceneManager
             {
             	mEngine.unregisterUpdateHandler(pTimerHandler);
             	ResourcesManager.getInstance().loadGameResources();
-        		gameScene = new GameScene(true);
+        		gameScene = new GameScene(reset);
         		setScene(gameScene);
             }
 		}));

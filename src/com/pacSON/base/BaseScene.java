@@ -33,7 +33,7 @@ public abstract class BaseScene extends Scene
 		this.activity = resourcesManager.activity;
 		this.vbom = resourcesManager.vbom;
 		this.camera = resourcesManager.camera;
-		createScene();
+		createScene(onCreateParams);
 	}
 	
 	//---------------------------------------------
