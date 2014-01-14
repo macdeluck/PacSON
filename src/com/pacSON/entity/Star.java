@@ -5,7 +5,7 @@ import org.andengine.entity.sprite.Sprite;
 import com.pacSON.GameActivity;
 import com.pacSON.manager.ResourcesManager;
 
-public class Star implements IEntity
+public class Star implements IPacSONEntity
 {
 
 	private Sprite mSprite;

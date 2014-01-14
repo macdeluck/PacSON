@@ -1,7 +1,5 @@
 package com.pacSON.entity;
 
-import java.util.HashSet;
-
 import org.andengine.entity.IEntity;
 import org.andengine.entity.modifier.DelayModifier;
 import org.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
@@ -20,19 +18,18 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Transform;
-import com.pacSON.GameActivity;
 import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.entity.modifiers.ModifiersFactory;
 import com.pacSON.manager.ResourcesManager;
 
-public class Player implements com.pacSON.entity.IEntity
+public class Player implements IPacSONEntity
 {
 	private Sprite mSprite;
 	private Body mBody;
 	private PhysicsConnector mConn;
-	private ResourcesManager resourceManager;
-	private PlayerStats mStats; 
+	
+	protected boolean immortality;
 	
 	public static final int IMAGE_WIDTH = 48;
 	public static final int IMAGE_HEIGHT = 48;
@@ -49,16 +46,6 @@ public class Player implements com.pacSON.entity.IEntity
 	
 	private float mImmortalityDuration = 3f;
 	private int mImmortalityBlinks = 3;
-
-	public Player(ResourcesManager resourcesManager)
-	{
-		this();
-		this.resourceManager = resourcesManager;
-	}
-	public Player()
-	{
-		mStats = new PlayerStats();
-	}
 	
 	public float getImmortalityDuration()
 	{
@@ -80,11 +67,6 @@ public class Player implements com.pacSON.entity.IEntity
 		this.mImmortalityBlinks = mImmortalityBlinks;
 	}
 	
-	public PlayerStats getStats()
-	{
-		return mStats;
-	}
-	
 	@Override
 	public Sprite getSprite()
 	{
@@ -98,13 +80,13 @@ public class Player implements com.pacSON.entity.IEntity
 	}
 	
 
-	public void load(GameActivity activity)
+	public void load()
 	{
 		/*new Sprite((p % part_w) * CAMERA_WIDTH / part_w, p / part_w
 				* CAMERA_HEIGHT / part_h, loadGraphics("circle.png"),
 				getEngine().getVertexBufferObjectManager());*/
-		mSprite = new Sprite(SPRITE_X, SPRITE_Y, resourceManager.player_reg, 
-				activity.getVertexBufferObjectManager());
+		mSprite = new Sprite(SPRITE_X, SPRITE_Y, ResourcesManager.getInstance().player_reg, 
+					ResourcesManager.getInstance().activity.getVertexBufferObjectManager());
 	}
 	
 	/*private TextureRegion loadGraphics(GameActivity activity, String name)
@@ -209,135 +191,27 @@ public class Player implements com.pacSON.entity.IEntity
 		Transform t = mBody.getTransform();
 		return t.vals[0]*PhysicsConstants.PIXEL_TO_METER_RATIO_DEFAULT;
 	}
-	
-	public class PlayerStats
+
+	public void setImmortality(float pDuration, int blinks)
 	{
-		private HashSet<IPlayerStatsChangedListener> lcListeners;
-		private HashSet<IPlayerStatsChangedListener> lsListeners;
-		
-		private int defaultLives = 3;
-		
-		private int lives;
-		
-		private int stars;
-		
-		protected boolean immortality;
+		immortality = true;
+		getSprite().registerEntityModifier(ModifiersFactory.getBlinkModifier(pDuration, blinks));
+		getSprite().registerEntityModifier(new DelayModifier(pDuration, new IEntityModifierListener() {
+		    @Override
+		    public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) 
+		    {
+		    }
 
-		public int getStars()
-		{
-			return stars;
-		}
-
-		public void setStars(int stars)
-		{
-			this.stars = stars;
-			starsChanged();
-		}
-		
-		public PlayerStats()
-		{
-			super();
-			lcListeners = new HashSet<IPlayerStatsChangedListener>();
-			lsListeners = new HashSet<IPlayerStatsChangedListener>();
-			reset();
-		}
-
-		public PlayerStats(int defaultLives)
-		{
-			super();
-			this.defaultLives = defaultLives;
-			reset();
-		}
-
-		public int getDefaultLives()
-		{
-			return defaultLives;
-		}
-
-		public void setDefaultLives(int defaultLives)
-		{
-			this.defaultLives = defaultLives;
-		}
-		
-		public int getLives()
-		{
-			return lives;
-		}
-
-		public void setLives(int lives)
-		{
-			this.lives = lives;
-			livesChanged();
-		}
-
-		public boolean registerLivesChangedListener(IPlayerStatsChangedListener listener)
-		{
-			return lcListeners.add(listener);
-		}
-		
-		public boolean unregisterLivesChangedListener(IPlayerStatsChangedListener listener)
-		{
-			return lcListeners.remove(listener);
-		}
-		
-		public boolean registerStarsChangedListener(IPlayerStatsChangedListener listener)
-		{
-			return lsListeners.add(listener);
-		}
-		
-		public boolean unregisterStarsChangedListener(IPlayerStatsChangedListener listener)
-		{
-			return lsListeners.remove(listener);
-		}
-		
-		public void reset()
-		{
-			lives = defaultLives;
-			immortality = false;
-			reseted();
-		}
-		
-		private void reseted()
-		{
-			for(IPlayerStatsChangedListener l : lcListeners)
-				l.statsReseted(this);
-			for(IPlayerStatsChangedListener l : lsListeners)
-				l.statsReseted(this);
-		}
-		
-		private void livesChanged()
-		{
-			for(IPlayerStatsChangedListener l : lcListeners)
-				l.statsChanged(this);
-		}
-		
-		private void starsChanged()
-		{
-			for(IPlayerStatsChangedListener l : lsListeners)
-				l.statsChanged(this);
-		}
-		
-		public void setImmortality(float pDuration, int blinks)
-		{
-			immortality = true;
-			Player.this.getSprite().registerEntityModifier(ModifiersFactory.getBlinkModifier(pDuration, blinks));
-			Player.this.getSprite().registerEntityModifier(new DelayModifier(pDuration, new IEntityModifierListener() {
-			    @Override
-			    public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) 
-			    {
-			    }
-
-			    @Override
-			    public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) 
-			    {
-			    	immortality = false;
-			    }
-			}));
-		}
-		
-		public boolean isImmortal()
-		{
-			return immortality;
-		}
+		    @Override
+		    public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) 
+		    {
+		    	immortality = false;
+		    }
+		}));
+	}
+	
+	public boolean isImmortal()
+	{
+		return immortality;
 	}
 }

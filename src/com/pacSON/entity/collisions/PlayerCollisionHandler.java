@@ -2,12 +2,12 @@ package com.pacSON.entity.collisions;
 
 import org.andengine.entity.sprite.Sprite;
 
-import com.pacSON.entity.IEntity;
+import com.pacSON.entity.IPacSONEntity;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.collisions.effects.ICollisionEffect;
 import com.pacSON.entity.collisions.effects.IPlayerCollisionEffect;
 
-public class PlayerCollisionHandler<T extends IEntity> extends CollisionHandler
+public class PlayerCollisionHandler<T extends IPacSONEntity> extends CollisionHandler
 {
 	public PlayerCollisionHandler(final Player player, final T target, final IPlayerCollisionEffect<T> effect)
 	{

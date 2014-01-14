@@ -27,6 +27,7 @@ import com.pacSON.entity.modifiers.GhostBotMoveManager;
 import com.pacSON.entity.modifiers.MovesReadyListener;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
+import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
@@ -34,34 +35,160 @@ import com.pacSON.physic.gravity.AccelerometerSensor;
 import com.pacSON.physic.gravity.GravitySensor;
 import com.pacSON.physic.gravity.OnGravityChangedListener;
 
-public class GameScene extends BaseScene // implements IOnSceneTouchListener
+public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchListener
 {
 	private PhysicsWorld mPhysicsWorld;
 	private int CAMERA_WIDTH;
 	private int CAMERA_HEIGHT;
-	private static final int BLOCK_WIDTH = 60;
-	private static final int BLOCK_HEIGHT = 60;
-	private static final int AREA_WIDTH = 1560;
-	private static final int AREA_HEIGHT = 960;
 	private int BLOCK_X_COUNT;
 	private int BLOCK_Y_COUNT;
-	private float GRAVITY_FACTOR = 1.5f;
-	private final int STARS_COUNT = 15;
-	private final float BOTS_SPEED = 0.75f;
-	private final int BOTS_COUNT = 5;
-	private final int UPDATE_RATE = 60;
-	private final int BOTS_INTELLIGENCE = 80;
+
 	private GravitySensor sensor;
 	private LabyrinthManager lb;
 	private ArtificialIntelligence ai;
 	private Player player;
-	// private Bot[] bots;
 	private GhostBot[] ghostBots;
 	private Star[] stars;
 	private PacHud hud;
+	private GhostBotMoveManager manager;
+
+	private static final int BLOCK_WIDTH = 60;
+	private static final int BLOCK_HEIGHT = 60;
+	private static final int AREA_WIDTH = 1560;
+	private static final int AREA_HEIGHT = 960;
+	private static final float GRAVITY_FACTOR = 2f;
+	private static final float GRAVITY_NOISE = 0.5f;
+	private static final int GRAVITY_IMPULSE_SKIP = 1;
+	private static final int UPDATE_RATE = 60;
+	
+	public GameScene(boolean reset)
+	{
+		super(reset);
+	}
+
+	public void createEngineOptions()
+	{
+		setUpCamera();
+		setUpSensor();
+	}
+
+	@Override
+	protected void onManagedUpdate(float pSecondsElapsed)
+	{
+		if (ResourcesManager.gamePaused)
+		{
+			if (resourcesManager.isAudioOn())
+				resourcesManager.music.pause();
+			sensor.stop();
+			super.onManagedUpdate(0);
+		} else
+		{
+			if (resourcesManager.isAudioOn())
+				resourcesManager.music.resume();
+			sensor.start();
+			super.onManagedUpdate(pSecondsElapsed);
+		}
+	}
+
+	@Override
+	public void createScene(Boolean reset)
+	{
+		if (reset)
+			GameManager.getInstance().reset();
+		else GameManager.getInstance().levelUp();
+		createEngineOptions();
+		loadResources();
+		onCreateScene();
+	}
+
+	protected void onCreateScene()
+	{
+		setUpAudio();
+		final VertexBufferObjectManager vertexBufferObjectManager = resourcesManager.activity
+				.getVertexBufferObjectManager();
+
+		setUpBackground();
+
+		spawnPlayer();
+		createWalls(vertexBufferObjectManager);
+		createStars(vertexBufferObjectManager);
+		createBots(vertexBufferObjectManager);
+		
+		// LIVES HUD SETUP
+		GameManager.getInstance().getPlayerStats().registerLivesChangedListener(
+				hud.getLivesHud().getStatsChangedListener());
+
+		// STARS HUD SETUP
+		GameManager.getInstance().getPlayerStats().registerStarsChangedListener(
+				hud.getStarsHud().getStatsChangedListener());
+
+		camera.setChaseEntity(player.getSprite());
+		camera.setHUD(hud);
+	}
+	
+	@Override
+	public void onSceneSet()
+	{
+		setUpCamera();
+		registerUpdateHandler(mPhysicsWorld);
+		manager.start();
+		sensor.start();
+		ResourcesManager.gamePaused = false;
+	}
+	
+	@Override
+	public void onSceneUnset()
+	{
+		unregisterUpdateHandler(mPhysicsWorld);
+		ResourcesManager.gamePaused = true;
+		disposeScene();
+		sensor.stop();
+	}
+	
+	@Override
+	public void onBackKeyPressed()
+	{
+		SceneManager.getInstance().loadMenuScene(engine);
+	}
+
+	@Override
+	public SceneType getSceneType()
+	{
+		return SceneType.SCENE_GAME;
+	}
+
+	@Override
+	public void disposeScene()
+	{
+		camera.setHUD(null);
+		camera.setChaseEntity(null);
+		camera.setCenter(
+				resourcesManager.menu_background_region.getWidth() / 2,
+				resourcesManager.menu_background_region.getHeight() / 2);
+		resourcesManager.music.stop();
+		// TODO code responsible for disposing scene
+		// removing all game scene objects.
+	}
+
+	protected void loadResources()
+	{
+		lb = new LabyrinthManager();
+		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, GameManager.MAX_STARS,
+				GameManager.getInstance().getBotCount(), false, true);
+		ai = new ArtificialIntelligence(lb.Return_Map(),GameManager.getInstance().getBotAI());
+		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+
+		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,
+				new Vector2(0, 0), false);
+		player = new Player();
+
+		player.load();
+		hud = new PacHud();
+		hud.load();
+	}
 
 	@SuppressWarnings("deprecation")
-	public void createEngineOptions()
+	private void setUpCamera()
 	{
 		Display display = resourcesManager.activity.getWindowManager()
 				.getDefaultDisplay();
@@ -81,36 +208,31 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		}
 		BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
-		// ///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!here is the question how to
+		if (player!=null)
+			camera.setChaseEntity(player.getSprite());
+		if (hud!=null)
+			camera.setHUD(hud);
+		// TODO ///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!here is the question how to
 		// resetup the camera proprietly
+	}
+
+	private void setUpSensor()
+	{
 		AccelerometerSensor sns = new AccelerometerSensor(
 				resourcesManager.activity);
-		sns.setNoise(0.1f);
+		sns.setNoise(GRAVITY_NOISE);
+		sns.setImpulseSkip(GRAVITY_IMPULSE_SKIP);
 		sensor = sns;
-	}
-
-	@Override
-	protected void onManagedUpdate(float pSecondsElapsed)
-	{
-		if (ResourcesManager.gamePaused)
+		sensor.addOnGravityChangedListener(new OnGravityChangedListener()
 		{
-			if (resourcesManager.isAudioOn())
-				resourcesManager.music.pause();
-			super.onManagedUpdate(0);
-		} else
-		{
-			if (resourcesManager.isAudioOn())
-				resourcesManager.music.resume();
-			super.onManagedUpdate(pSecondsElapsed);
-		}
-	}
-
-	@Override
-	public void createScene()
-	{
-		createEngineOptions();
-		loadResources();
-		onCreateScene();
+			@Override
+			public void onGravityChanged(float[] vector, float[] delta)
+			{
+				Vector2 nv = new Vector2(vector[1], vector[0]);
+				mPhysicsWorld.setGravity(nv.mul(GRAVITY_FACTOR));
+				hud.getGravityHud().setGravity(nv);
+			}
+		});
 	}
 
 	private void setUpAudio()
@@ -123,24 +245,25 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 		}
 	}
 
-	protected void onCreateScene()
+	private void setUpBackground()
 	{
-		setUpAudio();
-		registerUpdateHandler(mPhysicsWorld);
-		final VertexBufferObjectManager vertexBufferObjectManager = resourcesManager.activity
-				.getVertexBufferObjectManager();
-
 		LabyrinthBackground lbg = new LabyrinthBackground(resourcesManager,
 				AREA_WIDTH, AREA_HEIGHT);
 		lbg.load(resourcesManager.activity);
 		attachChild(lbg.getSprite());
-		// setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
-
+	}
+	
+	private void spawnPlayer()
+	{
+		int[] p = lb.Return_Player();
 		player.createPhysicBody(mPhysicsWorld);
 		mPhysicsWorld.registerPhysicsConnector(player.createPhysicsConnector());
-		int[] p = lb.Return_Player();
 		player.setPosition(p[1] * BLOCK_WIDTH, p[0] * BLOCK_HEIGHT);
+		attachChild(player.getSprite());
+	}
 
+	private void createWalls(VertexBufferObjectManager vertexBufferObjectManager)
+	{
 		final Rectangle ground = new Rectangle(0, AREA_HEIGHT - 2, AREA_WIDTH,
 				2, vertexBufferObjectManager);
 		final Rectangle roof = new Rectangle(0, 0, AREA_WIDTH, 2,
@@ -170,8 +293,16 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 			walls[i].createPhysicBody(mPhysicsWorld);
 			attachChild(walls[i].getSprite());
 		}
+		
+		attachChild(right);
+		attachChild(left);
+		attachChild(roof);
+		attachChild(ground);
+	}
 
-		tab = lb.Return_Stars();
+	private void createStars(VertexBufferObjectManager vertexBufferObjectManager)
+	{
+		List<int[]> tab = lb.Return_Stars();
 		stars = new Star[tab.size()];
 		for (int i = 0; i < tab.size(); i++)
 		{
@@ -182,31 +313,22 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 			registerUpdateHandler(new PlayerCollisionHandler<Star>(player,
 					stars[i], new PlayerWithStarCollisionEffect()));
 		}
-		tab = lb.Return_Bots();
+	}
+
+	private void createBots(VertexBufferObjectManager vertexBufferObjectManager)
+	{
+		List<int[]> tab = lb.Return_Bots();
 		ghostBots = new GhostBot[tab.size()];
 		for (int i = 0; i < tab.size(); i++)
 		{
 			ghostBots[i] = new GhostBot(resourcesManager, tab.get(i)[1]
 					* BLOCK_WIDTH, tab.get(i)[0] * BLOCK_HEIGHT);
 			ghostBots[i].load(resourcesManager.activity);
-			/*
-			 * ghostBots[i].getSprite().registerEntityModifier(
-			 * ModifiersFactory.getMoveAndGoBackModifier(10f, tab.get(i)[1] *
-			 * BLOCK_WIDTH - BLOCK_WIDTH * 5 + 9, tab.get(i)[1] * BLOCK_WIDTH +
-			 * BLOCK_WIDTH * 5 + 9, tab.get(i)[0] * BLOCK_HEIGHT + 5,
-			 * tab.get(i)[0] BLOCK_HEIGHT + 5));
-			 */
-			/*
-			 * ghostBots[i].getSprite().registerEntityModifier( new
-			 * MyMoveModifier(1f, tab.get(i)[1] * BLOCK_WIDTH + 9,
-			 * positions.get(i)[1] * BLOCK_WIDTH + 9, tab.get(i)[0] *
-			 * BLOCK_HEIGHT + 5, positions.get(i)[0] * BLOCK_HEIGHT + 9));
-			 */
 			registerUpdateHandler(new PlayerCollisionHandler<GhostBot>(player,
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
-		GhostBotMoveManager manager = new GhostBotMoveManager(ghostBots, BOTS_SPEED);
+		manager = new GhostBotMoveManager(ghostBots, GameManager.getInstance().getBotSpeed());
 		manager.setListener(new MovesReadyListener()
 		{
 			@Override
@@ -225,88 +347,5 @@ public class GameScene extends BaseScene // implements IOnSceneTouchListener
 				}
 			}
 		});
-		manager.start();
-		// LIVES HUD SETUP
-		player.getStats().registerLivesChangedListener(
-				hud.getLivesHud().getStatsChangedListener());
-
-		// STARS HUD SETUP
-		player.getStats().registerStarsChangedListener(
-				hud.getStarsHud().getStatsChangedListener());
-
-		// CREATE GHOST
-		/*
-		 * ghostBot = new GhostBot(resourcesManager);
-		 * ghostBot.load(resourcesManager.activity);
-		 * ghostBot.getSprite().registerEntityModifier(
-		 * ModifiersFactory.getMoveAndGoBackModifier(10f, 0, 800, 100, 100));
-		 */
-
-		attachChild(player.getSprite());
-		attachChild(right);
-		attachChild(left);
-		attachChild(roof);
-		attachChild(ground);
-
-		// attachChild(ghostBot.getSprite());
-		// registerUpdateHandler(new PlayerCollisionHandler(player,
-		// ghostBot.getSprite(), new PlayerWithEnemyCollisionEffect()));
-
-		sensor.addOnGravityChangedListener(new OnGravityChangedListener()
-		{
-			@Override
-			public void onGravityChanged(float[] vector, float[] delta)
-			{
-				Vector2 nv = new Vector2(vector[1], vector[0]);
-				mPhysicsWorld.setGravity(nv.mul(GRAVITY_FACTOR));
-				hud.getGravityHud().setGravity(nv);
-			}
-		});
-		camera.setChaseEntity(player.getSprite());
-		camera.setHUD(hud);
-		sensor.start();
-	}
-
-	@Override
-	public void onBackKeyPressed()
-	{
-		SceneManager.getInstance().loadMenuScene(engine);
-	}
-
-	@Override
-	public SceneType getSceneType()
-	{
-		return SceneType.SCENE_GAME;
-	}
-
-	@Override
-	public void disposeScene()
-	{
-		camera.setHUD(null);
-		camera.setChaseEntity(null);
-		camera.setCenter(
-				resourcesManager.menu_background_region.getWidth() / 2,
-				resourcesManager.menu_background_region.getHeight() / 2);
-		resourcesManager.music.stop();
-		// TODO code responsible for disposing scene
-		// removing all game scene objects.
-	}
-
-	protected void loadResources()
-	{
-
-		lb = new LabyrinthManager();
-		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, STARS_COUNT,
-				BOTS_COUNT, false, true);
-		ai = new ArtificialIntelligence(lb.Return_Map(),BOTS_INTELLIGENCE);
-		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
-
-		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,
-				new Vector2(0, 0), false);
-		player = new Player(resourcesManager);
-
-		player.load(resourcesManager.activity);
-		hud = new PacHud(resourcesManager);
-		hud.load(resourcesManager.activity);
 	}
 }

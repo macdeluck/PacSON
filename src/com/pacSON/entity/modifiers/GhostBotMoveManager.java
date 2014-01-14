@@ -1,10 +1,8 @@
 package com.pacSON.entity.modifiers;
 
 import org.andengine.entity.IEntity;
-import org.andengine.entity.modifier.DoubleValueChangeEntityModifier;
 import org.andengine.entity.modifier.IEntityModifier;
 import org.andengine.entity.modifier.MoveByModifier;
-import org.andengine.util.modifier.ease.IEaseFunction;
 
 import com.pacSON.entity.GhostBot;
 

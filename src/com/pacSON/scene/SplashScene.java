@@ -7,12 +7,17 @@ import org.andengine.opengl.util.GLState;
 import com.pacSON.base.BaseScene;
 import com.pacSON.manager.SceneManager.SceneType;
 
-public class SplashScene extends BaseScene
+public class SplashScene extends BaseScene<Void>
 {
+	public SplashScene(Void onCreateParam)
+	{
+		super(onCreateParam);
+	}
+
 	private Sprite splash;
 	
 	@Override
-	public void createScene()
+	public void createScene(Void onCreateParams)
 	{
 		splash = new Sprite(0,0, resourcesManager.splash_region, vbom)
     	{

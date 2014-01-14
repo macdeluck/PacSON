@@ -18,7 +18,31 @@ public class AccelerometerSensor extends GravitySensor
 	private Sensor mAccelerometer;
 	private float mNoise, mFilterFactor;
 	private float mX, mY, mZ;
+	private int mImpulseSkip;
+	private int impulse;
 	
+	/**
+	 * Gets impulse skip.
+	 * <br>Impulse skip determines how many of impulses users get. For example 1 means that user gets each
+	 * impulse and 3 means that user gets one impulse and 2 are skipped.
+	 * @return
+	 */
+	public int getImpulseSkip()
+	{
+		return mImpulseSkip;
+	}
+
+	/**
+	 * Sets impulse skip. Impulse skip must positive Integer. Look at getImpulseSkip() for details.
+	 * @param pImpulseSkip
+	 * @throws IllegalArgumentException
+	 */
+	public void setImpulseSkip(int pImpulseSkip) throws IllegalArgumentException
+	{
+		if (pImpulseSkip<1) throw new IllegalArgumentException();
+		this.mImpulseSkip = pImpulseSkip;
+	}
+
 	private SensorEventListener mSensorListener;
 	
 	/**
@@ -31,6 +55,8 @@ public class AccelerometerSensor extends GravitySensor
 		this.mContext = context;
 		this.mNoise = 0.2f;
 		this.mFilterFactor = 0.1f;
+		this.mImpulseSkip = 1;
+		this.impulse = 0;
 		this.mSensorListener = new SensorEventListener()
 		{
 			@Override
@@ -41,6 +67,9 @@ public class AccelerometerSensor extends GravitySensor
 			@Override
 			public void onSensorChanged(SensorEvent event)
 			{
+				if (++impulse<mImpulseSkip) return;
+				impulse = 0;
+				
 				boolean modified = false;
 				float x = event.values[0];
 				float y = event.values[1];
