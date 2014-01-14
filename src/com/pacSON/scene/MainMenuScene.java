@@ -131,4 +131,11 @@ public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickLi
 		
 		setChildScene(menuChildScene);
 	}
+
+	@Override
+	public void onGameOverHappened()
+	{
+		return;
+		
+	}
 }

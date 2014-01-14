@@ -21,9 +21,9 @@ import com.pacSON.manager.SceneManager;
 public class GameActivity extends BaseGameActivity
 {
 	private BoundCamera camera;
-	private int CAMERA_WIDTH;
-	private int CAMERA_HEIGHT;
-	private static final int BLOCK_WIDTH = 60;
+	//private int CAMERA_WIDTH;
+	//private int CAMERA_HEIGHT;
+	//private static final int BLOCK_WIDTH = 60;
 	//private static final int BLOCK_HEIGHT = 60;
 	//private static final int AREA_WIDTH = 960;
 	//private static final int AREA_HEIGHT = 1560;
@@ -51,7 +51,7 @@ public class GameActivity extends BaseGameActivity
 		//Display display = getWindowManager().getDefaultDisplay();
 		//CAMERA_WIDTH = display.getWidth();
 		//CAMERA_HEIGHT = display.getHeight();
-		int factor = CAMERA_HEIGHT * CAMERA_WIDTH;
+		/*int factor = CAMERA_HEIGHT * CAMERA_WIDTH;
 		if (factor < 120000)
 		{
 			CAMERA_WIDTH *= 2;
@@ -62,7 +62,7 @@ public class GameActivity extends BaseGameActivity
 					* BLOCK_WIDTH;
 			CAMERA_HEIGHT = (int) (CAMERA_HEIGHT * 1.5) / BLOCK_WIDTH
 					* BLOCK_WIDTH;
-		}
+		}*/
 		//BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		//BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
 //		camera = new BoundCamera((AREA_WIDTH - CAMERA_WIDTH) / 2,

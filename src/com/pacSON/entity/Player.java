@@ -35,8 +35,8 @@ public class Player implements IPacSONEntity
 	public static final int IMAGE_HEIGHT = 48;
 	public static final int SPRITE_WIDTH = 48;
 	public static final int SPRITE_HEIGHT = 48;
-	public static final int SPRITE_X = 0;
-	public static final int SPRITE_Y = 0;
+	public static final int SPRITE_X = 6;
+	public static final int SPRITE_Y = 6;
 	public static final int RADIUS = 24;
 	public static final float FIXTURE_DENSITY = 1f;
 	public static final float FIXTURE_ELASTICITY = 0.0f;

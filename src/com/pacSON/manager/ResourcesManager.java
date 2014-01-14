@@ -69,7 +69,9 @@ public class ResourcesManager
 	public ITextureRegion star_reg;
 	public ITextureRegion background_reg;
 	public ITextureRegion settings_reg;
+	public ITextureRegion gameOver_region;
 
+	private BitmapTextureAtlas gameOverTextureAtlas;
 	private BitmapTextureAtlas splashTextureAtlas;
 	private BitmapTextureAtlas playerTextureAtlas;
 	private BitmapTextureAtlas wallTextureAtlas;
@@ -304,6 +306,22 @@ public class ResourcesManager
 	{
 		menuTextureAtlas.load();
 	}
+	
+	public void loadGameOverTextures()
+	{
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
+		gameOverTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 350,
+				280, TextureOptions.DEFAULT);
+		gameOver_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				gameOverTextureAtlas, activity, "GameOver.jpeg", 0, 0);
+		gameOverTextureAtlas.load();
+	}
+	public void unloadGameOverTextures()
+	{
+		gameOverTextureAtlas.unload();
+	}
+	
 
 	/**
 	 * @param engine

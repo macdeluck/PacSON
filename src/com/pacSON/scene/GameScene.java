@@ -150,6 +150,12 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	{
 		SceneManager.getInstance().loadMenuScene(engine);
 	}
+	
+	@Override
+	public void onGameOverHappened()
+	{
+		SceneManager.getInstance().loadMenuSceneFromOver(engine);
+	}
 
 	@Override
 	public SceneType getSceneType()

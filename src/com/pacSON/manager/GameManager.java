@@ -17,10 +17,12 @@ public class GameManager
 	public final static float BOT_SPEED_STEP = -0.025f;
 	
 	public final static int MAX_LIVES = 3;
+	public final static int STARS_PER_LVL = 15;
 	public final static int MAX_STARS = 15;
-	public final static int DEF_BOT_AI = 80;
-	public final static float DEF_BOT_SPEED = 0.75f;
-	public final static int DEF_BOT_COUNT = 4;		
+	public final static int DEF_BOT_AI = 70;
+	public final static float DEF_BOT_SPEED = 0.8f;
+	public final static int DEF_BOT_COUNT = 4;
+	public final static int DEF_BOT_INCREMENT = 4;
 	
 	public PlayerStats getPlayerStats()
 	{
@@ -98,5 +100,7 @@ public class GameManager
 		currentLevel++;
 		if (playerStats.getLives()<MAX_LIVES)
 			playerStats.setLives(playerStats.getLives()+1);
+		if(currentLevel % DEF_BOT_INCREMENT == 0)
+			botCount++;
 	}
 }

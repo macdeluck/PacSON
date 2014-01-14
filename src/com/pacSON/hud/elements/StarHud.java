@@ -15,12 +15,13 @@ public class StarHud
 {
 	Sprite star;
 	Text text;
-	
+	Text stars_left_text;
+
 	private IPlayerStatsChangedListener listener = null;
-	
+
 	public static final String HUD_STAR_NAME = "star.png";
 	public static final int HUD_STAR_WIDTH = 50;
-	public static final int HUD_STAR_HEIGHT= 50;
+	public static final int HUD_STAR_HEIGHT = 50;
 	public static final int HUD_STAR_MARGIN = 10;
 
 	public static final int HUD_TEXT_MAXCHARS = 5;
@@ -34,40 +35,56 @@ public class StarHud
 			public void statsChanged(PlayerStats stats)
 			{
 				text.setText(Integer.toString(stats.getStars()));
+				stars_left_text.setText(Integer.toString(GameManager.getInstance().getPlayerStats()
+						.getStars()	% GameManager.STARS_PER_LVL)
+						+ "/" + Integer.toString(GameManager.STARS_PER_LVL));
 			}
 
 			@Override
 			public void statsReseted(PlayerStats stats)
 			{
 				text.setText("0");
+				stars_left_text.setText("0/" + Integer.toString(GameManager.STARS_PER_LVL));
 			}
 		};
 	}
 
 	public void setCamera(Camera camera)
 	{
-		star.setPosition(HUD_STAR_MARGIN,
-				camera.getHeight() - HUD_STAR_MARGIN - LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
+		star.setPosition(HUD_STAR_MARGIN, camera.getHeight() - HUD_STAR_MARGIN
+				- LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT*2);
 		text.setPosition(HUD_STAR_MARGIN + HUD_STAR_WIDTH + HUD_STAR_MARGIN,
-				camera.getHeight() - HUD_STAR_MARGIN - LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
+				camera.getHeight() - HUD_STAR_MARGIN
+						- LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT*2);
+		stars_left_text.setPosition(HUD_STAR_MARGIN,
+				camera.getHeight() - HUD_STAR_MARGIN
+				- LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
 	}
 
 	public void add()
 	{
 		GameActivity activity = ResourcesManager.getInstance().activity;
-		star = new Sprite(0,0, ResourcesManager.getInstance().star_reg, 
+		star = new Sprite(0, 0, ResourcesManager.getInstance().star_reg,
 				activity.getEngine().getVertexBufferObjectManager());
-		text = new Text(2, 2, ResourcesManager.getInstance().font , 
-				Integer.toString(GameManager.getInstance().getPlayerStats().getStars()), 
-				HUD_TEXT_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
+		text = new Text(2, 2, ResourcesManager.getInstance().font,
+				Integer.toString(GameManager.getInstance().getPlayerStats()
+						.getStars()), HUD_TEXT_MAXCHARS, activity.getEngine()
+						.getVertexBufferObjectManager());
+		stars_left_text = new Text(2, 2, ResourcesManager.getInstance().font,
+				Integer.toString(GameManager.getInstance().getPlayerStats()
+						.getStars()	% GameManager.STARS_PER_LVL)
+						+ "/" + Integer.toString(GameManager.STARS_PER_LVL),
+				HUD_TEXT_MAXCHARS, activity.getEngine()
+						.getVertexBufferObjectManager());
 	}
 
 	public void attach(IEntity parent)
 	{
 		parent.attachChild(star);
 		parent.attachChild(text);
+		parent.attachChild(stars_left_text);
 	}
-	
+
 	public IPlayerStatsChangedListener getStatsChangedListener()
 	{
 		return listener;
