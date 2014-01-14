@@ -109,8 +109,8 @@ public class LabyrinthManager
 		{
 			int p_x = rnd.nextInt(height);
 			int p_y = rnd.nextInt(width);
-			if (p_x > height / 3 && p_x < height * 2 / 3 && p_y > width / 3
-					&& p_y < width * 2 / 3)
+			if (p_x > height / 3 - 2 && p_x < height * 2 / 3 + 2
+					&& p_y > width / 3 - 2 && p_y < width * 2 / 3 + 2)
 				continue;
 			if (map.Is_Empty(p_x, p_y) && !map.Is_Star_Or_Player(p_x - 1, p_y)
 					&& !map.Is_Bot(p_x + 1, p_y) && !map.Is_Bot(p_x, p_y - 1)

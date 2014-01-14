@@ -207,16 +207,16 @@ public class ArtificialIntelligence
 	private int Scale_Intelligence(int dx, int dy)
 	{
 		int actual_intelligence;
-		double fact = Math.sqrt(dx * dx + dy * dy);
+		double fact = dx * dx + dy * dy;
 		if (fact <= 1)
 			actual_intelligence = intelligence + 30;
-		if (fact <= 3)
+		if (fact <= 9)
 			actual_intelligence = intelligence + 20;
-		else if (fact <= 5)
+		else if (fact <= 25)
 			actual_intelligence = intelligence + 10;
-		else if (fact <= 7)
+		else if (fact <= 49)
 			actual_intelligence = intelligence;
-		else if (fact <= 9)
+		else if (fact <= 81)
 			actual_intelligence = intelligence - 10;
 		else
 			actual_intelligence = intelligence - 20;
