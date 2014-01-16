@@ -13,6 +13,7 @@ import org.andengine.opengl.font.FontFactory;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.util.Log;
 
 import com.pacSON.GameActivity;
 import com.pacSON.hud.elements.GravityHud;
@@ -20,6 +21,7 @@ import com.pacSON.hud.elements.LevelHud;
 import com.pacSON.hud.elements.LivesHud;
 import com.pacSON.hud.elements.StarHud;
 import com.pacSON.manager.GameManager;
+import com.pacSON.manager.IFPSCounterEnableChanged;
 import com.pacSON.manager.IPauseChanged;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
@@ -83,10 +85,7 @@ public class PacHud extends HUD
 	{
 		this.attachChild(addOptionsButton());
 		addPauseToogleButton();
-		if(ResourcesManager.getInstance().isFpsCounterEnabled())
-		{
-			this.attachChild(addFpsCounter());
-		}
+		this.attachChild(addFpsCounter());
 		this.gravityHud.add();
 		this.gravityHud.attach(this);
 		
@@ -170,14 +169,45 @@ public class PacHud extends HUD
 				5, loadFont(resourcesManager.activity), "FPS:",
 				"FPS:".length() + 4, resourcesManager.activity.getEngine().getVertexBufferObjectManager());
 
-		final String form = "%.0f";
-		this.registerUpdateHandler(new TimerHandler(1 / 20.0f, true,
+		final String form = "FPS: %.0f";
+		final TimerHandler timerHandler = new TimerHandler(1 / 20.0f, true,
 				new ITimerCallback() {
-					@Override
-					public void onTimePassed(final TimerHandler pTimerHandler) {
-						fpsText.setText("FPS: " + String.format(form, fpsCounter.getFPS()));
-					}
-				}));
+			@Override
+			public void onTimePassed(final TimerHandler pTimerHandler) 
+			{
+				String str = String.format(form, fpsCounter.getFPS());
+				fpsText.setText(str);
+				Log.d("HUD", str);
+			}
+		});
+		
+		if (resourcesManager.isFpsCounterEnabled())
+		{
+			this.registerUpdateHandler(timerHandler);
+			fpsText.setAlpha(1f);
+		}
+		else
+		{
+			fpsText.setAlpha(0f);
+			PacHud.this.unregisterUpdateHandler(timerHandler);
+		}
+		resourcesManager.addOnFpsCounterEnableChangedListener(new IFPSCounterEnableChanged()
+		{
+			@Override
+			public void onEnableChanged(boolean value)
+			{
+				if (value)
+				{
+					fpsText.setAlpha(1f);
+					PacHud.this.registerUpdateHandler(timerHandler);
+				}
+				else
+				{
+					fpsText.setAlpha(0f);
+					PacHud.this.unregisterUpdateHandler(timerHandler);
+				}
+			}
+		});
 		return fpsText;
 	}
 	

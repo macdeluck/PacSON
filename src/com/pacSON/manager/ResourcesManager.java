@@ -25,6 +25,7 @@ import org.andengine.util.debug.Debug;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 
 import com.pacSON.GameActivity;
 import com.pacSON.entity.Bot;
@@ -87,6 +88,7 @@ public class ResourcesManager
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	private boolean isGamePaused = false;
 	private HashSet<IPauseChanged> pauseChangedListeners = new HashSet<IPauseChanged>();
+	private HashSet<IFPSCounterEnableChanged> fpsEnabledListeners = new HashSet<IFPSCounterEnableChanged>();
 	
 	public boolean isGamePaused()
 	{
@@ -402,5 +404,27 @@ public class ResourcesManager
 		if (!pref.contains(key))
 			pref.edit().putBoolean(key, true).commit();
 		return pref.getBoolean(key, true);
+	}
+	
+	public void setFpsCounterEnable(boolean value)
+	{
+		SharedPreferences pref = activity.getSharedPreferences(
+				activity.getString(com.pacSON.R.string.preference_key),
+				Context.MODE_PRIVATE);
+		final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
+		pref.edit().putBoolean(key, value).commit();
+		Log.d("Resource Manager", "FPS enable changed: "+value);
+		for(IFPSCounterEnableChanged l : fpsEnabledListeners)
+			l.onEnableChanged(isFpsCounterEnabled());
+	}
+	
+	public boolean addOnFpsCounterEnableChangedListener(IFPSCounterEnableChanged listener)
+	{
+		return fpsEnabledListeners.add(listener);
+	}
+	
+	public boolean removeOnFpsCounterEnableChangedListener(IFPSCounterEnableChanged listener)
+	{
+		return fpsEnabledListeners.remove(listener);
 	}
 }

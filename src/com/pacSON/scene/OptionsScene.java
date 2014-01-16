@@ -123,24 +123,14 @@ public class OptionsScene extends BaseScene<BaseScene<?>>
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) 
 			{
-				SharedPreferences pref = resourcesManager.activity.getSharedPreferences(
-					activity.getString(com.pacSON.R.string.preference_key),
-					Context.MODE_PRIVATE);
-				final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
-				pref.edit().putBoolean(key, false).commit();
-				//ResourcesManager.FPS_COUNTER_ENABLE = false;
+				resourcesManager.setFpsCounterEnable(false);
 			}
 			
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) 
 			{
-				SharedPreferences pref = resourcesManager.activity.getSharedPreferences(
-						activity.getString(com.pacSON.R.string.preference_key),
-						Context.MODE_PRIVATE);
-				final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
-				pref.edit().putBoolean(key, true).commit();
-				//ResourcesManager.FPS_COUNTER_ENABLE = true;
+				resourcesManager.setFpsCounterEnable(true);
 			}
 		});
 		registerTouchArea(resourcesManager.tickAndCrossToggleButtonSprite);
