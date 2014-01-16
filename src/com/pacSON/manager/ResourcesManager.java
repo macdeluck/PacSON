@@ -1,6 +1,7 @@
 package com.pacSON.manager;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
@@ -84,7 +85,36 @@ public class ResourcesManager
 
 	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
-	public static boolean gamePaused = false;
+	private boolean isGamePaused = false;
+	private HashSet<IPauseChanged> pauseChangedListeners = new HashSet<IPauseChanged>();
+	
+	public boolean isGamePaused()
+	{
+		return isGamePaused;
+	}
+
+	public void setGamePaused(boolean isGamePaused)
+	{
+		this.isGamePaused = isGamePaused;
+		for(IPauseChanged l : pauseChangedListeners)
+			l.onPauseChanged(isGamePaused);
+	}
+	
+	public void togglePause()
+	{
+		setGamePaused(!isGamePaused);
+	}
+	
+	public boolean addOnPauseChangedListener(IPauseChanged pc)
+	{
+		return pauseChangedListeners.add(pc);
+	}
+	
+	public boolean removeOnPauseChangedListener(IPauseChanged pc)
+	{
+		return pauseChangedListeners.remove(pc);
+	}
+
 	/**
 	 * Texture Region for the game graphics
 	 */

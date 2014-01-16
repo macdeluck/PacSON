@@ -2,11 +2,7 @@ package com.pacSON.scene;
 
 import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
-import org.andengine.entity.text.Text;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
-//import org.andengine.util.adt.color.Color;
-
-
 
 import com.pacSON.base.BaseScene;
 import com.pacSON.manager.ResourcesManager;

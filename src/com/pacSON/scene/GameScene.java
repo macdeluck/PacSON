@@ -75,7 +75,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	@Override
 	protected void onManagedUpdate(float pSecondsElapsed)
 	{
-		if (ResourcesManager.gamePaused)
+		if (ResourcesManager.getInstance().isGamePaused())
 		{
 			if (resourcesManager.isAudioOn())
 				resourcesManager.music.pause();
@@ -133,14 +133,14 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		registerUpdateHandler(mPhysicsWorld);
 		manager.start();
 		sensor.start();
-		ResourcesManager.gamePaused = false;
+		ResourcesManager.getInstance().setGamePaused(false);
 	}
 	
 	@Override
 	public void onSceneUnset()
 	{
 		unregisterUpdateHandler(mPhysicsWorld);
-		ResourcesManager.gamePaused = true;
+		ResourcesManager.getInstance().setGamePaused(true);
 		disposeScene();
 		sensor.stop();
 	}

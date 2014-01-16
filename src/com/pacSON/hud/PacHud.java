@@ -20,6 +20,7 @@ import com.pacSON.hud.elements.LevelHud;
 import com.pacSON.hud.elements.LivesHud;
 import com.pacSON.hud.elements.StarHud;
 import com.pacSON.manager.GameManager;
+import com.pacSON.manager.IPauseChanged;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -100,9 +101,9 @@ public class PacHud extends HUD
 	}
 	private void addPauseToogleButton()
 	{
-		ResourcesManager resourcesManager = ResourcesManager.getInstance();
+		final ResourcesManager resourcesManager = ResourcesManager.getInstance();
 		resourcesManager.pauseToggleButtonSprite = new ToggleButtonSprite(5, 5, resourcesManager.PauseButtonTextureRegion, resourcesManager.vbom);//vbo
-		if (ResourcesManager.gamePaused == false){
+		if (ResourcesManager.getInstance().isGamePaused() == false){
 			resourcesManager.pauseToggleButtonSprite.setState(ToggleState.ON);
 		}
 		else{
@@ -117,17 +118,29 @@ public class PacHud extends HUD
 			
 			@Override
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
-					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				ResourcesManager.gamePaused = true;
+					float pTouchAreaLocalX, float pTouchAreaLocalY) 
+			{
+				ResourcesManager.getInstance().setGamePaused(true);
 			}
 			
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
-					float pTouchAreaLocalX, float pTouchAreaLocalY) {
-				ResourcesManager.gamePaused = false;
+					float pTouchAreaLocalX, float pTouchAreaLocalY) 
+			{
+				ResourcesManager.getInstance().setGamePaused(false);
 			}
 		});
 		registerTouchArea(resourcesManager.pauseToggleButtonSprite);
+		resourcesManager.addOnPauseChangedListener(new IPauseChanged()
+		{
+			@Override
+			public void onPauseChanged(boolean isGamePaused)
+			{
+				if(isGamePaused)
+					resourcesManager.pauseToggleButtonSprite.setState(ToggleState.OFF);
+				else resourcesManager.pauseToggleButtonSprite.setState(ToggleState.ON);
+			}
+		});
 	}
 	private ButtonSprite addOptionsButton()
 	{
