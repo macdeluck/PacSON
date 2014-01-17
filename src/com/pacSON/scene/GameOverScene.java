@@ -25,7 +25,7 @@ public class GameOverScene extends BaseScene<Void>
 		int offsetX = ( cameraWidth - 350) / 2;
 		int offsetY = (int) ( cameraHeight - 280)/2;
 		ResourcesManager.getInstance().loadGameOverTextures();
-		attachChild(new Sprite(offsetX, offsetY, resourcesManager.gameOver_region, new VertexBufferObjectManager()));
+		attachChild(new Sprite(offsetX, offsetY, resourcesManager.gameOver_reg, new VertexBufferObjectManager()));
 		//attachChild(new Text(resourcesManager.camera.getXMin() + offsetX, resourcesManager.camera.getYMin() + offsetY, resourcesManager.font, "YOU FOOL", vbom));
 	}
 

@@ -35,16 +35,15 @@ public class StarHud
 			public void statsChanged(PlayerStats stats)
 			{
 				text.setText(Integer.toString(stats.getStars()));
-				stars_left_text.setText(Integer.toString(GameManager.getInstance().getPlayerStats()
-						.getStars()	% GameManager.STARS_PER_LVL)
-						+ "/" + Integer.toString(GameManager.STARS_PER_LVL));
+				stars_left_text.setText(Integer.toString(GameManager.getInstance().getTakenStars())
+						+ "/" + Integer.toString(GameManager.MAX_STARS));
 			}
 
 			@Override
 			public void statsReseted(PlayerStats stats)
 			{
 				text.setText("0");
-				stars_left_text.setText("0/" + Integer.toString(GameManager.STARS_PER_LVL));
+				stars_left_text.setText("0/" + Integer.toString(GameManager.MAX_STARS));
 			}
 		};
 	}
@@ -72,8 +71,8 @@ public class StarHud
 						.getVertexBufferObjectManager());
 		stars_left_text = new Text(2, 2, ResourcesManager.getInstance().font,
 				Integer.toString(GameManager.getInstance().getPlayerStats()
-						.getStars()	% GameManager.STARS_PER_LVL)
-						+ "/" + Integer.toString(GameManager.STARS_PER_LVL),
+						.getStars()	% GameManager.MAX_STARS)
+						+ "/" + Integer.toString(GameManager.MAX_STARS),
 				HUD_TEXT_MAXCHARS, activity.getEngine()
 						.getVertexBufferObjectManager());
 	}

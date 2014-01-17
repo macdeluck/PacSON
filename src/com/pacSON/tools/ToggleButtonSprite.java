@@ -74,7 +74,8 @@ public class ToggleButtonSprite extends TiledSprite implements ToggleButtonSprit
 
 			if (mOnToggleClickListener != null) {
 
-				if (mToogleState) {
+				mToogleState = !mToogleState;
+				if (!mToogleState) {
 					setCurrentTileIndex(ToggleState.OFF.get());
 					changeState(ToggleState.ON);
 					mOnToggleClickListener.onOnClick(this, 
@@ -85,7 +86,6 @@ pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 					mOnToggleClickListener.onOffClick(this, 
 pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 				}
-				mToogleState = !mToogleState;
 			}
 		}
 

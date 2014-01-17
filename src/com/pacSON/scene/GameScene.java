@@ -6,8 +6,10 @@ import org.andengine.entity.primitive.Rectangle;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import android.util.Log;
 import android.view.Display;
 
 import com.badlogic.gdx.math.Vector2;
@@ -129,6 +131,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	@Override
 	public void onSceneSet()
 	{
+		Log.d("GameScene", "GameScene set");
 		setUpCamera();
 		registerUpdateHandler(mPhysicsWorld);
 		manager.start();
@@ -182,7 +185,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, GameManager.MAX_STARS,
 				GameManager.getInstance().getBotCount(), false, true);
 		ai = new ArtificialIntelligence(lb.Return_Map(),GameManager.getInstance().getBotAI());
-		// BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,
 				new Vector2(0, 0), false);

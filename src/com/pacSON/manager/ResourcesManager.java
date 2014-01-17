@@ -34,6 +34,7 @@ import com.pacSON.entity.LabyrinthBackground;
 import com.pacSON.entity.Player;
 import com.pacSON.entity.Star;
 import com.pacSON.entity.Wall;
+import com.pacSON.hud.elements.GravityHud;
 import com.pacSON.tools.ToggleButtonSprite;
 
 public class ResourcesManager
@@ -71,7 +72,9 @@ public class ResourcesManager
 	public ITextureRegion star_reg;
 	public ITextureRegion background_reg;
 	public ITextureRegion settings_reg;
-	public ITextureRegion gameOver_region;
+	public ITextureRegion gameOver_reg;
+	public ITextureRegion hud_reg;
+	public ITextureRegion gravArrow_reg;
 
 	private BitmapTextureAtlas gameOverTextureAtlas;
 	private BitmapTextureAtlas splashTextureAtlas;
@@ -82,6 +85,8 @@ public class ResourcesManager
 	private BitmapTextureAtlas ghostBotGreenTextureAtlas;
 	private BitmapTextureAtlas backgroundTextureAtlas;
 	private BitmapTextureAtlas settingsTextureAtlas;
+	private BitmapTextureAtlas hudTextureAtlas;
+	private BitmapTextureAtlas gravArrowTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
 
 	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
@@ -240,6 +245,15 @@ public class ResourcesManager
 				LabyrinthBackground.IMAGE_HEIGHT, TextureOptions.REPEATING_NEAREST);
 		settingsTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), 117, 121, TextureOptions.DEFAULT);
+		hudTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
+				GravityHud.HUD_BASE_WIDTH, GravityHud.HUD_BASE_HEIGHT, TextureOptions.DEFAULT);
+		gravArrowTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
+				GravityHud.HUD_GRAV_ARROW_WIDTH, GravityHud.HUD_GRAV_ARROW_HEIGHT, TextureOptions.DEFAULT);
+		
+		hud_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(hudTextureAtlas, activity,
+				GravityHud.HUD_BASE_NAME, 0, 0);
+		gravArrow_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gravArrowTextureAtlas, activity,
+				GravityHud.HUD_GRAV_ARROW_NAME, 0, 0);
 		player_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				playerTextureAtlas, activity, Player.FILE_NAME, 0, 0);
 		wall_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
@@ -263,6 +277,8 @@ public class ResourcesManager
 		activity.getTextureManager().loadTexture(ghostBotGreenTextureAtlas);
 		activity.getTextureManager().loadTexture(backgroundTextureAtlas);
 		activity.getTextureManager().loadTexture(settingsTextureAtlas);
+		activity.getTextureManager().loadTexture(hudTextureAtlas);
+		activity.getTextureManager().loadTexture(gravArrowTextureAtlas);
 		
 		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
 				200, 200, TextureOptions.BILINEAR);
@@ -299,6 +315,7 @@ public class ResourcesManager
 
 	public void unloadGameTextures()
 	{
+		// TODO
 		playerTextureAtlas.unload();
 		player_reg = null;
 		wallTextureAtlas.unload();
@@ -345,7 +362,7 @@ public class ResourcesManager
 		gameOverTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), 350,
 				280, TextureOptions.DEFAULT);
-		gameOver_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+		gameOver_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				gameOverTextureAtlas, activity, "GameOver.jpeg", 0, 0);
 		gameOverTextureAtlas.load();
 	}

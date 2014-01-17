@@ -7,10 +7,6 @@ import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
-import org.andengine.opengl.texture.TextureOptions;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
-import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.andengine.opengl.texture.region.TextureRegion;
 
 import android.graphics.Typeface;
 
@@ -66,9 +62,9 @@ public class GravityHud
 	public void add()
 	{
 		GameActivity activity = ResourcesManager.getInstance().activity;
-		hudBase = new Sprite(2, 2, loadTextureRegion(activity, HUD_BASE_NAME, HUD_BASE_WIDTH, HUD_BASE_HEIGHT),
+		hudBase = new Sprite(2, 2, ResourcesManager.getInstance().hud_reg,
 					activity.getEngine().getVertexBufferObjectManager());
-		gravityArrow = new Sprite(2, 2, loadTextureRegion(activity, HUD_GRAV_ARROW_NAME, HUD_GRAV_ARROW_WIDTH, HUD_GRAV_ARROW_HEIGHT),
+		gravityArrow = new Sprite(2, 2, ResourcesManager.getInstance().gravArrow_reg,
 				activity.getEngine().getVertexBufferObjectManager());
 		gravityValue = new Text(2, 2, loadFont(activity),"0.0", HUD_GRAV_VAL_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
 				
@@ -104,17 +100,6 @@ public class GravityHud
 		if (l>=10)
 			form = "%1.0f";
 		gravityValue.setText(String.format(form, l));
-	}
-	
-	private TextureRegion loadTextureRegion(GameActivity activity, String name, int width, int height)
-	{
-		BitmapTextureAtlas bta = new BitmapTextureAtlas(activity.getTextureManager(), width, height, TextureOptions.DEFAULT);
-		
-		TextureRegion reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(bta, activity, name, 0, 0);
-		
-		activity.getTextureManager().loadTexture(bta);
-		
-		return reg;
 	}
 	
 	private Font loadFont(GameActivity activity)

@@ -17,7 +17,6 @@ public class GameManager
 	public final static float BOT_SPEED_STEP = -0.025f;
 	
 	public final static int MAX_LIVES = 3;
-	public final static int STARS_PER_LVL = 15;
 	public final static int MAX_STARS = 15;
 	public final static int DEF_BOT_AI = 70;
 	public final static float DEF_BOT_SPEED = 0.8f;
