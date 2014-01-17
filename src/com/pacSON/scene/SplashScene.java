@@ -60,11 +60,4 @@ public class SplashScene extends BaseScene<Void>
 		this.detachSelf();
 		this.dispose();
 	}
-
-	@Override
-	public void onGameOverHappened()
-	{
-		return;
-		
-	}
 }

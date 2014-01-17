@@ -6,7 +6,6 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import com.pacSON.base.BaseScene;
 import com.pacSON.manager.ResourcesManager;
-import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 
 public class GameOverScene extends BaseScene<Void>
@@ -44,13 +43,6 @@ public class GameOverScene extends BaseScene<Void>
 	@Override
 	public void disposeScene()
 	{
-
-	}
-
-	@Override
-	public void onGameOverHappened()
-	{
-		SceneManager.getInstance().loadMenuSceneFromOver(engine);
-		
+		ResourcesManager.getInstance().unloadGameOverTextures();
 	}
 }

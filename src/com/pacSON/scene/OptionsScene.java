@@ -156,11 +156,4 @@ public class OptionsScene extends BaseScene<BaseScene<?>>
 	{
 
 	}
-
-	@Override
-	public void onGameOverHappened()
-	{
-		return;
-		
-	}
 }

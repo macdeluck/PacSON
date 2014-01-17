@@ -14,6 +14,8 @@ public class PlayerStats
 	private int lives;
 	
 	private int stars;
+	
+	private int takenStars;
 
 	public int getStars()
 	{
@@ -23,6 +25,17 @@ public class PlayerStats
 	public void setStars(int stars)
 	{
 		this.stars = stars;
+		starsChanged();
+	}
+	
+	public int getTakenStars()
+	{
+		return takenStars;
+	}
+
+	public void setTakenStars(int takenStars)
+	{
+		this.takenStars = takenStars;
 		starsChanged();
 	}
 	

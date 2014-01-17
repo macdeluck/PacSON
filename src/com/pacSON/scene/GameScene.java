@@ -63,6 +63,11 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	private static final int GRAVITY_IMPULSE_SKIP = 1;
 	private static final int UPDATE_RATE = 60;
 	
+	public void pauseGame()
+	{
+		
+	}
+	
 	public GameScene(boolean reset)
 	{
 		super(reset);
@@ -136,14 +141,14 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		registerUpdateHandler(mPhysicsWorld);
 		manager.start();
 		sensor.start();
-		ResourcesManager.getInstance().setGamePaused(false);
+		ResourcesManager.getInstance().setGamePausedByFocus(false);
 	}
 	
 	@Override
 	public void onSceneUnset()
 	{
 		unregisterUpdateHandler(mPhysicsWorld);
-		ResourcesManager.getInstance().setGamePaused(true);
+		ResourcesManager.getInstance().setGamePausedByFocus(true);
 		disposeScene();
 		sensor.stop();
 	}
@@ -152,12 +157,6 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	public void onBackKeyPressed()
 	{
 		SceneManager.getInstance().loadMenuScene(engine);
-	}
-	
-	@Override
-	public void onGameOverHappened()
-	{
-		SceneManager.getInstance().loadMenuSceneFromOver(engine);
 	}
 
 	@Override

@@ -91,35 +91,73 @@ public class ResourcesManager
 
 	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
-	private boolean isGamePaused = false;
-	private HashSet<IPauseChanged> pauseChangedListeners = new HashSet<IPauseChanged>();
+	private boolean isGamePausedByButton = false;
+	private boolean isGamePausedByFocus = false;
+	private HashSet<IPauseChanged> pauseByButtonChangedListeners = new HashSet<IPauseChanged>();
+	private HashSet<IPauseChanged> pauseByFocusChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IFPSCounterEnableChanged> fpsEnabledListeners = new HashSet<IFPSCounterEnableChanged>();
 	
-	public boolean isGamePaused()
+	public boolean isGamePausedByButton()
 	{
-		return isGamePaused;
+		return isGamePausedByButton;
 	}
 
-	public void setGamePaused(boolean isGamePaused)
+	public void setGamePausedByButton(boolean isGamePaused)
 	{
-		this.isGamePaused = isGamePaused;
-		for(IPauseChanged l : pauseChangedListeners)
+		this.isGamePausedByButton = isGamePaused;
+		for(IPauseChanged l : pauseByButtonChangedListeners)
 			l.onPauseChanged(isGamePaused);
 	}
 	
-	public void togglePause()
+	public boolean isGamePaused()
 	{
-		setGamePaused(!isGamePaused);
+		return isGamePausedByButton || isGamePausedByFocus;
 	}
 	
-	public boolean addOnPauseChangedListener(IPauseChanged pc)
+	public void unpauseAll()
 	{
-		return pauseChangedListeners.add(pc);
+		isGamePausedByButton = isGamePausedByFocus = false;
+		for(IPauseChanged l : pauseByButtonChangedListeners)
+			l.onPauseChanged(false);
+		for(IPauseChanged l : pauseByFocusChangedListeners)
+			l.onPauseChanged(false);
 	}
 	
-	public boolean removeOnPauseChangedListener(IPauseChanged pc)
+	public boolean isGamePausedByFocus()
 	{
-		return pauseChangedListeners.remove(pc);
+		return isGamePausedByFocus;
+	}
+
+	public void setGamePausedByFocus(boolean isGamePausedByNotFocused)
+	{
+		this.isGamePausedByFocus = isGamePausedByNotFocused;
+		for(IPauseChanged l : pauseByFocusChangedListeners)
+			l.onPauseChanged(isGamePausedByNotFocused);
+	}
+
+	public void togglePauseByButton()
+	{
+		setGamePausedByButton(!isGamePausedByButton);
+	}
+	
+	public boolean addOnPauseByButtonChangedListener(IPauseChanged pc)
+	{
+		return pauseByButtonChangedListeners.add(pc);
+	}
+	
+	public boolean removeOnPauseByButtonChangedListener(IPauseChanged pc)
+	{
+		return pauseByButtonChangedListeners.remove(pc);
+	}
+	
+	public boolean addOnPauseByFocusChangedListener(IPauseChanged pc)
+	{
+		return pauseByFocusChangedListeners.add(pc);
+	}
+	
+	public boolean removeOnPauseByFocusChangedListener(IPauseChanged pc)
+	{
+		return pauseByFocusChangedListeners.remove(pc);
 	}
 
 	/**

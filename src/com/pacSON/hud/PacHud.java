@@ -102,7 +102,7 @@ public class PacHud extends HUD
 	{
 		final ResourcesManager resourcesManager = ResourcesManager.getInstance();
 		resourcesManager.pauseToggleButtonSprite = new ToggleButtonSprite(5, 5, resourcesManager.PauseButtonTextureRegion, resourcesManager.vbom);//vbo
-		if (ResourcesManager.getInstance().isGamePaused() == false){
+		if (ResourcesManager.getInstance().isGamePausedByButton() == false){
 			resourcesManager.pauseToggleButtonSprite.setState(ToggleState.ON);
 		}
 		else{
@@ -119,18 +119,18 @@ public class PacHud extends HUD
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) 
 			{
-				ResourcesManager.getInstance().setGamePaused(true);
+				ResourcesManager.getInstance().setGamePausedByButton(true);
 			}
 			
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) 
 			{
-				ResourcesManager.getInstance().setGamePaused(false);
+				ResourcesManager.getInstance().setGamePausedByButton(false);
 			}
 		});
 		registerTouchArea(resourcesManager.pauseToggleButtonSprite);
-		resourcesManager.addOnPauseChangedListener(new IPauseChanged()
+		resourcesManager.addOnPauseByButtonChangedListener(new IPauseChanged()
 		{
 			@Override
 			public void onPauseChanged(boolean isGamePaused)

@@ -35,7 +35,7 @@ public class StarHud
 			public void statsChanged(PlayerStats stats)
 			{
 				text.setText(Integer.toString(stats.getStars()));
-				stars_left_text.setText(Integer.toString(GameManager.getInstance().getTakenStars())
+				stars_left_text.setText(Integer.toString(GameManager.getInstance().getPlayerStats().getTakenStars())
 						+ "/" + Integer.toString(GameManager.MAX_STARS));
 			}
 

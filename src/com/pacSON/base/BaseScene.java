@@ -48,8 +48,6 @@ public abstract class BaseScene<Parameter> extends Scene
 	
 	public abstract void onBackKeyPressed();
 	
-	public abstract void onGameOverHappened();
-	
 	public abstract SceneType getSceneType();
 	
 	public abstract void disposeScene();

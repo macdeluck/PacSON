@@ -3,4 +3,5 @@
     <string name="preference_key">com.PacSON.preferenceKey</string>
     <string name="isAudioOn">isAudioOn</string>
     <string name="isFpsCounterEnabled">isFpsCounterEnabled</string>
+    <string name="hiScores">hiScores</string>
 </resources>

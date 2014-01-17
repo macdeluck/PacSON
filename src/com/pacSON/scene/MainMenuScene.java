@@ -28,7 +28,7 @@ public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickLi
 	
 	private final int MENU_PLAY = 0;
 	private final int MENU_OPTIONS = 1;
-	private final int ABOUT_OPTIONS = 2;
+	private final int HISCORES_OPTIONS = 2;
 	private final int EXIT_OPTIONS = 3;
 	//---------------------------------------------
 	// METHODS FROM SUPERCLASS
@@ -69,7 +69,8 @@ public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickLi
 			case MENU_OPTIONS:
 				SceneManager.getInstance().loadOptionsScene(engine);
 				return true;
-			case ABOUT_OPTIONS:
+			case HISCORES_OPTIONS:
+				SceneManager.getInstance().loadHiScoresScene(engine);
 				return true;
 			case EXIT_OPTIONS:
 				resourcesManager.activity.finish();
@@ -112,7 +113,7 @@ public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickLi
 		// int cameraHeight = (int) resourcesManager.camera.getHeight();
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.2f, 1);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.2f, 1);
-		final IMenuItem aboutMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(ABOUT_OPTIONS, resourcesManager.about_region, vbom), 1.2f, 1);
+		final IMenuItem aboutMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(HISCORES_OPTIONS, resourcesManager.about_region, vbom), 1.2f, 1);
 		final IMenuItem exitMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(EXIT_OPTIONS, resourcesManager.exit_region, vbom), 1.2f, 1);
 		
 		menuChildScene.addMenuItem(playMenuItem);
@@ -130,12 +131,5 @@ public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickLi
 		menuChildScene.setOnMenuItemClickListener(this);
 		
 		setChildScene(menuChildScene);
-	}
-
-	@Override
-	public void onGameOverHappened()
-	{
-		return;
-		
 	}
 }

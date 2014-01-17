@@ -7,6 +7,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import com.pacSON.base.BaseScene;
 import com.pacSON.scene.GameScene;
+import com.pacSON.scene.HiScoresScene;
 import com.pacSON.scene.LoadingScene;
 import com.pacSON.scene.GameOverScene;
 import com.pacSON.scene.MainMenuScene;
@@ -21,6 +22,7 @@ public class SceneManager
 
 	private BaseScene<?> splashScene;
 	private BaseScene<?> menuScene;
+	private BaseScene<?> hiScoresScene;
 
 	public BaseScene<?> getSplashScene()
 	{
@@ -76,6 +78,16 @@ public class SceneManager
 	{
 		return optionsScene;
 	}
+	
+	public void setHiScoresScene(BaseScene<?> hiScoresScene)
+	{
+		this.hiScoresScene = hiScoresScene;
+	}
+
+	public BaseScene<?> getHiScoresScene()
+	{
+		return hiScoresScene;
+	}
 
 	public void setOptionsScene(BaseScene<?> optionsScene)
 	{
@@ -111,7 +123,7 @@ public class SceneManager
 
 	public enum SceneType
 	{
-		SCENE_SPLASH, SCENE_MENU, SCENE_GAME, SCENE_LOADING, SCENE_GAME_OVER, SCENE_OPTIONS,
+		SCENE_SPLASH, SCENE_MENU, SCENE_GAME, SCENE_LOADING, SCENE_GAME_OVER, SCENE_OPTIONS, SCENE_HISCORES,
 	}
 
 	// ---------------------------------------------
@@ -142,6 +154,10 @@ public class SceneManager
 			break;
 		case SCENE_LOADING:
 			setScene(loadingScene);
+			break;
+		case SCENE_HISCORES:
+			setScene(hiScoresScene);
+			break;
 		case SCENE_GAME_OVER:
 			setScene(gameOverScene);
 			break;
@@ -271,6 +287,22 @@ public class SceneManager
 					}
 				}));
 	}
+	
+	public void loadHiScoresScene(final Engine mEngine)
+	{
+		setScene(loadingScene);
+		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+				new ITimerCallback()
+				{
+					@Override
+					public void onTimePassed(final TimerHandler pTimerHandler)
+					{
+						mEngine.unregisterUpdateHandler(pTimerHandler);
+						hiScoresScene = new HiScoresScene(null);
+						setScene(hiScoresScene);
+					}
+				}));
+	}
 
 	public void loadMenuSceneFromOver(final Engine mEngine)
 	{
@@ -287,8 +319,8 @@ public class SceneManager
 					public void onTimePassed(final TimerHandler pTimerHandler)
 					{
 						mEngine.unregisterUpdateHandler(pTimerHandler);
-						ResourcesManager.getInstance().loadMenuTextures();
-						setScene(menuScene);
+						hiScoresScene = new HiScoresScene(null);
+						setScene(hiScoresScene);
 					}
 				}));
 	}

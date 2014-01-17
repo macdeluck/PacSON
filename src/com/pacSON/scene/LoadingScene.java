@@ -44,11 +44,4 @@ public class LoadingScene extends BaseScene<Void>
 	{
 
 	}
-
-	@Override
-	public void onGameOverHappened()
-	{
-		return;
-		
-	}
 }

@@ -19,10 +19,10 @@ public class PlayerWithStarCollisionEffect implements IPlayerCollisionEffect<Sta
 		{
 			PlayerStats stats = GameManager.getInstance().getPlayerStats();
 			stats.setStars(stats.getStars()+1);
-			GameManager.getInstance().setTakenStars(GameManager.getInstance().getTakenStars()+1);
+			stats.setTakenStars(stats.getTakenStars()+1);
 			target.getSprite().setAlpha(0f);
 			target.setTaken(true);
-			if (GameManager.getInstance().getTakenStars()==GameManager.MAX_STARS)
+			if (stats.getTakenStars()==GameManager.MAX_STARS)
 				callNextLevel();
 		}
 	}
