@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
@@ -20,7 +21,7 @@ import com.pacSON.manager.SceneManager;
 
 public class GameActivity extends BaseGameActivity
 {
-	private BoundCamera camera;
+	private SmoothCamera camera;
 	//private int CAMERA_WIDTH;
 	//private int CAMERA_HEIGHT;
 	//private static final int BLOCK_WIDTH = 60;
@@ -67,7 +68,7 @@ public class GameActivity extends BaseGameActivity
 		//BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
 //		camera = new BoundCamera((AREA_WIDTH - CAMERA_WIDTH) / 2,
 //				(AREA_HEIGHT - CAMERA_HEIGHT) / 2, CAMERA_WIDTH, CAMERA_HEIGHT);// cam;
-		camera = new BoundCamera(0,0, BACKGROUND_HEIGHT, BACKGROUND_WIDTH);
+		camera = new SmoothCamera(0,0, BACKGROUND_HEIGHT, BACKGROUND_WIDTH, 300, 300, 10);
 		EngineOptions engineOptions = new EngineOptions(true,
 				ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(),
 				camera);
