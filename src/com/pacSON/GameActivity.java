@@ -35,6 +35,9 @@ public class GameActivity extends BaseGameActivity  implements IOnSceneTouchList
 	//private int BLOCK_Y_COUNT;
 	public static final int BACKGROUND_WIDTH = 480;
 	public static final int BACKGROUND_HEIGHT = 800;	
+	public static final float CAMERA_VELOCITY_X = 500;
+	public static final float CAMERA_VELOCITY_Y = 500;
+	public static final float MAX_ZOOM_FACTOR_CHANGE = 10;
 	//private static final int ITEMS_COUNT = 5;
 	private final int FPS = 60;
 	  // It is a good idea to place limits on zoom functionality
@@ -81,7 +84,7 @@ public class GameActivity extends BaseGameActivity  implements IOnSceneTouchList
 		//BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
 //		camera = new BoundCamera((AREA_WIDTH - CAMERA_WIDTH) / 2,
 //				(AREA_HEIGHT - CAMERA_HEIGHT) / 2, CAMERA_WIDTH, CAMERA_HEIGHT);// cam;
-		camera = new SmoothCamera(0,0, BACKGROUND_HEIGHT, BACKGROUND_WIDTH, 300, 300, 10);
+		camera = new SmoothCamera(0,0, BACKGROUND_HEIGHT, BACKGROUND_WIDTH, CAMERA_VELOCITY_X, CAMERA_VELOCITY_Y, MAX_ZOOM_FACTOR_CHANGE);
 		EngineOptions engineOptions = new EngineOptions(true,
 				ScreenOrientation.LANDSCAPE_FIXED, new FillResolutionPolicy(),
 				camera);
