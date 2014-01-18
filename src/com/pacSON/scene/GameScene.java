@@ -13,11 +13,18 @@ import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
 import android.util.Log;
 import android.view.Display;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.pacSON.GameActivity;
+import com.pacSON.R;
 import com.pacSON.AI.ArtificialIntelligence;
 import com.pacSON.base.BaseScene;
 import com.pacSON.entity.GhostBot;
@@ -160,7 +167,35 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	@Override
 	public void onBackKeyPressed()
 	{
-		SceneManager.getInstance().loadMenuScene(engine);
+		ResourcesManager.getInstance().setGamePausedByButton(true);
+		LayoutInflater layoutInflater = (LayoutInflater) resourcesManager.activity
+				.getSystemService(resourcesManager.activity.LAYOUT_INFLATER_SERVICE);
+		View popupView = layoutInflater.inflate(R.layout.popup, null);
+		final PopupWindow popupWindow = new PopupWindow(popupView,
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+
+     Button btnyes = (Button)popupView.findViewById(R.id.yes);
+     btnyes.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				popupWindow.dismiss();  
+				ResourcesManager.getInstance().setGamePausedByButton(false);
+				SceneManager.getInstance().loadMenuScene(engine);
+			}
+		});
+		Button btnno = (Button)popupView.findViewById(R.id.no);
+		btnno.setOnClickListener(new Button.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				ResourcesManager.getInstance().setGamePausedByButton(false);
+				popupWindow.dismiss();
+			}
+		});
+		 popupWindow.showAsDropDown(new LinearLayout(resourcesManager.activity));   
+		 
 	}
 
 	@Override

@@ -18,7 +18,9 @@ import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 import org.andengine.ui.activity.BaseGameActivity;
 
+import android.os.Bundle;
 import android.view.KeyEvent;
+import android.widget.TextView;
 
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
@@ -125,7 +127,7 @@ public class GameActivity extends BaseGameActivity  implements IOnSceneTouchList
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
 	}
-	
+	        
 	@Override
 	protected void onDestroy()
 	{
