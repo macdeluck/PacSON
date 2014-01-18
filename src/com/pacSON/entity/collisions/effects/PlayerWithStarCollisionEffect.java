@@ -22,7 +22,7 @@ public class PlayerWithStarCollisionEffect implements IPlayerCollisionEffect<Sta
 			stats.setTakenStars(stats.getTakenStars()+1);
 			target.getSprite().setAlpha(0f);
 			target.setTaken(true);
-			if (stats.getTakenStars()==GameManager.MAX_STARS)
+			if (stats.getLives() > 0 && stats.getTakenStars()==GameManager.MAX_STARS)
 				callNextLevel();
 		}
 	}

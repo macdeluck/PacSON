@@ -2,6 +2,7 @@ package com.pacSON.entity.collisions.effects;
 
 import com.pacSON.entity.GhostBot;
 import com.pacSON.entity.Player;
+import com.pacSON.gameStats.PlayerStats;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.HiScoresManager;
 import com.pacSON.manager.ResourcesManager;
@@ -14,15 +15,19 @@ public class PlayerWithEnemyCollisionEffect implements IPlayerCollisionEffect<Gh
 	{
 		if (!player.isImmortal())
 		{
-			if(GameManager.getInstance().getPlayerStats().getLives() == 1)
+			PlayerStats stats = GameManager.getInstance().getPlayerStats();
+			if(stats.getLives() == 1)
 			{
-				HiScoresManager.addScore(GameManager.getInstance().getPlayerStats().getStars());
+				HiScoresManager.addScore(stats.getStars());
 				SceneManager.getInstance().loadMenuSceneFromOver(ResourcesManager.getInstance().engine);
 			}
-			GameManager.getInstance().getPlayerStats().setLives(
-					GameManager.getInstance().getPlayerStats().getLives()-1);
-			player.setImmortality(player.getImmortalityDuration(), 
-					player.getImmortalityBlinks());
+			else
+			{
+				stats.setLives(
+						stats.getLives()-1);
+				player.setImmortality(player.getImmortalityDuration(), 
+						player.getImmortalityBlinks());
+			}
 		}
 	}
 

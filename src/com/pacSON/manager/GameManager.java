@@ -21,7 +21,7 @@ public class GameManager
 	public final static int BOT_COUNT_MAX = 8;
 	
 	public final static int MAX_LIVES = 3;
-	public final static int MAX_STARS = 1;
+	public final static int MAX_STARS = 15;
 	public final static int DEF_BOT_AI = 70;
 	public final static float DEF_BOT_SPEED = 0.8f;
 	
