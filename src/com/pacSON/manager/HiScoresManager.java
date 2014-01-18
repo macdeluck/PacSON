@@ -10,9 +10,9 @@ import com.pacSON.GameActivity;
 
 public class HiScoresManager
 {
-	public final static String DEFAULT_HISCORES_STRING = "#0#0#0#0#0";
+	public final static String DEFAULT_HISCORES_STRING = "#0#0#0#0#0#0#0#0#0#0";
 	public final static char DEFAULT_HISCORES_STRING_SEPARATOR = '#';
-	public final static int HISCORES_COUNT = 5;
+	public final static int HISCORES_COUNT = 10;
 	
 	private HiScoresManager()
 	{

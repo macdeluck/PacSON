@@ -43,14 +43,23 @@ public class HiScoresScene extends BaseScene<Void>
 		for(int i=0; i<hsc.length; i++)
 		{
 			float yPos = HISCORES_LABEL_MARGIN + hiScoresLabel.getHeight()+ SCORES_TOP_MARGIN + 
-					i*(SCORES_MARGIN+hiScoresLabel.getHeight());
+					(i%(hsc.length/2))*(SCORES_MARGIN+hiScoresLabel.getHeight());
+			if( i < hsc.length/2)
 			scoresLabels[i] = new Text(camera.getWidth()/2, 
-					yPos, rm.font, Integer.toString(i+1) + ". " +Integer.toString(hsc[hsc.length-1-i]), 
+					yPos, rm.font, Integer.toString(i+1) + " --> " +Integer.toString(hsc[hsc.length-1-i]), 
+					rm.activity.getVertexBufferObjectManager());
+			else
+			scoresLabels[i] = new Text(camera.getWidth()/2, 
+					yPos, rm.font, Integer.toString(i+1) + " --> " +Integer.toString(hsc[hsc.length-1-i]), 
 					rm.activity.getVertexBufferObjectManager());
 			Utils.CenterAlign(scoresLabels[i]);
 			attachChild(scoresLabels[i]);
 		}
-		
+		for(int i=0; i<hsc.length; i++)
+			if( i < hsc.length/2)
+				scoresLabels[i].setX(scoresLabels[i].getX() - camera.getWidth()/4);
+			else
+				scoresLabels[i].setX(scoresLabels[i].getX() + camera.getWidth()/4);
 	}
 	private void createBackground()
 	{
