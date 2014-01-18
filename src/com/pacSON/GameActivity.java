@@ -11,7 +11,11 @@ import org.andengine.engine.handler.timer.TimerHandler;
 import org.andengine.engine.options.EngineOptions;
 import org.andengine.engine.options.ScreenOrientation;
 import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
+import org.andengine.entity.scene.IOnSceneTouchListener;
 import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.TouchEvent;
+import org.andengine.input.touch.detector.PinchZoomDetector;
+import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 import org.andengine.ui.activity.BaseGameActivity;
 
 import android.view.KeyEvent;
@@ -19,7 +23,7 @@ import android.view.KeyEvent;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 
-public class GameActivity extends BaseGameActivity
+public class GameActivity extends BaseGameActivity  implements IOnSceneTouchListener, IPinchZoomDetectorListener
 {
 	private SmoothCamera camera;
 	//private int CAMERA_WIDTH;
@@ -30,10 +34,20 @@ public class GameActivity extends BaseGameActivity
 	//private static final int AREA_HEIGHT = 1560;
 	//private int BLOCK_X_COUNT;
 	//private int BLOCK_Y_COUNT;
-	private static final int BACKGROUND_WIDTH = 480;
-	private static final int BACKGROUND_HEIGHT = 800;	
+	public static final int BACKGROUND_WIDTH = 480;
+	public static final int BACKGROUND_HEIGHT = 800;	
 	//private static final int ITEMS_COUNT = 5;
 	private final int FPS = 60;
+	  // It is a good idea to place limits on zoom functionality
+	  private static final float MIN_ZOOM_FACTOR = 0.5f;
+	  private static final float MAX_ZOOM_FACTOR = 1.5f;
+	  // This object will handle the zooming pending touch
+	  public PinchZoomDetector mPinchZoomDetector;
+	  private float mInitialTouchZoomFactor;
+	  // These are for Panning
+	  private float mInitialTouchX;
+	  private float mInitialTouchY;
+
 	@Override
 	public Engine onCreateEngine(EngineOptions pEngineOptions) 
 	{
@@ -118,4 +132,46 @@ public class GameActivity extends BaseGameActivity
 		super.onDestroy();
 		System.exit(0);	
 	}
+	
+	 @Override
+	  public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+	     mPinchZoomDetector.onTouchEvent(pSceneTouchEvent);
+	     if (pSceneTouchEvent.isActionDown()) {
+	        mInitialTouchX = pSceneTouchEvent.getX();
+	        mInitialTouchY = pSceneTouchEvent.getY();
+	     }
+	     if(pSceneTouchEvent.isActionMove()){
+	        // it means we move already
+	        final float touchOffsetX = mInitialTouchX - pSceneTouchEvent.getX();
+	        final float touchOffsetY = mInitialTouchY - pSceneTouchEvent.getY();
+	        camera.setCenter(camera.getCenterX() + touchOffsetX, camera.getCenterY() + touchOffsetY);
+	     }
+	     return true;
+	  }
+
+	  @Override
+	  public void onPinchZoomStarted(PinchZoomDetector pPinchZoomDetector,
+	TouchEvent pSceneTouchEvent) {
+	     mInitialTouchZoomFactor = camera.getZoomFactor();
+	  }
+
+	  @Override
+	  public void onPinchZoom(PinchZoomDetector pPinchZoomDetector,
+	  TouchEvent pTouchEvent, float pZoomFactor) {
+	     final float newZoomFactor = mInitialTouchZoomFactor * pZoomFactor;
+	     // If the camera is within zooming bounds
+	     if(newZoomFactor < MAX_ZOOM_FACTOR && newZoomFactor > MIN_ZOOM_FACTOR){
+	    	 camera.setZoomFactor(newZoomFactor);
+	     }
+	  }
+
+	  //well same behavior like in normal zoom
+	  @Override
+	  public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector,
+	  TouchEvent pTouchEvent, float pZoomFactor) {
+		  final float newZoomFactor = mInitialTouchZoomFactor * pZoomFactor;
+	     if(newZoomFactor < MAX_ZOOM_FACTOR && newZoomFactor > MIN_ZOOM_FACTOR){
+	    	 camera.setZoomFactor(newZoomFactor);
+	     }
+	  }
 }

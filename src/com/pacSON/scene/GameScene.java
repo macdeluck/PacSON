@@ -3,9 +3,11 @@ package com.pacSON.scene;
 import java.util.List;
 
 import org.andengine.entity.primitive.Rectangle;
+import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
+import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -15,6 +17,7 @@ import android.view.Display;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.pacSON.GameActivity;
 import com.pacSON.AI.ArtificialIntelligence;
 import com.pacSON.base.BaseScene;
 import com.pacSON.entity.GhostBot;
@@ -149,6 +152,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	{
 		unregisterUpdateHandler(mPhysicsWorld);
 		ResourcesManager.getInstance().setGamePausedByFocus(true);
+		ResourcesManager.getInstance().camera.setZoomFactor(1);
 		disposeScene();
 		sensor.stop();
 	}
@@ -220,8 +224,8 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 			camera.setChaseEntity(player.getSprite());
 		if (hud!=null)
 			camera.setHUD(hud);
-		// TODO ///////!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!here is the question how to
-		// resetup the camera proprietly
+		if (player != null)
+		ResourcesManager.getInstance().camera.setCenterDirect(player.getY(), player.getX());
 	}
 
 	private void setUpSensor()
@@ -357,4 +361,5 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 			}
 		});
 	}
+
 }

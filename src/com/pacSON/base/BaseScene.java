@@ -51,4 +51,5 @@ public abstract class BaseScene<Parameter> extends Scene
 	public abstract SceneType getSceneType();
 	
 	public abstract void disposeScene();
+	
 }
