@@ -62,7 +62,7 @@ public class ResourcesManager
 	public ITextureRegion menu_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
-	public ITextureRegion about_region;
+	public ITextureRegion highScores_region;
 	public ITextureRegion exit_region;
 
 	// Game Texture Regions
@@ -226,8 +226,8 @@ public class ResourcesManager
 				menuTextureAtlas, activity, "itemPlay.png");
 		options_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity, "itemOptions.png");
-		about_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				menuTextureAtlas, activity, "itemAbout.png");
+		highScores_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuTextureAtlas, activity, "itemHighScores.png");
 		exit_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				menuTextureAtlas, activity, "itemExit.png");
 
