@@ -30,6 +30,7 @@ public class HiScoresScene extends BaseScene<Void>
 	@Override
 	public void createScene(Void onCreateParams)
 	{
+		createBackground();
 		ResourcesManager rm = ResourcesManager.getInstance();
 		Camera camera = rm.camera;
 		hiScoresLabel = new Text(camera.getWidth()/2, HISCORES_LABEL_MARGIN
@@ -51,7 +52,26 @@ public class HiScoresScene extends BaseScene<Void>
 		}
 		
 	}
-	
+	private void createBackground()
+	{
+		Sprite options = new Sprite(0,0, resourcesManager.base_background_region, vbom)
+		{
+    		@Override
+            protected void preDraw(GLState pGLState, Camera pCamera) 
+    		{
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+		};
+		int cameraWidth = (int) resourcesManager.camera.getWidth();
+		int cameraHeight = (int) resourcesManager.camera.getHeight();
+		int optionsWidth = (int) resourcesManager.base_background_region.getWidth();
+		int optionsHeight= (int) resourcesManager.base_background_region.getHeight();
+		int offsetX = ( cameraWidth - optionsWidth ) / 2;
+		int offsetY = ( cameraHeight - optionsHeight ) / 2;
+		options.setPosition(0,0);
+    	attachChild(options);
+	}
 	@Override
 	public void onSceneUnset()
 	{

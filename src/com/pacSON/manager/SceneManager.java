@@ -318,6 +318,7 @@ public class SceneManager
 					public void onTimePassed(final TimerHandler pTimerHandler)
 					{
 						mEngine.unregisterUpdateHandler(pTimerHandler);
+						ResourcesManager.getInstance().loadHighScoresResources();
 						hiScoresScene = new HiScoresScene(null);
 						setScene(hiScoresScene);
 					}

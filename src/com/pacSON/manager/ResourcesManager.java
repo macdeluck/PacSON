@@ -60,6 +60,7 @@ public class ResourcesManager
 
 	public ITextureRegion splash_region;
 	public ITextureRegion menu_background_region;
+	public ITextureRegion base_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
 	public ITextureRegion highScores_region;
@@ -89,7 +90,7 @@ public class ResourcesManager
 	private BitmapTextureAtlas hudTextureAtlas;
 	private BitmapTextureAtlas gravArrowTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
-
+	private BitmapTextureAtlas menuBaseTextureAtlas;
 	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	private boolean isGamePausedByButton = false;
@@ -190,21 +191,34 @@ public class ResourcesManager
 		loadGameFonts();
 		loadGameAudio();
 	}
-
+	public void loadHighScoresResources()
+	{
+		loadHighScoresGraphics();
+	}
 	public void loadOptionsResources()
 	{
 		loadOptionsGraphics();
 	}
 
+	private void loadHighScoresGraphics()
+	{
+		
+	}
 	private void loadOptionsGraphics()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/options/");
 		this.mSoundButtonBitmapTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), 200, 200, TextureOptions.BILINEAR);
-
+		this.menuBaseTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		
+		base_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuBaseTextureAtlas, activity, "backgroundBase.png", 0, 0);
+		
 		this.soundButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mSoundButtonBitmapTextureAtlas,
 						activity.getAssets(), TOGGLE_BUTTON_AUDOIO, 0, 0, 2, 1);
+		
 
 		this.tickAndCrossButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mSoundButtonBitmapTextureAtlas,
@@ -212,6 +226,7 @@ public class ResourcesManager
 						1);
 
 		this.mSoundButtonBitmapTextureAtlas.load();
+		this.menuBaseTextureAtlas.load();
 	}
 
 	private void loadMenuGraphics()
@@ -245,7 +260,12 @@ public class ResourcesManager
 
 	private void loadMenuAudio()
 	{
-
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/options/");
+		menuBaseTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		base_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuBaseTextureAtlas, activity, "backgroundBase.png", 0, 0);
+		menuBaseTextureAtlas.load();
 	}
 
 	private void loadMenuFonts()
