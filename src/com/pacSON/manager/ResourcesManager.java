@@ -7,6 +7,7 @@ import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
 import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
 import org.andengine.opengl.texture.ITexture;
@@ -47,7 +48,7 @@ public class ResourcesManager
 
 	public Engine engine;
 	public GameActivity activity;
-	public BoundCamera camera;
+	public SmoothCamera camera;
 	public VertexBufferObjectManager vbom;
 	public Music music;
 	public Font font;
@@ -422,7 +423,7 @@ public class ResourcesManager
 	 *            we can latter access them from different classes (eg. scenes)
 	 */
 	public static void prepareManager(Engine engine, GameActivity activity,
-			BoundCamera camera, VertexBufferObjectManager vbom)
+			SmoothCamera camera, VertexBufferObjectManager vbom)
 	{
 		getInstance().engine = engine;
 		getInstance().activity = activity;
