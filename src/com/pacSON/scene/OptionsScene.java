@@ -1,7 +1,6 @@
 package com.pacSON.scene;
 
 import org.andengine.engine.camera.Camera;
-import org.andengine.entity.scene.background.Background;
 import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
 import org.andengine.opengl.util.GLState;
@@ -10,7 +9,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.pacSON.base.BaseScene;
-import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -188,12 +186,12 @@ public class OptionsScene extends BaseScene<BaseScene<?>>
                 pGLState.enableDither();
             }
 		};
-		int cameraWidth = (int) resourcesManager.camera.getWidth();
-		int cameraHeight = (int) resourcesManager.camera.getHeight();
-		int optionsWidth = (int) resourcesManager.base_background_region.getWidth();
-		int optionsHeight= (int) resourcesManager.base_background_region.getHeight();
-		int offsetX = ( cameraWidth - optionsWidth ) / 2;
-		int offsetY = ( cameraHeight - optionsHeight ) / 2;
+		//int cameraWidth = (int) resourcesManager.camera.getWidth();
+		//int cameraHeight = (int) resourcesManager.camera.getHeight();
+		//int optionsWidth = (int) resourcesManager.base_background_region.getWidth();
+		//int optionsHeight= (int) resourcesManager.base_background_region.getHeight();
+		//int offsetX = ( cameraWidth - optionsWidth ) / 2;
+		//int offsetY = ( cameraHeight - optionsHeight ) / 2;
 		options.setPosition(0,0);
     	attachChild(options);
 	}

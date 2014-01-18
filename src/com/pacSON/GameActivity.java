@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import org.andengine.engine.Engine;
 import org.andengine.engine.LimitedFPSEngine;
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
@@ -18,9 +17,7 @@ import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 import org.andengine.ui.activity.BaseGameActivity;
 
-import android.os.Bundle;
 import android.view.KeyEvent;
-import android.widget.TextView;
 
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;

@@ -3,16 +3,16 @@ package com.pacSON.scene;
 import java.util.List;
 
 import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.Scene;
 import org.andengine.extension.physics.box2d.FixedStepPhysicsWorld;
 import org.andengine.extension.physics.box2d.PhysicsFactory;
 import org.andengine.extension.physics.box2d.PhysicsWorld;
-import org.andengine.input.touch.TouchEvent;
 import org.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
+import android.content.Context;
 import android.util.Log;
 import android.view.Display;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
@@ -23,7 +23,6 @@ import android.widget.PopupWindow;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.pacSON.GameActivity;
 import com.pacSON.R;
 import com.pacSON.AI.ArtificialIntelligence;
 import com.pacSON.base.BaseScene;
@@ -40,6 +39,7 @@ import com.pacSON.entity.modifiers.MovesReadyListener;
 import com.pacSON.hud.PacHud;
 import com.pacSON.labyrinth.LabyrinthManager;
 import com.pacSON.manager.GameManager;
+import com.pacSON.manager.HiScoresManager;
 import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
@@ -47,7 +47,8 @@ import com.pacSON.physic.gravity.AccelerometerSensor;
 import com.pacSON.physic.gravity.GravitySensor;
 import com.pacSON.physic.gravity.OnGravityChangedListener;
 
-public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchListener
+public class GameScene extends BaseScene<Boolean> // implements
+// IOnSceneTouchListener
 {
 	private PhysicsWorld mPhysicsWorld;
 	private int CAMERA_WIDTH;
@@ -63,6 +64,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	private Star[] stars;
 	private PacHud hud;
 	private GhostBotMoveManager manager;
+	private PopupWindow popupWindow;
 
 	private static final int BLOCK_WIDTH = 60;
 	private static final int BLOCK_HEIGHT = 60;
@@ -72,12 +74,12 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	private static final float GRAVITY_NOISE = 0.5f;
 	private static final int GRAVITY_IMPULSE_SKIP = 1;
 	private static final int UPDATE_RATE = 60;
-	
+
 	public void pauseGame()
 	{
-		
+
 	}
-	
+
 	public GameScene(boolean reset)
 	{
 		super(reset);
@@ -112,7 +114,8 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	{
 		if (reset)
 			GameManager.getInstance().reset();
-		else GameManager.getInstance().levelUp();
+		else
+			GameManager.getInstance().levelUp();
 		createEngineOptions();
 		loadResources();
 		onCreateScene();
@@ -130,19 +133,25 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		createWalls(vertexBufferObjectManager);
 		createStars(vertexBufferObjectManager);
 		createBots(vertexBufferObjectManager);
-		
+
 		// LIVES HUD SETUP
-		GameManager.getInstance().getPlayerStats().registerLivesChangedListener(
-				hud.getLivesHud().getStatsChangedListener());
+		GameManager
+				.getInstance()
+				.getPlayerStats()
+				.registerLivesChangedListener(
+						hud.getLivesHud().getStatsChangedListener());
 
 		// STARS HUD SETUP
-		GameManager.getInstance().getPlayerStats().registerStarsChangedListener(
-				hud.getStarsHud().getStatsChangedListener());
+		GameManager
+				.getInstance()
+				.getPlayerStats()
+				.registerStarsChangedListener(
+						hud.getStarsHud().getStatsChangedListener());
 
 		camera.setChaseEntity(player.getSprite());
 		camera.setHUD(hud);
 	}
-	
+
 	@Override
 	public void onSceneSet()
 	{
@@ -152,8 +161,9 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		manager.start();
 		sensor.start();
 		ResourcesManager.getInstance().setGamePausedByFocus(false);
+		ResourcesManager.getInstance().setGameSceneTouchable(true);
 	}
-	
+
 	@Override
 	public void onSceneUnset()
 	{
@@ -163,39 +173,62 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		disposeScene();
 		sensor.stop();
 	}
-	
+
 	@Override
 	public void onBackKeyPressed()
 	{
-		ResourcesManager.getInstance().setGamePausedByButton(true);
-		LayoutInflater layoutInflater = (LayoutInflater) resourcesManager.activity
-				.getSystemService(resourcesManager.activity.LAYOUT_INFLATER_SERVICE);
-		View popupView = layoutInflater.inflate(R.layout.popup, null);
-		final PopupWindow popupWindow = new PopupWindow(popupView,
-				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		if (!ResourcesManager.getInstance().isGameSceneTouchable())
+		{
+			exitFromPopup();
+		} else
+		{
+			ResourcesManager.getInstance().setGameSceneTouchable(false);
+			ResourcesManager.getInstance().setGamePausedByButton(true);
+			LayoutInflater layoutInflater = (LayoutInflater) resourcesManager.activity
+					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+			View popupView = layoutInflater.inflate(R.layout.popup, null);
+			popupWindow = new PopupWindow(popupView, LayoutParams.WRAP_CONTENT,
+					LayoutParams.WRAP_CONTENT);
 
-     Button btnyes = (Button)popupView.findViewById(R.id.yes);
-     btnyes.setOnClickListener(new Button.OnClickListener() {
+			Button btnyes = (Button) popupView.findViewById(R.id.yes);
+			btnyes.setOnClickListener(new Button.OnClickListener()
+			{
 
-			@Override
-			public void onClick(View v) {
-				popupWindow.dismiss();  
-				ResourcesManager.getInstance().setGamePausedByButton(false);
-				SceneManager.getInstance().loadMenuScene(engine);
-			}
-		});
-		Button btnno = (Button)popupView.findViewById(R.id.no);
-		btnno.setOnClickListener(new Button.OnClickListener() {
+				@Override
+				public void onClick(View v)
+				{
+					exitFromPopup();
+				}
+			});
+			Button btnno = (Button) popupView.findViewById(R.id.no);
+			btnno.setOnClickListener(new Button.OnClickListener()
+			{
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				ResourcesManager.getInstance().setGamePausedByButton(false);
-				popupWindow.dismiss();
-			}
-		});
-		 popupWindow.showAsDropDown(new LinearLayout(resourcesManager.activity));   
-		 
+				@Override
+				public void onClick(View v)
+				{
+					ResourcesManager.getInstance().setGameSceneTouchable(true);
+					ResourcesManager.getInstance().setGamePausedByButton(false);
+					popupWindow.dismiss();
+				}
+			});
+			popupWindow.showAtLocation(new LinearLayout(
+					resourcesManager.activity), Gravity.CENTER, 0, 0);
+		}
+		/*
+		 * (int)(camera.getWidth()/2 - popupView.getWidth()/2),
+		 * (int)(camera.getHeight()/2 - popupView.getHeight()/2));
+		 */
+	}
+	
+	private void exitFromPopup()
+	{
+		if (popupWindow != null)
+			popupWindow.dismiss();
+		ResourcesManager.getInstance().setGameSceneTouchable(true);
+		ResourcesManager.getInstance().setGamePausedByButton(false);
+		SceneManager.getInstance().loadMenuScene(engine);
+		HiScoresManager.addScore(GameManager.getInstance().getPlayerStats().getStars());
 	}
 
 	@Override
@@ -220,9 +253,11 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 	protected void loadResources()
 	{
 		lb = new LabyrinthManager();
-		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT, GameManager.MAX_STARS,
-				GameManager.getInstance().getBotCount(), false, true);
-		ai = new ArtificialIntelligence(lb.Return_Map(),GameManager.getInstance().getBotAI());
+		lb.Generate_Labyrinth(BLOCK_X_COUNT, BLOCK_Y_COUNT,
+				GameManager.MAX_STARS, GameManager.getInstance().getBotCount(),
+				false, true);
+		ai = new ArtificialIntelligence(lb.Return_Map(), GameManager
+				.getInstance().getBotAI());
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 
 		mPhysicsWorld = new FixedStepPhysicsWorld(UPDATE_RATE,
@@ -255,12 +290,13 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		}
 		BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
-		if (player!=null)
+		if (player != null)
 			camera.setChaseEntity(player.getSprite());
-		if (hud!=null)
+		if (hud != null)
 			camera.setHUD(hud);
 		if (player != null)
-		ResourcesManager.getInstance().camera.setCenterDirect(player.getY(), player.getX());
+			ResourcesManager.getInstance().camera.setCenterDirect(
+					player.getY(), player.getX());
 	}
 
 	private void setUpSensor()
@@ -300,7 +336,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		lbg.load(resourcesManager.activity);
 		attachChild(lbg.getSprite());
 	}
-	
+
 	private void spawnPlayer()
 	{
 		int[] p = lb.Return_Player();
@@ -341,7 +377,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 			walls[i].createPhysicBody(mPhysicsWorld);
 			attachChild(walls[i].getSprite());
 		}
-		
+
 		attachChild(right);
 		attachChild(left);
 		attachChild(roof);
@@ -376,18 +412,19 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 					ghostBots[i], new PlayerWithEnemyCollisionEffect()));
 			attachChild(ghostBots[i].getSprite());
 		}
-		manager = new GhostBotMoveManager(ghostBots, GameManager.getInstance().getBotSpeed());
+		manager = new GhostBotMoveManager(ghostBots, GameManager.getInstance()
+				.getBotSpeed());
 		manager.setListener(new MovesReadyListener()
 		{
 			@Override
 			public void onReady(GhostBotMoveManager manager)
 			{
 				GhostBot[] bots = manager.getBots();
-				List<int[]> positions = ai
-						.Return_New_Positions(new int[] {
-								(int)player.getX()/ BLOCK_WIDTH,
-								(int)player.getY() / BLOCK_HEIGHT, });
-				//Log.d("pacSON", String.format("%f %f", player.getX(), player.getY()));
+				List<int[]> positions = ai.Return_New_Positions(new int[] {
+						(int) player.getX() / BLOCK_WIDTH,
+						(int) player.getY() / BLOCK_HEIGHT, });
+				// Log.d("pacSON", String.format("%f %f", player.getX(),
+				// player.getY()));
 				for (int i = 0; i < bots.length; i++)
 				{
 					manager.setNewMoveModifier(bots[i], positions.get(i)[1]

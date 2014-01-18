@@ -6,7 +6,6 @@ import java.util.HashSet;
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -95,6 +94,17 @@ public class ResourcesManager
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	private boolean isGamePausedByButton = false;
 	private boolean isGamePausedByFocus = false;
+	private boolean isGameSceneTouchable = true;
+	public boolean isGameSceneTouchable()
+	{
+		return isGameSceneTouchable;
+	}
+
+	public void setGameSceneTouchable(boolean isGameSceneTouchable)
+	{
+		this.isGameSceneTouchable = isGameSceneTouchable;
+	}
+
 	private HashSet<IPauseChanged> pauseByButtonChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IPauseChanged> pauseByFocusChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IFPSCounterEnableChanged> fpsEnabledListeners = new HashSet<IFPSCounterEnableChanged>();

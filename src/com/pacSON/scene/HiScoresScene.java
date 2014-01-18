@@ -63,12 +63,12 @@ public class HiScoresScene extends BaseScene<Void>
                 pGLState.enableDither();
             }
 		};
-		int cameraWidth = (int) resourcesManager.camera.getWidth();
-		int cameraHeight = (int) resourcesManager.camera.getHeight();
-		int optionsWidth = (int) resourcesManager.base_background_region.getWidth();
-		int optionsHeight= (int) resourcesManager.base_background_region.getHeight();
-		int offsetX = ( cameraWidth - optionsWidth ) / 2;
-		int offsetY = ( cameraHeight - optionsHeight ) / 2;
+		//int cameraWidth = (int) resourcesManager.camera.getWidth();
+		//int cameraHeight = (int) resourcesManager.camera.getHeight();
+		//int optionsWidth = (int) resourcesManager.base_background_region.getWidth();
+		//int optionsHeight= (int) resourcesManager.base_background_region.getHeight();
+		//int offsetX = ( cameraWidth - optionsWidth ) / 2;
+		//int offsetY = ( cameraHeight - optionsHeight ) / 2;
 		options.setPosition(0,0);
     	attachChild(options);
 	}
@@ -95,9 +95,8 @@ public class HiScoresScene extends BaseScene<Void>
 	public void disposeScene()
 	{
 		hiScoresLabel.dispose();
-		/* TODO
 		for(Text t : scoresLabels)
-			t.dispose();*/
+			t.dispose();
 		dispose();
 	}
 
