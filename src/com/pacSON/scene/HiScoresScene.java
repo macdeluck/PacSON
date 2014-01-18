@@ -1,7 +1,9 @@
 package com.pacSON.scene;
 
 import org.andengine.engine.camera.Camera;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.util.GLState;
 
 import com.pacSON.base.BaseScene;
 import com.pacSON.common.Utils;
@@ -47,6 +49,7 @@ public class HiScoresScene extends BaseScene<Void>
 			Utils.CenterAlign(scoresLabels[i]);
 			attachChild(scoresLabels[i]);
 		}
+		
 	}
 	
 	@Override

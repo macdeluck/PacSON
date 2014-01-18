@@ -173,7 +173,7 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 		camera.setCenter(
 				resourcesManager.menu_background_region.getWidth() / 2,
 				resourcesManager.menu_background_region.getHeight() / 2);
-		resourcesManager.music.stop();
+		resourcesManager.music.pause();
 		// TODO code responsible for disposing scene
 		// removing all game scene objects.
 	}
@@ -245,11 +245,12 @@ public class GameScene extends BaseScene<Boolean> // implements IOnSceneTouchLis
 
 	private void setUpAudio()
 	{
-		if (resourcesManager.isAudioOn() == true)
+		resourcesManager.music.setVolume(0.5f);
+		resourcesManager.music.setLooping(true);
+		resourcesManager.music.play();
+		if (resourcesManager.isAudioOn() == false)
 		{
-			resourcesManager.music.setVolume(0.5f);
-			resourcesManager.music.setLooping(true);
-			resourcesManager.music.play();
+			resourcesManager.music.pause();
 		}
 	}
 

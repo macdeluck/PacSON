@@ -97,7 +97,7 @@ public class ResourcesManager
 	private HashSet<IPauseChanged> pauseByButtonChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IPauseChanged> pauseByFocusChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IFPSCounterEnableChanged> fpsEnabledListeners = new HashSet<IFPSCounterEnableChanged>();
-	
+
 	public boolean isGamePausedByButton()
 	{
 		return isGamePausedByButton;
@@ -106,24 +106,24 @@ public class ResourcesManager
 	public void setGamePausedByButton(boolean isGamePaused)
 	{
 		this.isGamePausedByButton = isGamePaused;
-		for(IPauseChanged l : pauseByButtonChangedListeners)
+		for (IPauseChanged l : pauseByButtonChangedListeners)
 			l.onPauseChanged(isGamePaused);
 	}
-	
+
 	public boolean isGamePaused()
 	{
 		return isGamePausedByButton || isGamePausedByFocus;
 	}
-	
+
 	public void unpauseAll()
 	{
 		isGamePausedByButton = isGamePausedByFocus = false;
-		for(IPauseChanged l : pauseByButtonChangedListeners)
+		for (IPauseChanged l : pauseByButtonChangedListeners)
 			l.onPauseChanged(false);
-		for(IPauseChanged l : pauseByFocusChangedListeners)
+		for (IPauseChanged l : pauseByFocusChangedListeners)
 			l.onPauseChanged(false);
 	}
-	
+
 	public boolean isGamePausedByFocus()
 	{
 		return isGamePausedByFocus;
@@ -132,7 +132,7 @@ public class ResourcesManager
 	public void setGamePausedByFocus(boolean isGamePausedByNotFocused)
 	{
 		this.isGamePausedByFocus = isGamePausedByNotFocused;
-		for(IPauseChanged l : pauseByFocusChangedListeners)
+		for (IPauseChanged l : pauseByFocusChangedListeners)
 			l.onPauseChanged(isGamePausedByNotFocused);
 	}
 
@@ -140,22 +140,22 @@ public class ResourcesManager
 	{
 		setGamePausedByButton(!isGamePausedByButton);
 	}
-	
+
 	public boolean addOnPauseByButtonChangedListener(IPauseChanged pc)
 	{
 		return pauseByButtonChangedListeners.add(pc);
 	}
-	
+
 	public boolean removeOnPauseByButtonChangedListener(IPauseChanged pc)
 	{
 		return pauseByButtonChangedListeners.remove(pc);
 	}
-	
+
 	public boolean addOnPauseByFocusChangedListener(IPauseChanged pc)
 	{
 		return pauseByFocusChangedListeners.add(pc);
 	}
-	
+
 	public boolean removeOnPauseByFocusChangedListener(IPauseChanged pc)
 	{
 		return pauseByFocusChangedListeners.remove(pc);
@@ -267,31 +267,33 @@ public class ResourcesManager
 		playerTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), Player.IMAGE_WIDTH,
 				Player.IMAGE_HEIGHT, TextureOptions.DEFAULT);
-		wallTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), Wall.IMAGE_WIDTH,
-				Wall.IMAGE_HEIGHT, TextureOptions.REPEATING_BILINEAR);
-		starTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), Star.IMAGE_WIDTH,
-				Star.IMAGE_HEIGHT, TextureOptions.DEFAULT);
-		botTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), Bot.IMAGE_WIDTH,
-				Bot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
+		wallTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
+				Wall.IMAGE_WIDTH, Wall.IMAGE_HEIGHT,
+				TextureOptions.REPEATING_BILINEAR);
+		starTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
+				Star.IMAGE_WIDTH, Star.IMAGE_HEIGHT, TextureOptions.DEFAULT);
+		botTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
+				Bot.IMAGE_WIDTH, Bot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
 		ghostBotGreenTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), GhostBot.IMAGE_WIDTH,
 				GhostBot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
 		backgroundTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), LabyrinthBackground.IMAGE_WIDTH,
-				LabyrinthBackground.IMAGE_HEIGHT, TextureOptions.REPEATING_NEAREST);
+				LabyrinthBackground.IMAGE_HEIGHT,
+				TextureOptions.REPEATING_NEAREST);
 		settingsTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), 117, 121, TextureOptions.DEFAULT);
-		hudTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
-				GravityHud.HUD_BASE_WIDTH, GravityHud.HUD_BASE_HEIGHT, TextureOptions.DEFAULT);
-		gravArrowTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
-				GravityHud.HUD_GRAV_ARROW_WIDTH, GravityHud.HUD_GRAV_ARROW_HEIGHT, TextureOptions.DEFAULT);
-		
-		hud_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(hudTextureAtlas, activity,
-				GravityHud.HUD_BASE_NAME, 0, 0);
-		gravArrow_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(gravArrowTextureAtlas, activity,
+		hudTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
+				GravityHud.HUD_BASE_WIDTH, GravityHud.HUD_BASE_HEIGHT,
+				TextureOptions.DEFAULT);
+		gravArrowTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), GravityHud.HUD_GRAV_ARROW_WIDTH,
+				GravityHud.HUD_GRAV_ARROW_HEIGHT, TextureOptions.DEFAULT);
+
+		hud_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				hudTextureAtlas, activity, GravityHud.HUD_BASE_NAME, 0, 0);
+		gravArrow_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				gravArrowTextureAtlas, activity,
 				GravityHud.HUD_GRAV_ARROW_NAME, 0, 0);
 		player_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				playerTextureAtlas, activity, Player.FILE_NAME, 0, 0);
@@ -301,13 +303,14 @@ public class ResourcesManager
 				starTextureAtlas, activity, Star.FILE_NAME, 0, 0);
 		bot_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				botTextureAtlas, activity, Bot.FILE_NAME, 0, 0);
-		ghostBotGreen_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				ghostBotGreenTextureAtlas, activity, GhostBot.GREEN_FILE_NAME, 0, 0);
-		background_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				backgroundTextureAtlas, activity, LabyrinthBackground.FILE_NAME, 0, 0);
-		settings_reg = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(settingsTextureAtlas, activity,
-						"settings.png", 0, 0);
+		ghostBotGreen_reg = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(ghostBotGreenTextureAtlas, activity,
+						GhostBot.GREEN_FILE_NAME, 0, 0);
+		background_reg = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(backgroundTextureAtlas, activity,
+						LabyrinthBackground.FILE_NAME, 0, 0);
+		settings_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				settingsTextureAtlas, activity, "settings.png", 0, 0);
 
 		activity.getTextureManager().loadTexture(playerTextureAtlas);
 		activity.getTextureManager().loadTexture(wallTextureAtlas);
@@ -318,12 +321,12 @@ public class ResourcesManager
 		activity.getTextureManager().loadTexture(settingsTextureAtlas);
 		activity.getTextureManager().loadTexture(hudTextureAtlas);
 		activity.getTextureManager().loadTexture(gravArrowTextureAtlas);
-		
-		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(), 
-				200, 200, TextureOptions.BILINEAR);
+
+		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 200, 200, TextureOptions.BILINEAR);
 		this.PauseButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(mPauseButtonBitmapTextureAtlas, activity.getAssets(), 
-						"playPause.png", 0, 0, 2, 1);	
+				.createTiledFromAsset(mPauseButtonBitmapTextureAtlas,
+						activity.getAssets(), "playPause.png", 0, 0, 2, 1);
 		this.mPauseButtonBitmapTextureAtlas.load();
 	}
 
@@ -334,13 +337,14 @@ public class ResourcesManager
 				activity.getTextureManager(), 256, 256,
 				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		levelFont = FontFactory.createStrokeFromAsset(activity.getFontManager(),
-				mainFontTexture, activity.getAssets(), "font.ttf", 30, true,
-				Color.WHITE, 2, Color.BLACK);
+		levelFont = FontFactory.createStrokeFromAsset(
+				activity.getFontManager(), mainFontTexture,
+				activity.getAssets(), "font.ttf", 30, true, Color.WHITE, 2,
+				Color.BLACK);
 		levelFont.load();
 	}
 
-	private void loadGameAudio()
+	public void loadGameAudio()
 	{
 		try
 		{
@@ -394,22 +398,21 @@ public class ResourcesManager
 	{
 		menuTextureAtlas.load();
 	}
-	
+
 	public void loadGameOverTextures()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		gameOverTextureAtlas = new BitmapTextureAtlas(
-				activity.getTextureManager(), 350,
-				280, TextureOptions.DEFAULT);
+				activity.getTextureManager(), 350, 280, TextureOptions.DEFAULT);
 		gameOver_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				gameOverTextureAtlas, activity, "GameOver.jpeg", 0, 0);
 		gameOverTextureAtlas.load();
 	}
+
 	public void unloadGameOverTextures()
 	{
 		gameOverTextureAtlas.unload();
 	}
-	
 
 	/**
 	 * @param engine
@@ -439,7 +442,7 @@ public class ResourcesManager
 	{
 		return INSTANCE;
 	}
-	
+
 	public boolean isAudioOn()
 	{
 		SharedPreferences pref = activity.getSharedPreferences(
@@ -450,36 +453,40 @@ public class ResourcesManager
 			pref.edit().putBoolean(key, false).commit();
 		return pref.getBoolean(key, false);
 	}
-	
+
 	public boolean isFpsCounterEnabled()
 	{
 		SharedPreferences pref = activity.getSharedPreferences(
 				activity.getString(com.pacSON.R.string.preference_key),
 				Context.MODE_PRIVATE);
-		final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
+		final String key = activity
+				.getString(com.pacSON.R.string.isFpsCounterEnabled);
 		if (!pref.contains(key))
 			pref.edit().putBoolean(key, true).commit();
 		return pref.getBoolean(key, true);
 	}
-	
+
 	public void setFpsCounterEnable(boolean value)
 	{
 		SharedPreferences pref = activity.getSharedPreferences(
 				activity.getString(com.pacSON.R.string.preference_key),
 				Context.MODE_PRIVATE);
-		final String key = activity.getString(com.pacSON.R.string.isFpsCounterEnabled);
+		final String key = activity
+				.getString(com.pacSON.R.string.isFpsCounterEnabled);
 		pref.edit().putBoolean(key, value).commit();
-		Log.d("Resource Manager", "FPS enable changed: "+value);
-		for(IFPSCounterEnableChanged l : fpsEnabledListeners)
+		Log.d("Resource Manager", "FPS enable changed: " + value);
+		for (IFPSCounterEnableChanged l : fpsEnabledListeners)
 			l.onEnableChanged(isFpsCounterEnabled());
 	}
-	
-	public boolean addOnFpsCounterEnableChangedListener(IFPSCounterEnableChanged listener)
+
+	public boolean addOnFpsCounterEnableChangedListener(
+			IFPSCounterEnableChanged listener)
 	{
 		return fpsEnabledListeners.add(listener);
 	}
-	
-	public boolean removeOnFpsCounterEnableChangedListener(IFPSCounterEnableChanged listener)
+
+	public boolean removeOnFpsCounterEnableChangedListener(
+			IFPSCounterEnableChanged listener)
 	{
 		return fpsEnabledListeners.remove(listener);
 	}
