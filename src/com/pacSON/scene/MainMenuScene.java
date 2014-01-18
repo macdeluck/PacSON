@@ -113,7 +113,7 @@ public class MainMenuScene extends BaseScene<Void> implements IOnMenuItemClickLi
 		// int cameraHeight = (int) resourcesManager.camera.getHeight();
 		final IMenuItem playMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_PLAY, resourcesManager.play_region, vbom), 1.2f, 1);
 		final IMenuItem optionsMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(MENU_OPTIONS, resourcesManager.options_region, vbom), 1.2f, 1);
-		final IMenuItem aboutMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(HISCORES_OPTIONS, resourcesManager.about_region, vbom), 1.2f, 1);
+		final IMenuItem aboutMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(HISCORES_OPTIONS, resourcesManager.highScores_region, vbom), 1.2f, 1);
 		final IMenuItem exitMenuItem = new ScaleMenuItemDecorator(new SpriteMenuItem(EXIT_OPTIONS, resourcesManager.exit_region, vbom), 1.2f, 1);
 		
 		menuChildScene.addMenuItem(playMenuItem);

@@ -119,14 +119,18 @@ public class PacHud extends HUD
 			public void onOnClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) 
 			{
-				ResourcesManager.getInstance().setGamePausedByButton(true);
+				if (ResourcesManager.getInstance().isGameSceneTouchable())
+					ResourcesManager.getInstance().setGamePausedByButton(true);
+				else ResourcesManager.getInstance().setGamePausedByButton(false);
 			}
 			
 			@Override
 			public void onOffClick(ToggleButtonSprite pButtonSprite,
 					float pTouchAreaLocalX, float pTouchAreaLocalY) 
 			{
-				ResourcesManager.getInstance().setGamePausedByButton(false);
+				if (ResourcesManager.getInstance().isGameSceneTouchable())
+					ResourcesManager.getInstance().setGamePausedByButton(false);
+				else ResourcesManager.getInstance().setGamePausedByButton(true);
 			}
 		});
 		registerTouchArea(resourcesManager.pauseToggleButtonSprite);
@@ -148,7 +152,7 @@ public class PacHud extends HUD
 		{
 		       @Override
 		       public boolean onAreaTouched(TouchEvent pTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
-		           if(pTouchEvent.isActionDown()) 
+		           if(pTouchEvent.isActionDown() && ResourcesManager.getInstance().isGameSceneTouchable()) 
 		           {
 		        	   //SceneManager.getInstance().getCurrentScene().disposeScene();//this is to change experience
 		               SceneManager.getInstance().loadOptionsScene(ResourcesManager.getInstance().engine,

@@ -6,7 +6,6 @@ import java.util.HashSet;
 import org.andengine.audio.music.Music;
 import org.andengine.audio.music.MusicFactory;
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.BoundCamera;
 import org.andengine.engine.camera.SmoothCamera;
 import org.andengine.opengl.font.Font;
 import org.andengine.opengl.font.FontFactory;
@@ -60,16 +59,17 @@ public class ResourcesManager
 
 	public ITextureRegion splash_region;
 	public ITextureRegion menu_background_region;
+	public ITextureRegion base_background_region;
 	public ITextureRegion play_region;
 	public ITextureRegion options_region;
-	public ITextureRegion about_region;
+	public ITextureRegion highScores_region;
 	public ITextureRegion exit_region;
 
 	// Game Texture Regions
 	public ITextureRegion player_reg;
 	public ITextureRegion wall_reg;
 	public ITextureRegion bot_reg;
-	public ITextureRegion ghostBotGreen_reg;
+	public ITextureRegion[] ghostBotReg;
 	public ITextureRegion star_reg;
 	public ITextureRegion background_reg;
 	public ITextureRegion settings_reg;
@@ -83,17 +83,28 @@ public class ResourcesManager
 	private BitmapTextureAtlas wallTextureAtlas;
 	private BitmapTextureAtlas starTextureAtlas;
 	private BitmapTextureAtlas botTextureAtlas;
-	private BitmapTextureAtlas ghostBotGreenTextureAtlas;
+	private BitmapTextureAtlas[] ghostBotTextureAtlas;
 	private BitmapTextureAtlas backgroundTextureAtlas;
 	private BitmapTextureAtlas settingsTextureAtlas;
 	private BitmapTextureAtlas hudTextureAtlas;
 	private BitmapTextureAtlas gravArrowTextureAtlas;
 	private BuildableBitmapTextureAtlas menuTextureAtlas;
-
+	private BitmapTextureAtlas menuBaseTextureAtlas;
 	private final String TOGGLE_BUTTON_AUDOIO = "speakers.png";
 	private final String TOGGLE_TICK_AND_CROSS = "tickAndCross.png";
 	private boolean isGamePausedByButton = false;
 	private boolean isGamePausedByFocus = false;
+	private boolean isGameSceneTouchable = true;
+	public boolean isGameSceneTouchable()
+	{
+		return isGameSceneTouchable;
+	}
+
+	public void setGameSceneTouchable(boolean isGameSceneTouchable)
+	{
+		this.isGameSceneTouchable = isGameSceneTouchable;
+	}
+
 	private HashSet<IPauseChanged> pauseByButtonChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IPauseChanged> pauseByFocusChangedListeners = new HashSet<IPauseChanged>();
 	private HashSet<IFPSCounterEnableChanged> fpsEnabledListeners = new HashSet<IFPSCounterEnableChanged>();
@@ -190,21 +201,34 @@ public class ResourcesManager
 		loadGameFonts();
 		loadGameAudio();
 	}
-
+	public void loadHighScoresResources()
+	{
+		loadHighScoresGraphics();
+	}
 	public void loadOptionsResources()
 	{
 		loadOptionsGraphics();
 	}
 
+	private void loadHighScoresGraphics()
+	{
+		
+	}
 	private void loadOptionsGraphics()
 	{
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/options/");
 		this.mSoundButtonBitmapTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), 200, 200, TextureOptions.BILINEAR);
-
+		this.menuBaseTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		
+		base_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuBaseTextureAtlas, activity, "backgroundBase.png", 0, 0);
+		
 		this.soundButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mSoundButtonBitmapTextureAtlas,
 						activity.getAssets(), TOGGLE_BUTTON_AUDOIO, 0, 0, 2, 1);
+		
 
 		this.tickAndCrossButtonTextureRegion = BitmapTextureAtlasTextureRegionFactory
 				.createTiledFromAsset(mSoundButtonBitmapTextureAtlas,
@@ -212,6 +236,7 @@ public class ResourcesManager
 						1);
 
 		this.mSoundButtonBitmapTextureAtlas.load();
+		this.menuBaseTextureAtlas.load();
 	}
 
 	private void loadMenuGraphics()
@@ -226,8 +251,8 @@ public class ResourcesManager
 				menuTextureAtlas, activity, "itemPlay.png");
 		options_region = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(menuTextureAtlas, activity, "itemOptions.png");
-		about_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-				menuTextureAtlas, activity, "itemAbout.png");
+		highScores_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuTextureAtlas, activity, "itemHighScores.png");
 		exit_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				menuTextureAtlas, activity, "itemExit.png");
 
@@ -245,7 +270,12 @@ public class ResourcesManager
 
 	private void loadMenuAudio()
 	{
-
+		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/options/");
+		menuBaseTextureAtlas = new BitmapTextureAtlas(
+				activity.getTextureManager(), 1024, 1024, TextureOptions.BILINEAR);
+		base_background_region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
+				menuBaseTextureAtlas, activity, "backgroundBase.png", 0, 0);
+		menuBaseTextureAtlas.load();
 	}
 
 	private void loadMenuFonts()
@@ -263,6 +293,9 @@ public class ResourcesManager
 
 	private void loadGameGraphics()
 	{
+		ghostBotReg = new ITextureRegion[GhostBot.COLORS_COUNT];
+		ghostBotTextureAtlas = new BitmapTextureAtlas[GhostBot.COLORS_COUNT];		
+		
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/game/");
 		playerTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), Player.IMAGE_WIDTH,
@@ -274,9 +307,12 @@ public class ResourcesManager
 				Star.IMAGE_WIDTH, Star.IMAGE_HEIGHT, TextureOptions.DEFAULT);
 		botTextureAtlas = new BitmapTextureAtlas(activity.getTextureManager(),
 				Bot.IMAGE_WIDTH, Bot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
-		ghostBotGreenTextureAtlas = new BitmapTextureAtlas(
+		
+		for (int i=0; i<ghostBotTextureAtlas.length; i++)
+		ghostBotTextureAtlas[i] = new BitmapTextureAtlas(
 				activity.getTextureManager(), GhostBot.IMAGE_WIDTH,
 				GhostBot.IMAGE_HEIGHT, TextureOptions.DEFAULT);
+		
 		backgroundTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), LabyrinthBackground.IMAGE_WIDTH,
 				LabyrinthBackground.IMAGE_HEIGHT,
@@ -303,9 +339,12 @@ public class ResourcesManager
 				starTextureAtlas, activity, Star.FILE_NAME, 0, 0);
 		bot_reg = BitmapTextureAtlasTextureRegionFactory.createFromAsset(
 				botTextureAtlas, activity, Bot.FILE_NAME, 0, 0);
-		ghostBotGreen_reg = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(ghostBotGreenTextureAtlas, activity,
-						GhostBot.GREEN_FILE_NAME, 0, 0);
+		
+		for (int i=0; i<ghostBotReg.length; i++)
+		ghostBotReg[i] = BitmapTextureAtlasTextureRegionFactory
+				.createFromAsset(ghostBotTextureAtlas[i], activity,
+						GhostBot.FILE_NAMES[i], 0, 0);
+		
 		background_reg = BitmapTextureAtlasTextureRegionFactory
 				.createFromAsset(backgroundTextureAtlas, activity,
 						LabyrinthBackground.FILE_NAME, 0, 0);
@@ -316,11 +355,12 @@ public class ResourcesManager
 		activity.getTextureManager().loadTexture(wallTextureAtlas);
 		activity.getTextureManager().loadTexture(starTextureAtlas);
 		activity.getTextureManager().loadTexture(botTextureAtlas);
-		activity.getTextureManager().loadTexture(ghostBotGreenTextureAtlas);
 		activity.getTextureManager().loadTexture(backgroundTextureAtlas);
 		activity.getTextureManager().loadTexture(settingsTextureAtlas);
 		activity.getTextureManager().loadTexture(hudTextureAtlas);
 		activity.getTextureManager().loadTexture(gravArrowTextureAtlas);
+		for (int i=0; i<ghostBotTextureAtlas.length; i++)
+			activity.getTextureManager().loadTexture(ghostBotTextureAtlas[i]);
 
 		this.mPauseButtonBitmapTextureAtlas = new BitmapTextureAtlas(
 				activity.getTextureManager(), 200, 200, TextureOptions.BILINEAR);

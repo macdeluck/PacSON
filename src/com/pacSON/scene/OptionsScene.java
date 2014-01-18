@@ -1,13 +1,14 @@
 package com.pacSON.scene;
 
-import org.andengine.entity.scene.background.Background;
+import org.andengine.engine.camera.Camera;
+import org.andengine.entity.sprite.Sprite;
 import org.andengine.entity.text.Text;
+import org.andengine.opengl.util.GLState;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.pacSON.base.BaseScene;
-import com.pacSON.manager.ResourcesManager;
 import com.pacSON.manager.SceneManager;
 import com.pacSON.manager.SceneManager.SceneType;
 import com.pacSON.tools.ToggleButtonSprite;
@@ -36,11 +37,12 @@ public class OptionsScene extends BaseScene<BaseScene<?>>
 	@Override
 	public void createScene(BaseScene<?> onCreateParam)
 	{
+		createBackground();
 		if (onCreateParam != null)
 			previousScene = onCreateParam;
 		else
 			previousScene = SceneManager.getInstance().getMenuScene();
-		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
+//		setBackground(new Background(0.09804f, 0.6274f, 0.8784f));
 		int cameraWidth = (int) resourcesManager.camera.getWidth();
 		// int cameraHeight = (int) resourcesManager.camera.getHeight();
 		int offsetX = (cameraWidth - 150) / 2;
@@ -173,7 +175,26 @@ public class OptionsScene extends BaseScene<BaseScene<?>>
 		}
 		return;
 	}
-
+	private void createBackground()
+	{
+		Sprite options = new Sprite(0,0, resourcesManager.base_background_region, vbom)
+		{
+    		@Override
+            protected void preDraw(GLState pGLState, Camera pCamera) 
+    		{
+                super.preDraw(pGLState, pCamera);
+                pGLState.enableDither();
+            }
+		};
+		//int cameraWidth = (int) resourcesManager.camera.getWidth();
+		//int cameraHeight = (int) resourcesManager.camera.getHeight();
+		//int optionsWidth = (int) resourcesManager.base_background_region.getWidth();
+		//int optionsHeight= (int) resourcesManager.base_background_region.getHeight();
+		//int offsetX = ( cameraWidth - optionsWidth ) / 2;
+		//int offsetY = ( cameraHeight - optionsHeight ) / 2;
+		options.setPosition(0,0);
+    	attachChild(options);
+	}
 	@Override
 	public SceneType getSceneType()
 	{

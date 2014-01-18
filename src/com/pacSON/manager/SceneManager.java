@@ -3,30 +3,18 @@ package com.pacSON.manager;
 import org.andengine.engine.Engine;
 import org.andengine.engine.handler.timer.ITimerCallback;
 import org.andengine.engine.handler.timer.TimerHandler;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
+import org.andengine.input.touch.detector.PinchZoomDetector;
 import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import com.pacSON.GameActivity;
 import com.pacSON.base.BaseScene;
+import com.pacSON.scene.GameOverScene;
 import com.pacSON.scene.GameScene;
 import com.pacSON.scene.HiScoresScene;
 import com.pacSON.scene.LoadingScene;
-import com.pacSON.scene.GameOverScene;
 import com.pacSON.scene.MainMenuScene;
 import com.pacSON.scene.OptionsScene;
 import com.pacSON.scene.SplashScene;
-
-import org.andengine.engine.camera.ZoomCamera;
-import org.andengine.engine.options.EngineOptions;
-import org.andengine.engine.options.ScreenOrientation;
-import org.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
-import org.andengine.entity.primitive.Rectangle;
-import org.andengine.entity.scene.IOnSceneTouchListener;
-import org.andengine.entity.scene.Scene;
-import org.andengine.input.touch.TouchEvent;
-import org.andengine.input.touch.detector.PinchZoomDetector;
-import org.andengine.input.touch.detector.PinchZoomDetector.IPinchZoomDetectorListener;
 public class SceneManager
 {
 	// ---------------------------------------------
@@ -318,6 +306,7 @@ public class SceneManager
 					public void onTimePassed(final TimerHandler pTimerHandler)
 					{
 						mEngine.unregisterUpdateHandler(pTimerHandler);
+						ResourcesManager.getInstance().loadHighScoresResources();
 						hiScoresScene = new HiScoresScene(null);
 						setScene(hiScoresScene);
 					}
