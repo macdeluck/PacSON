@@ -401,6 +401,7 @@ public class GameScene extends BaseScene<Boolean> // implements
 
 	private void createBots(VertexBufferObjectManager vertexBufferObjectManager)
 	{
+		GhostBot.resetColorIndex();
 		List<int[]> tab = lb.Return_Bots();
 		ghostBots = new GhostBot[tab.size()];
 		for (int i = 0; i < tab.size(); i++)
