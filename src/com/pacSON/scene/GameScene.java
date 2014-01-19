@@ -294,9 +294,6 @@ public class GameScene extends BaseScene<Boolean> // implements
 			camera.setChaseEntity(player.getSprite());
 		if (hud != null)
 			camera.setHUD(hud);
-		if (player != null)
-			ResourcesManager.getInstance().camera.setCenterDirect(
-					player.getY(), player.getX());
 	}
 
 	private void setUpSensor()

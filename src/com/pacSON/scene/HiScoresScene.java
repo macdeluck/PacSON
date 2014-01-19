@@ -46,11 +46,11 @@ public class HiScoresScene extends BaseScene<Void>
 					(i%(hsc.length/2))*(SCORES_MARGIN+hiScoresLabel.getHeight());
 			if( i < hsc.length/2)
 			scoresLabels[i] = new Text(camera.getWidth()/2, 
-					yPos, rm.font, Integer.toString(i+1) + " --> " +Integer.toString(hsc[hsc.length-1-i]), 
+					yPos, rm.font, Integer.toString(i+1) + '\u2192' +Integer.toString(hsc[hsc.length-1-i]), 
 					rm.activity.getVertexBufferObjectManager());
 			else
 			scoresLabels[i] = new Text(camera.getWidth()/2, 
-					yPos, rm.font, Integer.toString(i+1) + " --> " +Integer.toString(hsc[hsc.length-1-i]), 
+					yPos, rm.font, Integer.toString(i+1) + '\u2192' +Integer.toString(hsc[hsc.length-1-i]), 
 					rm.activity.getVertexBufferObjectManager());
 			Utils.CenterAlign(scoresLabels[i]);
 			attachChild(scoresLabels[i]);

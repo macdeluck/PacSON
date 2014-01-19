@@ -134,7 +134,7 @@ public class SceneManager
 	public void setScene(BaseScene<?> scene)
 	{
 		currentScene.onSceneUnset();
-		ResourcesManager.getInstance().camera.setCenterDirect(GameActivity.BACKGROUND_HEIGHT / 2, GameActivity.BACKGROUND_WIDTH / 2);
+		ResourcesManager.getInstance().camera.setCenter(GameActivity.BACKGROUND_HEIGHT / 2, GameActivity.BACKGROUND_WIDTH / 2);
 		engine.setScene(scene);
 		currentScene = scene;
 		currentSceneType = scene.getSceneType();

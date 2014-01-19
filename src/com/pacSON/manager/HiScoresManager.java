@@ -61,7 +61,7 @@ public class HiScoresManager
 	{
 		int[] result = new int[HISCORES_COUNT];
 		String[] res = str.split(String.format("%c%c",'\\',DEFAULT_HISCORES_STRING_SEPARATOR));
-		for(int i=1; i<HISCORES_COUNT+1; i++)
+		for(int i=1; i<res.length; i++)
 			result[i-1] = Integer.parseInt(res[i]);
 		Arrays.sort(result);
 		return result;
