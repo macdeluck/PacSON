@@ -169,6 +169,8 @@ public class GameScene extends BaseScene<Boolean> // implements
 	{
 		unregisterUpdateHandler(mPhysicsWorld);
 		ResourcesManager.getInstance().setGamePausedByFocus(true);
+		ResourcesManager.getInstance().setSavedZoomFactor(
+				ResourcesManager.getInstance().camera.getZoomFactor());
 		ResourcesManager.getInstance().camera.setZoomFactor(1);
 		disposeScene();
 		sensor.stop();
@@ -290,10 +292,12 @@ public class GameScene extends BaseScene<Boolean> // implements
 		}
 		BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
+	    ResourcesManager.getInstance().camera.setZoomFactor(1f);
 		if (player != null)
 			camera.setChaseEntity(player.getSprite());
 		if (hud != null)
 			camera.setHUD(hud);
+	    ResourcesManager.getInstance().camera.setZoomFactor(ResourcesManager.getInstance().getSavedZoomFactor());
 	}
 
 	private void setUpSensor()

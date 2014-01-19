@@ -232,14 +232,19 @@ public class SceneManager
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						ResourcesManager.getInstance().loadGameResources();
 						gameScene = new GameScene(true);
-						gameScene.setOnSceneTouchListener(ResourcesManager.getInstance().activity);
-					    ResourcesManager.getInstance().activity.mPinchZoomDetector = new PinchZoomDetector(ResourcesManager.getInstance().activity);
-
-					     // Enable the zoom detector
-					    ResourcesManager.getInstance().activity.mPinchZoomDetector.setEnabled(true);
+						setPinchZoomDetector(gameScene);
 						setScene(gameScene);
 					}
 				}));
+	}
+	
+	private void setPinchZoomDetector(BaseScene<?> scene)
+	{
+		scene.setOnSceneTouchListener(ResourcesManager.getInstance().activity);
+	    ResourcesManager.getInstance().activity.mPinchZoomDetector = new PinchZoomDetector(ResourcesManager.getInstance().activity);
+	    
+	     // Enable the zoom detector
+	    ResourcesManager.getInstance().activity.mPinchZoomDetector.setEnabled(true);
 	}
 
 	public void loadGameSceneFromOptions(final Engine mEngine)
@@ -269,6 +274,7 @@ public class SceneManager
 					{
 						mEngine.unregisterUpdateHandler(pTimerHandler);
 						gameScene = new GameScene(false);
+						setPinchZoomDetector(gameScene);
 						setScene(gameScene);
 					}
 				}));

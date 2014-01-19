@@ -95,6 +95,18 @@ public class ResourcesManager
 	private boolean isGamePausedByButton = false;
 	private boolean isGamePausedByFocus = false;
 	private boolean isGameSceneTouchable = true;
+	private float savedZoomFactor = 1f;
+	
+	public float getSavedZoomFactor()
+	{
+		return savedZoomFactor;
+	}
+
+	public void setSavedZoomFactor(float savedZoomFactor)
+	{
+		this.savedZoomFactor = savedZoomFactor;
+	}
+
 	public boolean isGameSceneTouchable()
 	{
 		return isGameSceneTouchable;

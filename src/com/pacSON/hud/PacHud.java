@@ -35,6 +35,8 @@ public class PacHud extends HUD
 	private LivesHud livesHud;
 	private StarHud starsHud;
 	private LevelHud levelHud;
+	private ButtonSprite optionButtonSprite;
+	private Text fpsText;
 	
 	public PacHud()
 	{ 
@@ -148,7 +150,7 @@ public class PacHud extends HUD
 	private ButtonSprite addOptionsButton()
 	{
 		ResourcesManager resourcesManager = ResourcesManager.getInstance();
-		ButtonSprite button = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth(), 5, resourcesManager.settings_reg, resourcesManager.vbom) 
+		optionButtonSprite = new ButtonSprite(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth(), 5, resourcesManager.settings_reg, resourcesManager.vbom) 
 		{
 		       @Override
 		       public boolean onAreaTouched(TouchEvent pTouchEvent, float pTouchAreaLocalX, float pTouchAreaLocalY) {
@@ -161,16 +163,16 @@ public class PacHud extends HUD
 		           return super.onAreaTouched(pTouchEvent, pTouchAreaLocalX, pTouchAreaLocalY);
 		       }
 		};
-		registerTouchArea(button);
-		return button;
+		registerTouchArea(optionButtonSprite);
+		return optionButtonSprite;
 	}
 	private Text addFpsCounter()
 	{
 		ResourcesManager resourcesManager = ResourcesManager.getInstance();
 		final FPSCounter fpsCounter = new FPSCounter();
 		resourcesManager.activity.getEngine().registerUpdateHandler(fpsCounter);
-		final Text fpsText = new Text(resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth() - 100, 
-				5, loadFont(resourcesManager.activity), "FPS:",
+		//resourcesManager.camera.getWidth() - resourcesManager.settings_reg.getWidth() - 120, 5
+		fpsText = new Text(0,0, loadFont(resourcesManager.activity), "FPS:",
 				"FPS:".length() + 4, resourcesManager.activity.getEngine().getVertexBufferObjectManager());
 
 		final String form = "FPS: %.0f";
@@ -219,6 +221,9 @@ public class PacHud extends HUD
 	public void setCamera(Camera camera)
 	{
 		super.setCamera(camera);
+		optionButtonSprite.setPosition(ResourcesManager.getInstance().camera.getWidth() 
+				- optionButtonSprite.getWidth(), 5);
+		fpsText.setPosition(optionButtonSprite.getX() - 100, 5);
 		this.gravityHud.setCamera(camera);
 		this.livesHud.setCamera(camera);
 		this.starsHud.setCamera(camera);

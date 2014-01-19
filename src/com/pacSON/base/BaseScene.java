@@ -1,7 +1,7 @@
 package com.pacSON.base;
 
 import org.andengine.engine.Engine;
-import org.andengine.engine.camera.BoundCamera;
+import org.andengine.engine.camera.ZoomCamera;
 import org.andengine.entity.scene.Scene;
 import org.andengine.opengl.vbo.VertexBufferObjectManager;
 
@@ -20,7 +20,7 @@ public abstract class BaseScene<Parameter> extends Scene
 	protected Activity activity;
 	protected ResourcesManager resourcesManager;
 	protected VertexBufferObjectManager vbom;
-	protected BoundCamera camera;
+	protected ZoomCamera camera;
 	
 	//---------------------------------------------
 	// CONSTRUCTOR
