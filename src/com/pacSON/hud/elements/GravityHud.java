@@ -16,7 +16,7 @@ import com.pacSON.common.Vector2RotationCalculator;
 import com.pacSON.common.Vector2RotationResult;
 import com.pacSON.manager.ResourcesManager;
 
-public class GravityHud
+public class GravityHud implements IHudElement
 {
 	private Sprite hudBase;
 	private Sprite gravityArrow;
@@ -37,6 +37,7 @@ public class GravityHud
 	public static final int HUD_GRAV_VAL_MARGINY = 63;
 	public static final int HUD_GRAV_VAL_MAXCHARS = 5;
 	
+	@Override
 	public void attach(IEntity parent)
 	{
 		parent.attachChild(hudBase);
@@ -59,6 +60,7 @@ public class GravityHud
 		return gravityValue;
 	}
 	
+	@Override
 	public void add()
 	{
 		GameActivity activity = ResourcesManager.getInstance().activity;
@@ -70,6 +72,7 @@ public class GravityHud
 				
 	}
 	
+	@Override
 	public void setCamera(Camera camera)
 	{
 		hudBase.setPosition(camera.getWidth()-hudBase.getWidth(),
@@ -108,5 +111,16 @@ public class GravityHud
 				256, 256, Typeface.create(Typeface.DEFAULT, Typeface.BOLD), 32);
 		mFont.load();
 		return mFont;
+	}
+
+	@Override
+	public void dispose()
+	{
+		hudBase.detachSelf();
+		hudBase.dispose();
+		gravityArrow.detachSelf();
+		gravityArrow.dispose();
+		gravityValue.detachSelf();
+		gravityValue.dispose();
 	}
 }

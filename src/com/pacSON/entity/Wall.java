@@ -70,4 +70,11 @@ public class Wall implements IPacSONEntity
 				BodyType.StaticBody, def);
 		return mBody;
 	}
+
+	@Override
+	public void dispose()
+	{
+		mSprite.detachSelf();
+		mSprite.dispose();
+	}
 }

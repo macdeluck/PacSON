@@ -9,7 +9,7 @@ import com.pacSON.entity.IPlayerStatsChangedListener;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 
-public class LevelHud
+public class LevelHud implements IHudElement
 {
 	Text text;
 	
@@ -26,12 +26,14 @@ public class LevelHud
 		super();
 	}
 
+	@Override
 	public void setCamera(Camera camera)
 	{
 		text.setPosition(camera.getWidth()/2, HUD_LEVELHUD_MARGIN);
 		update();
 	}
 
+	@Override
 	public void add()
 	{
 		GameActivity activity = ResourcesManager.getInstance().activity;
@@ -40,6 +42,7 @@ public class LevelHud
 				HUD_LEVELHUD_MAXCHARS, activity.getEngine().getVertexBufferObjectManager());
 	}
 
+	@Override
 	public void attach(IEntity parent)
 	{
 		parent.attachChild(text);
@@ -56,5 +59,12 @@ public class LevelHud
 		final String txt = String.format("%s %d", HUD_LEVEL_TXT, GameManager.getInstance().getCurrentLevel());
 		text.setText(txt);
 		text.setPosition(text.getX()-text.getWidth()/2 , text.getY());
+	}
+
+	@Override
+	public void dispose()
+	{
+		text.detachSelf();
+		text.dispose();
 	}
 }

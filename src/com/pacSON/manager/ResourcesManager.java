@@ -410,7 +410,6 @@ public class ResourcesManager
 
 	public void unloadGameTextures()
 	{
-		// TODO
 		playerTextureAtlas.unload();
 		player_reg = null;
 		wallTextureAtlas.unload();
@@ -423,6 +422,18 @@ public class ResourcesManager
 		background_reg = null;
 		settingsTextureAtlas.unload();
 		settings_reg = null;
+		hudTextureAtlas.unload();
+		hud_reg = null;
+		gravArrowTextureAtlas.unload();
+		gravArrow_reg = null;
+
+		for (BitmapTextureAtlas b : ghostBotTextureAtlas)
+			b.unload();
+		for (int i=0; i<ghostBotReg.length; i++)
+			ghostBotReg[i] = null;
+		
+		mPauseButtonBitmapTextureAtlas.unload();
+		PauseButtonTextureRegion = null;
 	}
 
 	public void loadSplashScreen()

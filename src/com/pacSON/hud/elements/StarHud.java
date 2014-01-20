@@ -11,7 +11,7 @@ import com.pacSON.gameStats.PlayerStats;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 
-public class StarHud
+public class StarHud implements IHudElement
 {
 	Sprite star;
 	Text text;
@@ -48,6 +48,7 @@ public class StarHud
 		};
 	}
 
+	@Override
 	public void setCamera(Camera camera)
 	{
 		star.setPosition(HUD_STAR_MARGIN, camera.getHeight() - HUD_STAR_MARGIN
@@ -60,6 +61,7 @@ public class StarHud
 				- LivesHud.HUD_LIVES_HEIGHT - HUD_STAR_HEIGHT);
 	}
 
+	@Override
 	public void add()
 	{
 		GameActivity activity = ResourcesManager.getInstance().activity;
@@ -77,6 +79,7 @@ public class StarHud
 						.getVertexBufferObjectManager());
 	}
 
+	@Override
 	public void attach(IEntity parent)
 	{
 		parent.attachChild(star);
@@ -87,5 +90,16 @@ public class StarHud
 	public IPlayerStatsChangedListener getStatsChangedListener()
 	{
 		return listener;
+	}
+
+	@Override
+	public void dispose()
+	{
+		star.detachSelf();
+		star.dispose();
+		text.detachSelf();
+		text.dispose();
+		stars_left_text.detachSelf();
+		stars_left_text.dispose();
 	}
 }

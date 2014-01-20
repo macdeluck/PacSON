@@ -55,4 +55,11 @@ public class Star implements IPacSONEntity
 				activity.getVertexBufferObjectManager());
 	}
 
+	@Override
+	public void dispose()
+	{
+		mSprite.detachSelf();
+		mSprite.dispose();
+	}
+
 }

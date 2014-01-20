@@ -45,6 +45,19 @@ public class PacHud extends HUD
 		starsHud = new StarHud();
 		levelHud = new LevelHud();
 	}
+	
+	@Override
+	public void dispose()
+	{
+		gravityHud.dispose();
+		livesHud.dispose();
+		starsHud.dispose();
+		levelHud.dispose();
+		optionButtonSprite.dispose();
+		fpsText.dispose();
+		ResourcesManager.getInstance().pauseToggleButtonSprite.detachSelf();
+		ResourcesManager.getInstance().pauseToggleButtonSprite.dispose();
+	}
 
 	public LevelHud getLevelHud()
 	{

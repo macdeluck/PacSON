@@ -69,4 +69,11 @@ public class GhostBot implements IPacSONEntity
 	{
 		colorIndex = 0;
 	}
+
+	@Override
+	public void dispose()
+	{
+		mSprite.detachSelf();
+		mSprite.dispose();
+	}
 }

@@ -55,6 +55,7 @@ public class GameScene extends BaseScene<Boolean> // implements
 	private int CAMERA_HEIGHT;
 	private int BLOCK_X_COUNT;
 	private int BLOCK_Y_COUNT;
+	private boolean disposed = false;
 
 	private GravitySensor sensor;
 	private LabyrinthManager lb;
@@ -172,7 +173,7 @@ public class GameScene extends BaseScene<Boolean> // implements
 		ResourcesManager.getInstance().setSavedZoomFactor(
 				ResourcesManager.getInstance().camera.getZoomFactor());
 		ResourcesManager.getInstance().camera.setZoomFactor(1);
-		disposeScene();
+		prepareToHideScene();
 		sensor.stop();
 	}
 
@@ -239,8 +240,7 @@ public class GameScene extends BaseScene<Boolean> // implements
 		return SceneType.SCENE_GAME;
 	}
 
-	@Override
-	public void disposeScene()
+	public void prepareToHideScene()
 	{
 		camera.setHUD(null);
 		camera.setChaseEntity(null);
@@ -248,8 +248,24 @@ public class GameScene extends BaseScene<Boolean> // implements
 				resourcesManager.menu_background_region.getWidth() / 2,
 				resourcesManager.menu_background_region.getHeight() / 2);
 		resourcesManager.music.pause();
-		// TODO code responsible for disposing scene
-		// removing all game scene objects.
+	}
+	
+	@Override
+	public void disposeScene()
+	{
+		if (!disposed)
+		{
+			Log.d("GameScene","disposing");
+			prepareToHideScene();
+			hud.dispose();
+			for(GhostBot b : ghostBots)
+				b.dispose();
+			for(Star s : stars)
+				s.dispose();
+			player.dispose();
+			disposed = true;
+			Log.d("GameScene","disposed");
+		}
 	}
 
 	protected void loadResources()

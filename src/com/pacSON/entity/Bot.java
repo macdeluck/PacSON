@@ -62,4 +62,11 @@ public class Bot implements IPacSONEntity
 				BodyType.KinematicBody, def);
 		return mBody;
 	}
+
+	@Override
+	public void dispose()
+	{
+		mSprite.detachSelf();
+		mSprite.dispose();
+	}
 }

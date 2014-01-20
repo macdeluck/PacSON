@@ -214,4 +214,11 @@ public class Player implements IPacSONEntity
 	{
 		return immortality;
 	}
+
+	@Override
+	public void dispose()
+	{
+		mSprite.detachSelf();
+		mSprite.dispose();
+	}
 }

@@ -46,4 +46,11 @@ public class LabyrinthBackground implements IPacSONEntity
 		mSprite = new Sprite(SPRITE_X, SPRITE_Y, resourceManager.background_reg,
 				activity.getVertexBufferObjectManager());
 	}
+
+	@Override
+	public void dispose()
+	{
+		mSprite.detachSelf();
+		mSprite.dispose();
+	}
 }

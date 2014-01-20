@@ -6,4 +6,5 @@ public interface IPacSONEntity
 {
 	Sprite getSprite();
 	void setSprite(Sprite sprite);
+	void dispose();
 }

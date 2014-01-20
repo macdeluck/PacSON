@@ -18,7 +18,7 @@ import com.pacSON.gameStats.PlayerStats;
 import com.pacSON.manager.GameManager;
 import com.pacSON.manager.ResourcesManager;
 
-public class LivesHud
+public class LivesHud implements IHudElement
 {
 	Sprite[] lives;
 	private IPlayerStatsChangedListener listener = null;
@@ -46,11 +46,7 @@ public class LivesHud
 			@Override
 			public void statsReseted(PlayerStats stats)
 			{
-				for(Sprite l : lives)
-				{
-					l.detachSelf();
-					l.dispose();
-				}
+				dispose();
 				lives = new Sprite[stats.getLives()];
 				for (int i=0; i<lives.length; i++)
 				{
@@ -60,6 +56,7 @@ public class LivesHud
 		};
 	}
 
+	@Override
 	public void setCamera(Camera camera)
 	{
 		for (int i=0; i<lives.length; i++)
@@ -67,6 +64,7 @@ public class LivesHud
 					camera.getHeight() - HUD_LIVES_MARGIN - HUD_LIVES_HEIGHT);
 	}
 
+	@Override
 	public void add()
 	{
 		GameActivity activity = ResourcesManager.getInstance().activity;
@@ -84,6 +82,7 @@ public class LivesHud
 		}
 	}
 
+	@Override
 	public void attach(IEntity parent)
 	{
 		for (int i=0; i<lives.length; i++)
@@ -104,5 +103,15 @@ public class LivesHud
 	public IPlayerStatsChangedListener getStatsChangedListener()
 	{
 		return listener;
+	}
+
+	@Override
+	public void dispose()
+	{
+		for(Sprite s : lives)
+		{
+			s.detachSelf();
+			s.dispose();
+		}
 	}
 }
