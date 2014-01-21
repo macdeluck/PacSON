@@ -223,7 +223,7 @@ public class GameScene extends BaseScene<Boolean> // implements
 		 * (int)(camera.getHeight()/2 - popupView.getHeight()/2));
 		 */
 	}
-	
+
 	private void exitFromPopup()
 	{
 		if (popupWindow != null)
@@ -231,7 +231,8 @@ public class GameScene extends BaseScene<Boolean> // implements
 		ResourcesManager.getInstance().setGameSceneTouchable(true);
 		ResourcesManager.getInstance().setGamePausedByButton(false);
 		SceneManager.getInstance().loadMenuScene(engine);
-		HiScoresManager.addScore(GameManager.getInstance().getPlayerStats().getStars());
+		HiScoresManager.addScore(GameManager.getInstance().getPlayerStats()
+				.getStars());
 	}
 
 	@Override
@@ -249,23 +250,30 @@ public class GameScene extends BaseScene<Boolean> // implements
 				resourcesManager.menu_background_region.getHeight() / 2);
 		resourcesManager.music.pause();
 	}
-	
+
 	@Override
 	public void disposeScene()
 	{
-		if (!disposed)
+		engine.runOnUpdateThread(new Runnable()
 		{
-			Log.d("GameScene","disposing");
-			prepareToHideScene();
-			hud.dispose();
-			for(GhostBot b : ghostBots)
-				b.dispose();
-			for(Star s : stars)
-				s.dispose();
-			player.dispose();
-			disposed = true;
-			Log.d("GameScene","disposed");
-		}
+			@Override
+			public void run()
+			{
+				if (!disposed)
+				{
+					Log.d("GameScene", "disposing");
+					prepareToHideScene();
+					hud.dispose();
+					for (GhostBot b : ghostBots)
+						b.dispose();
+					for (Star s : stars)
+						s.dispose();
+					player.dispose();
+					disposed = true;
+					Log.d("GameScene", "disposed");
+				}
+			}
+		});
 	}
 
 	protected void loadResources()
@@ -308,12 +316,13 @@ public class GameScene extends BaseScene<Boolean> // implements
 		}
 		BLOCK_X_COUNT = AREA_WIDTH / BLOCK_WIDTH;
 		BLOCK_Y_COUNT = AREA_HEIGHT / BLOCK_HEIGHT;
-	    ResourcesManager.getInstance().camera.setZoomFactor(1f);
+		ResourcesManager.getInstance().camera.setZoomFactor(1f);
 		if (player != null)
 			camera.setChaseEntity(player.getSprite());
 		if (hud != null)
 			camera.setHUD(hud);
-	    ResourcesManager.getInstance().camera.setZoomFactor(ResourcesManager.getInstance().getSavedZoomFactor());
+		ResourcesManager.getInstance().camera.setZoomFactor(ResourcesManager
+				.getInstance().getSavedZoomFactor());
 	}
 
 	private void setUpSensor()
