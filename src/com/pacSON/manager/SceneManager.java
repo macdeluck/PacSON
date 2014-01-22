@@ -327,7 +327,7 @@ public class SceneManager
 			gameScene.disposeScene();
 			ResourcesManager.getInstance().unloadGameTextures();
 		}
-		mEngine.registerUpdateHandler(new TimerHandler(0.1f,
+		mEngine.registerUpdateHandler(new TimerHandler(3f,
 				new ITimerCallback()
 				{
 					@Override
