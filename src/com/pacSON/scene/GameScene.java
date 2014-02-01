@@ -346,12 +346,20 @@ public class GameScene extends BaseScene<Boolean> // implements
 
 	private void setUpAudio()
 	{
-		resourcesManager.music.setVolume(0.5f);
-		resourcesManager.music.setLooping(true);
-		resourcesManager.music.play();
-		if (resourcesManager.isAudioOn() == false)
+		if (resourcesManager.music!=null)
 		{
-			resourcesManager.music.pause();
+			// TODO remove if null and make sure it is not
+			// it is temporary fix
+			if (resourcesManager.isAudioOn() == true)
+			{
+				resourcesManager.music.setVolume(0.5f);
+				resourcesManager.music.setLooping(true);
+				resourcesManager.music.play();
+			}
+			else
+			{
+				resourcesManager.music.pause();
+			}
 		}
 	}
 
