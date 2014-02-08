@@ -1,5 +1,6 @@
 package com.pacSON.entity.collisions.effects;
 
+import com.pacSON.common.Configuration;
 import com.pacSON.entity.GhostBot;
 import com.pacSON.entity.Player;
 import com.pacSON.gameStats.PlayerStats;
@@ -13,6 +14,7 @@ public class PlayerWithEnemyCollisionEffect implements IPlayerCollisionEffect<Gh
 	@Override
 	public void onCollision(Player player, GhostBot enemy)
 	{
+		if (Configuration.DEBUG_IMMORTALITY) return;
 		if (!player.isImmortal())
 		{
 			PlayerStats stats = GameManager.getInstance().getPlayerStats();

@@ -158,6 +158,7 @@ public class GameScene extends BaseScene<Boolean> // implements
 	{
 		Log.d("GameScene", "GameScene set");
 		setUpCamera();
+		setUpAudio();
 		registerUpdateHandler(mPhysicsWorld);
 		manager.start();
 		sensor.start();

@@ -60,7 +60,7 @@ public class GhostBot implements IPacSONEntity
 	
 	public static int nextColorIndex()
 	{
-		if (colorIndex>COLORS_COUNT)
+		if (colorIndex>=COLORS_COUNT)
 			colorIndex=0;
 		return colorIndex++;
 	}

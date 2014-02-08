@@ -1,5 +1,6 @@
 package com.pacSON.manager;
 
+import com.pacSON.common.Configuration;
 import com.pacSON.gameStats.PlayerStats;
 
 
@@ -14,14 +15,14 @@ public class GameManager
 	
 	public final static int BOT_AI_STEP = 2;
 	public final static int BOT_AI_MAX = 100;
-	public final static float BOT_SPEED_STEP = -0.020f;
-	public final static float BOT_SPEED_MIN = 0.7f;
+	public final static float BOT_SPEED_STEP = -0.010f;
+	public final static float BOT_SPEED_MIN = 0.65f;
 	public final static int BOT_COUNT = 4;
 	public final static int BOT_COUNT_INCREMENT = 6;
 	public final static int BOT_COUNT_MAX = 8;
 	
 	public final static int MAX_LIVES = 3;
-	public final static int MAX_STARS = 15;
+	public final static int MAX_STARS = (Configuration.DEBUG_ONE_STAR) ? 1 : 15;
 	public final static int DEF_BOT_AI = 70;
 	public final static float DEF_BOT_SPEED = 0.8f;
 	
