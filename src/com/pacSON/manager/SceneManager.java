@@ -8,6 +8,7 @@ import org.andengine.ui.IGameInterface.OnCreateSceneCallback;
 
 import com.pacSON.GameActivity;
 import com.pacSON.base.BaseScene;
+import com.pacSON.scene.EmptyScene;
 import com.pacSON.scene.GameOverScene;
 import com.pacSON.scene.GameScene;
 import com.pacSON.scene.HiScoresScene;
@@ -109,6 +110,7 @@ public class SceneManager
 	private BaseScene<?> loadingScene;
 	private BaseScene<?> gameOverScene;
 	private BaseScene<?> optionsScene;
+	private BaseScene<?> emptyScene;
 
 	// ---------------------------------------------
 	// VARIABLES
@@ -118,13 +120,13 @@ public class SceneManager
 
 	private SceneType currentSceneType = SceneType.SCENE_SPLASH;
 
-	private BaseScene<?> currentScene;
+	private BaseScene<?> currentScene = emptyScene = new EmptyScene(null);
 
 	private Engine engine = ResourcesManager.getInstance().engine;
 
 	public enum SceneType
 	{
-		SCENE_SPLASH, SCENE_MENU, SCENE_GAME, SCENE_LOADING, SCENE_GAME_OVER, SCENE_OPTIONS, SCENE_HISCORES,
+		SCENE_SPLASH, SCENE_MENU, SCENE_GAME, SCENE_LOADING, SCENE_GAME_OVER, SCENE_OPTIONS, SCENE_HISCORES, SCENE_EMPTY
 	}
 
 	// ---------------------------------------------
@@ -166,6 +168,7 @@ public class SceneManager
 		case SCENE_OPTIONS:
 			setScene(optionsScene);
 		default:
+			setScene(emptyScene);
 			break;
 		}
 	}
