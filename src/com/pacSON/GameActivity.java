@@ -131,7 +131,14 @@ public class GameActivity extends BaseGameActivity implements
 			public void onTimePassed(final TimerHandler pTimerHandler)
 			{
 				mEngine.unregisterUpdateHandler(pTimerHandler);
-				SceneManager.getInstance().createMenuScene();
+				runOnUpdateThread(new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						SceneManager.getInstance().createMenuScene();	
+					}
+				});
 			}
 		}));
 		pOnPopulateSceneCallback.onPopulateSceneFinished();
